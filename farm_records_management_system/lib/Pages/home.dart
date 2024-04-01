@@ -26,14 +26,27 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         drawer: Container(
-        width: MediaQuery.of(context).size.width,
-        color: Colors.white,
-        child: Column(
-          children: [
-            // Add your drawer content here
-          ],
+        width: MediaQuery.of(context).size.width * 0.75,
+        child: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: const [
+              DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.blue
+                ), child: Text(
+                  'MENU',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
+  
         backgroundColor: const Color.fromARGB(
             255, 169, 175, 175), // Change background color here
         appBar: AppBar(
