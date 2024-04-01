@@ -25,7 +25,15 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: Container(alignment: Alignment.topLeft, color: Colors.white, height: 250,),
+        drawer: Container(
+        width: MediaQuery.of(context).size.width,
+        color: Colors.white,
+        child: Column(
+          children: [
+            // Add your drawer content here
+          ],
+        ),
+      ),
         backgroundColor: const Color.fromARGB(
             255, 169, 175, 175), // Change background color here
         appBar: AppBar(
@@ -37,10 +45,13 @@ class HomePage extends StatelessWidget {
         ),
         body:  Center(
           child: Column(
-           mainAxisAlignment: MainAxisAlignment.start,
+           mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Expanded(
+             Container(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+               child: Expanded(
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     CardItem(
                         title: 'Crops & Fields',
@@ -59,8 +70,13 @@ class HomePage extends StatelessWidget {
                   ],
                 ),
               ),
-              Expanded(
+             ),
+
+             Container(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Expanded(
                 child: Row(
+                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     CardItem(
                       title: 'Transactions',
@@ -77,8 +93,10 @@ class HomePage extends StatelessWidget {
                   ],
                 ),
               ),
+             ),
               Expanded(
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     CardItem(
                       title: 'Card 5',
@@ -105,17 +123,14 @@ class CardItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.all(16.0),
       child: InkWell(
         onTap: onTap,
-        // () {
-        //   // Add your onTap logic here
-        // },
+  
         child: Container(
           padding: const EdgeInsets.all(16.0),
-          height: 150,
-          width: 150,
-          alignment: Alignment.bottomRight,
+          height: 195,
+          width: 195,
+          alignment: Alignment.center,
           child: Center(
             child: Text(
               title,
