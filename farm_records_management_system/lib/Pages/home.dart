@@ -4,7 +4,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: HomePage(),
+      home: Scaffold(
+        backgroundColor: Color.fromARGB(255, 16, 83, 8),
+        body: HomePage(),
+      ),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -25,107 +28,202 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: Container(
+      drawer: Container(
         width: MediaQuery.of(context).size.width * 0.75,
         child: Drawer(
           child: ListView(
             padding: EdgeInsets.zero,
-            children: const [
-              DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.blue
-                ), child: Text(
-                  'MENU',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
+            children: [
+              Container(
+                height: 100,
+                child: const DrawerHeader(
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
                   ),
+                  child: Text('My Farm Manager',
+                      // ignore: prefer_const_constructors
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      )),
                 ),
+              ),
+              ListTile(
+                //ignore: prefer_const_constructors
+                leading: Icon(Icons.verified_user),
+                title: Text('Profile'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const DetailsPage(cardTitle: 'First Card'),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                //ignore: prefer_const_constructors
+                leading: Icon(Icons.settings),
+                title: Text('Settings'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const DetailsPage(cardTitle: 'First Card'),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                //ignore: prefer_const_constructors
+                leading: Icon(Icons.logout),
+                title: Text('Logout'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const DetailsPage(cardTitle: 'First Card'),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                //ignore: prefer_const_constructors
+                leading: Icon(Icons.help_center),
+                title: Text('How to use this app'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const DetailsPage(cardTitle: 'First Card'),
+                    ),
+                  );
+                },
               ),
             ],
           ),
         ),
       ),
-  
-        backgroundColor: const Color.fromARGB(
-            255, 169, 175, 175), // Change background color here
-        appBar: AppBar(
-          backgroundColor: Colors.blue, // Change background color here
-          title: const Text('Farm Records Management'),
-          titleTextStyle:
-              const TextStyle(fontStyle: FontStyle.normal, fontSize: 20),
-          centerTitle: true,
-        ),
-        body:  Center(
-          child: Column(
-           mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-             Container(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-               child: Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    CardItem(
-                        title: 'Crops & Fields',
-                        onTap: () {
-                         Navigator.push(context, MaterialPageRoute(
-                           builder: (context) =>const DetailsPage(cardTitle: 'First Card'),
-                  ),
-                );
-              },
-            ),
-                    CardItem(
-                        title: 'Reports',
-                        onTap: () {
-                          navigateToDetailsPage(context, 'reports');
-                        })
-                  ],
-                ),
-              ),
-             ),
 
-             Container(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Expanded(
-                child: Row(
-                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    CardItem(
-                      title: 'Transactions',
-                      onTap: () {
-                        navigateToDetailsPage(context, 'Card 1');
-                      },
-                    ),
-                    CardItem(
-                      title: 'Crops Comparison',
-                      onTap: () {
-                        navigateToDetailsPage(context, 'Card 2');
-                      },
-                    ),
-                  ],
-                ),
-              ),
-             ),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    CardItem(
-                      title: 'Card 5',
-                      onTap: () {
-                        navigateToDetailsPage(context, 'Card 2');
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ],
+      backgroundColor: Colors.transparent,
+
+      appBar: AppBar(
+        backgroundColor: Colors.blue, // Change background color here
+        title: const Text('Farm Records Management'),
+        titleTextStyle:
+            const TextStyle(fontStyle: FontStyle.normal, fontSize: 20),
+            centerTitle: true,
+      ),
+      body: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                  'images/background.png'), // Replace with your image file
+              fit: BoxFit.cover,
+            ),
           ),
-        ));
+
+        // child: const Padding(
+        //   padding: EdgeInsets.only(top: 50)
+        // );  
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  
+                  child: Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        CardItem(
+                          title: 'Crops & Fields',
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const DetailsPage(cardTitle: 'First Card'),
+                              ),
+                            );
+                          },
+                        ),
+                        CardItem(
+                            title: 'Reports',
+                            onTap: () {
+                              navigateToDetailsPage(context, 'reports');
+                            })
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        CardItem(
+                          title: 'Transactions',
+                          onTap: () {
+                            Navigator.pushNamed(context, '/transactions');
+                          },
+                        ),
+                        CardItem(
+                          title: 'Crops Comparison',
+                          onTap: () {
+                            navigateToDetailsPage(context, 'Card 2');
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Card(
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const DetailsPage(cardTitle: 'First Card'),
+                              ),
+                            );
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Image.asset('images/report.png'),
+                              Text(
+                                'Crops & Fields',
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          )),
+    );
   }
 }
-
 
 class CardItem extends StatelessWidget {
   final String title;
@@ -135,19 +233,20 @@ class CardItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: InkWell(
-        onTap: onTap,
-  
-        child: Container(
-          padding: const EdgeInsets.all(16.0),
-          height: 195,
-          width: 195,
-          alignment: Alignment.center,
-          child: Center(
-            child: Text(
-              title,
-              style: const TextStyle(fontSize: 20.0),
+    return Container(
+      child: Card(
+        child: InkWell(
+          onTap: onTap,
+          child: Container(
+            padding: const EdgeInsets.all(16.0),
+            height: 180,
+            width: 180,
+            alignment: Alignment.center,
+            child: Center(
+              child: Text(
+                title,
+                style: const TextStyle(fontSize: 15.0),
+              ),
             ),
           ),
         ),
@@ -170,7 +269,7 @@ class DetailsPage extends StatelessWidget {
       body: Center(
         child: Text(
           'Details for $cardTitle will be shown here.',
-          style:const TextStyle(fontSize: 24),
+          style: const TextStyle(fontSize: 24),
         ),
       ),
     );
