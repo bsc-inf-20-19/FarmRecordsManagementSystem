@@ -46,8 +46,8 @@ class _HomeScreenCard extends State<HomeScreenCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // place here your image
-                        Text("Bed room", style: TextStyle(fontSize: 20.0, color: Colors.brown, fontWeight: FontWeight.bold)),
-                        Text("4 Lights", style: TextStyle(fontSize: 18.0, color: Colors.orange)),
+                        Text("Crops", style: TextStyle(fontSize: 20.0, color: Colors.brown, fontWeight: FontWeight.bold)),
+                        
                       ],
                     ),
                   ),
@@ -74,8 +74,8 @@ class _HomeScreenCard extends State<HomeScreenCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // place here your image
-                        Text("Living room", style: TextStyle(fontSize: 20.0, color: Colors.brown, fontWeight: FontWeight.bold)),
-                        Text("2 Lights", style: TextStyle(fontSize: 18.0, color: Colors.orange)),
+                        Text("Livestocks", style: TextStyle(fontSize: 20.0, color: Colors.brown, fontWeight: FontWeight.bold)),
+                        
                       ],
                     ),
                   ),
@@ -110,8 +110,8 @@ class _HomeScreenCard extends State<HomeScreenCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // place here your image
-                        Text("Kitchen", style: TextStyle(fontSize: 20.0, color: Colors.brown, fontWeight: FontWeight.bold)),
-                        Text("5 Lights", style: TextStyle(fontSize: 18.0, color: Colors.orange)),
+                        Text("Report", style: TextStyle(fontSize: 20.0, color: Colors.brown, fontWeight: FontWeight.bold)),
+                        
                       ],
                     ),
                   ),
@@ -138,8 +138,8 @@ class _HomeScreenCard extends State<HomeScreenCard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // place here your image
-                        Text("Bathroom", style: TextStyle(fontSize: 20.0, color: Colors.brown, fontWeight: FontWeight.bold)),
-                        Text("1 Lights", style: TextStyle(fontSize: 18.0, color: Colors.orange)),
+                        Text("Farm Setup", style: TextStyle(fontSize: 20.0, color: Colors.brown, fontWeight: FontWeight.bold)),
+                        
                       ],
                     ),
                   ),
