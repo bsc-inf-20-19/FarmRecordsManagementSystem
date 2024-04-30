@@ -1,9 +1,10 @@
 import 'package:farm_records_management_system/Models/Expenses_model.dart';
+import 'package:farm_records_management_system/Pages/transaction/transactions.dart';
 import 'package:farm_records_management_system/Services/database_helper.dart';
 import 'package:flutter/material.dart';
 
 class Expense extends StatefulWidget {
-  const Expense({Key? key}) : super(key: key);
+  Expense({Key? key}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -37,6 +38,14 @@ class _HomeState extends State<Expense> {
   final _nameController = TextEditingController();
   final _amountController = TextEditingController();
   final _descriptionController = TextEditingController();
+
+  _saveData() async {
+    final expenseName = _nameController.text;
+    final description = _descriptionController.text;
+    final amount = double.tryParse(_amountController.text) ?? 0;
+
+    await DatabaseHelper.insertExpense(expenseName, description, amount);
+  }
 
   final _cropTypeList = ["Maize", "Tobacco", "G. Nuts", "Beans"];
   String? _selectVal = "";
@@ -96,10 +105,10 @@ class _HomeState extends State<Expense> {
               icon: const Icon(
                 Icons.arrow_drop_down_circle_outlined,
               ),
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   labelText: "Select crop", border: UnderlineInputBorder()),
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             DropdownButtonFormField(
               value: _selectFieldVal,
               items: _fieldList
@@ -124,19 +133,22 @@ class _HomeState extends State<Expense> {
             //Textfields for expense details
             MyTextField(
               myController: _nameController,
-              fieldName: "Expense Name", id: 'expense',
+              fieldName: "Expense Name",
+              id: 'expense',
             ),
             SizedBox(height: 10.0),
             MyTextField(
               myController: _amountController,
               fieldName: "Amount",
-              keyboardType: TextInputType.number, id: 'amount',
+              keyboardType: TextInputType.number,
+              id: 'amount',
             ),
             SizedBox(height: 10.0),
             MyTextField(
               myController: _descriptionController,
               fieldName: "Description",
-              maxLines: 3, id: 'descript',
+              maxLines: 3,
+              id: 'descript',
             ),
             SizedBox(height: 10.0),
             myBtn(context)
@@ -150,29 +162,18 @@ class _HomeState extends State<Expense> {
     return OutlinedButton(
       style: OutlinedButton.styleFrom(minimumSize: const Size(200, 50)),
       onPressed: () async {
-        // Create an instance of Expenses model with the input data
-        Expenses expense = Expenses(
-          amount: double.parse(_amountController.text),
-          expenseName: _nameController.text,
-          date: _selectedDate != null
-              ? _selectedDate.toString()
-              : '', // Format date as needed
-          description: _descriptionController.text,
-          id: 0, // You can set id to 0 as it's auto-incremented in the database
-        );
-
-        // Add the expense to the database
-        int result = await DatabaseHelper.addExpense(expense);
-
-        if (result != 0) {
-          // If the insertion was successful, navigate back to the transaction screen
-          Navigator.pop(context);
-        } else {
-          // Handle error if insertion failed
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Failed to add expense')),
-          );
-        }
+        _saveData();
+        // Navigator.push(
+        // context,
+        // MaterialPageRoute(builder: (context) {
+        //   return _saveData;
+        // return Trans(
+        //   expenseName: _nameController.text,
+        //   amount: double.parse(_amountController.text),
+        //   description: _descriptionController.text,
+        // );
+        //   }),
+        // );
       },
       child: Text("Add"),
     );

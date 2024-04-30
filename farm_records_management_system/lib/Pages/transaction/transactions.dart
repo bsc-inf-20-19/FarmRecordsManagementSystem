@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Trasanction extends StatelessWidget {
-  const Trasanction({Key? key});
+class Transaction extends StatelessWidget {
+  const Transaction({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,15 +21,15 @@ class Trans extends StatelessWidget {
     required this.description,
   }) : super(key: key);
 
-      final String expenseName,
-      description;
-      final double amount;
+  final String expenseName;
+  final String description;
+  final double amount;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
-      appBar: AppBar(
+        backgroundColor: Colors.grey[200],
+        appBar: AppBar(
         backgroundColor: Colors.blue[900],
         title: const Text('Transactions'),
         centerTitle: true,
@@ -42,12 +42,13 @@ class Trans extends StatelessWidget {
               children: [
                 ListTile(
                   shape: RoundedRectangleBorder(
-                      side: BorderSide(width: 1.0, color: Colors.grey.shade300)),
-                     leading: IconButton(
+                      side:
+                          BorderSide(width: 1.0, color: Colors.grey.shade300)),
+                  leading: IconButton(
                     icon: const Icon(
                       Icons.bookmark_add_outlined,
                       color: Colors.blueAccent,
-                    ),
+                    ),  
                     onPressed: () {},
                   ),
                   title: Text(
@@ -56,7 +57,12 @@ class Trans extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       fontSize: 18.0,
                     ),
+                   
                   ),
+                  subtitle: Text(
+                    description
+                  ),
+                  isThreeLine: true,
                   trailing: IconButton(
                     icon: const Icon(
                       Icons.edit,

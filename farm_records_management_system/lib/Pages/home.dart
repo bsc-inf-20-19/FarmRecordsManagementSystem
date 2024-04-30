@@ -28,15 +28,15 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Container(
+      drawer: SizedBox(
         width: MediaQuery.of(context).size.width * 0.75,
         child: Drawer(
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
-              Container(
+              const SizedBox(
                 height: 100,
-                child: const DrawerHeader(
+                child: DrawerHeader(
                   decoration: BoxDecoration(
                     color: Colors.blue,
                   ),
@@ -126,10 +126,7 @@ class HomePage extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-
-        // child: const Padding(
-        //   padding: EdgeInsets.only(top: 50)
-        // );  
+ 
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -204,9 +201,9 @@ class HomePage extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Image.asset('images/report.png'),
-                              Text(
+                              const Text(
                                 'Crops & Fields',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                 ),
