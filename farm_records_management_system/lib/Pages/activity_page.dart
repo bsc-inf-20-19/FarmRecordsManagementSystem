@@ -1,3 +1,4 @@
+import 'package:farm_records_management_system/Pages/fields.dart';
 import 'package:flutter/material.dart';
 import 'package:farm_records_management_system/pages/tasks.dart';
 import 'package:farm_records_management_system/Pages/treatments.dart';
@@ -56,6 +57,15 @@ class MyHomePage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => TasksPage()),
+                      );
+                    },
+                  ),
+                  CardItem(
+                    title: 'Fields', // New navigation option
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => FieldsPage()),
                       );
                     },
                   ),
