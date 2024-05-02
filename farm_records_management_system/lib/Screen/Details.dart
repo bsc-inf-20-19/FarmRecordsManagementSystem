@@ -14,7 +14,7 @@ class Details extends StatelessWidget{
         title: Text("Details"),
         leading: IconButton(onPressed: (){
           Navigator.pop(context);
-        }, icon: Icon(Icons.arrow_back)
+        }, icon: const Icon(Icons.arrow_back)
         ),
       ),
       body: Container(
