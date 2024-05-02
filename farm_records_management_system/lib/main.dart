@@ -1,20 +1,13 @@
 import 'package:farm_records_management_system/screens/home_page.dart';
+import 'package:farm_records_management_system/Pages/home.dart';
+import 'package:farm_records_management_system/Pages/transaction/expense.dart';
+import 'package:farm_records_management_system/Pages/transaction/transactions.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Freshify App",
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(primaryColor: Color(0xFF33691E)),
-      home: HomePage(),
-    );
-  }
-}
+void main() => runApp(MaterialApp( 
+  routes: {
+    '/': (context) => const HomePage(),
+    '/transactions':(context) =>Trans(amount: 0.0, description: '', expenseName: '', key: const Key('value'),),
+    '/Expense':(context) => Expense(),
+  },
+));
