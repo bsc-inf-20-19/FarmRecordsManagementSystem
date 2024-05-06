@@ -1,3 +1,4 @@
+// import 'package:farm_records_management_system/Pages/crop.dart';
 import 'package:farm_records_management_system/Pages/fields.dart';
 import 'package:flutter/material.dart';
 import 'package:farm_records_management_system/pages/tasks.dart';
@@ -32,43 +33,144 @@ class MyHomePage extends StatelessWidget {
         title: Text(title),
         centerTitle: true,
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        color: Colors.white, // background color
+        child: ListView(
           children: [
-            Expanded(
+            Container(
+              height: 200,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Card Item for Treatments
-                  CardItem(
-                    title: 'Treatments',
+                  InkWell(
                     onTap: () {
                       Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => TreatmentsPage()),
-                      );
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => TreatmentsPage()));
                     },
+                    child: Container(
+                      height: 200,
+                      width: MediaQuery.of(context).size.width / 2 -
+                          32, // minus 32 due to the margin
+                      margin: EdgeInsets.all(14.0),
+                      padding: EdgeInsets.all(14.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white, // background color of the cards
+                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                        boxShadow: [
+                          // this is the shadow of the card
+                          BoxShadow(
+                            color: Colors.black,
+                            spreadRadius: 0.5,
+                            offset: Offset(2.0, 2.0),
+                            blurRadius: 5.0,
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment
+                            .end, // posion the everything to the bottom
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // place here your image
+                          Text("Treatments",
+                              style: TextStyle(
+                                  fontSize: 20.0,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                    ),
                   ),
-                  CardItem(
-                    title: 'Tasks',
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => TasksPage()));
+                    },
+                    child: Container(
+                      height: 200,
+                      width: MediaQuery.of(context).size.width / 2 -
+                          32, // minus 32 due to the margin
+                      margin: EdgeInsets.all(14.0),
+                      padding: EdgeInsets.all(14.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white, // background color of the cards
+                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                        boxShadow: [
+                          // this is the shadow of the card
+                          BoxShadow(
+                            color: Colors.black,
+                            spreadRadius: 0.5,
+                            offset: Offset(2.0, 2.0),
+                            blurRadius: 5.0,
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment
+                            .end, // posion the everything to the bottom
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // place here your image
+                          Text("Tasks",
+                              style: TextStyle(
+                                  fontSize: 20.0,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              height: 200,
+              child: Row(
+                children: [
+                  InkWell(
                     onTap: () {
                       Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => TasksPage()),
-                      );
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => FieldsPage()));
                     },
-                  ),
-                  CardItem(
-                    title: 'Fields', // New navigation option
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => FieldsPage()),
-                      );
-                    },
-                  ),
+                    child: Container(
+                      height: 200,
+                      width: MediaQuery.of(context).size.width / 2 -
+                          32, // minus 32 due to the margin
+                      margin: EdgeInsets.all(14.0),
+                      padding: EdgeInsets.all(14.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white, // background color of the cards
+                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                        boxShadow: [
+                          // this is the shadow of the card
+                          BoxShadow(
+                            color: Colors.black,
+                            spreadRadius: 0.5,
+                            offset: Offset(2.0, 2.0),
+                            blurRadius: 5.0,
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment
+                            .end, // posion the everything to the bottom
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // place here your image
+                          Text("Field",
+                              style: TextStyle(
+                                  fontSize: 20.0,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
