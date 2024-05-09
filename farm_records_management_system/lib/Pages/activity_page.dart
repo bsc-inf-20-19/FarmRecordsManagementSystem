@@ -5,6 +5,8 @@ import 'package:farm_records_management_system/pages/tasks.dart';
 import 'package:farm_records_management_system/Pages/treatments.dart';
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -12,11 +14,11 @@ class MyApp extends StatelessWidget {
       title: 'Farm Record',
       theme: ThemeData(
         primarySwatch: Colors.green,
-        appBarTheme: AppBarTheme(
+        appBarTheme: const AppBarTheme(
           backgroundColor: Colors.green,
         ),
       ),
-      home: MyHomePage(title: 'Farm Record'),
+      home: const MyHomePage(title: 'Farm Record'),
     );
   }
 }
@@ -24,7 +26,7 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatelessWidget {
   final String title;
 
-  MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,7 @@ class MyHomePage extends StatelessWidget {
         color: Colors.white, // background color
         child: ListView(
           children: [
-            Container(
+            SizedBox(
               height: 200,
               child: Row(
                 children: [
@@ -48,15 +50,15 @@ class MyHomePage extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => TreatmentsPage()));
+                              builder: (context) => const TreatmentsPage()));
                     },
                     child: Container(
                       height: 200,
                       width: MediaQuery.of(context).size.width / 2 -
                           32, // minus 32 due to the margin
-                      margin: EdgeInsets.all(14.0),
-                      padding: EdgeInsets.all(14.0),
-                      decoration: BoxDecoration(
+                      margin: const EdgeInsets.all(14.0),
+                      padding: const EdgeInsets.all(14.0),
+                      decoration: const BoxDecoration(
                         color: Colors.white, // background color of the cards
                         borderRadius: BorderRadius.all(Radius.circular(20.0)),
                         boxShadow: [
@@ -69,7 +71,7 @@ class MyHomePage extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: Column(
+                      child: const Column(
                         mainAxisAlignment: MainAxisAlignment
                             .end, // posion the everything to the bottom
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,15 +89,15 @@ class MyHomePage extends StatelessWidget {
                   InkWell(
                     onTap: () {
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => TasksPage()));
+                          MaterialPageRoute(builder: (context) => const TasksPage()));
                     },
                     child: Container(
                       height: 200,
                       width: MediaQuery.of(context).size.width / 2 -
                           32, // minus 32 due to the margin
-                      margin: EdgeInsets.all(14.0),
-                      padding: EdgeInsets.all(14.0),
-                      decoration: BoxDecoration(
+                      margin: const EdgeInsets.all(14.0),
+                      padding: const EdgeInsets.all(14.0),
+                      decoration: const BoxDecoration(
                         color: Colors.white, // background color of the cards
                         borderRadius: BorderRadius.all(Radius.circular(20.0)),
                         boxShadow: [
@@ -108,7 +110,7 @@ class MyHomePage extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: Column(
+                      child: const Column(
                         mainAxisAlignment: MainAxisAlignment
                             .end, // posion the everything to the bottom
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,7 +128,7 @@ class MyHomePage extends StatelessWidget {
                 ],
               ),
             ),
-            Container(
+            SizedBox(
               height: 200,
               child: Row(
                 children: [
@@ -135,15 +137,15 @@ class MyHomePage extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => FieldsPage()));
+                              builder: (context) => const FieldsPage()));
                     },
                     child: Container(
                       height: 200,
                       width: MediaQuery.of(context).size.width / 2 -
                           32, // minus 32 due to the margin
-                      margin: EdgeInsets.all(14.0),
-                      padding: EdgeInsets.all(14.0),
-                      decoration: BoxDecoration(
+                      margin: const EdgeInsets.all(14.0),
+                      padding: const EdgeInsets.all(14.0),
+                      decoration: const BoxDecoration(
                         color: Colors.white, // background color of the cards
                         borderRadius: BorderRadius.all(Radius.circular(20.0)),
                         boxShadow: [
@@ -156,7 +158,7 @@ class MyHomePage extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: Column(
+                      child: const Column(
                         mainAxisAlignment: MainAxisAlignment
                             .end, // posion the everything to the bottom
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,8 +187,7 @@ class CardItem extends StatelessWidget {
   final String title;
   final VoidCallback onTap;
 
-  const CardItem({Key? key, required this.title, required this.onTap})
-      : super(key: key);
+  const CardItem({super.key, required this.title, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

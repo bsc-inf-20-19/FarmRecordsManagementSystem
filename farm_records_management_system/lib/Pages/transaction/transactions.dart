@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class Transaction extends StatelessWidget {
-  const Transaction({Key? key});
+  const Transaction({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Trans(
+    return const Trans(
       expenseName: '',
       amount: 0.0,
       description: '',
@@ -14,12 +14,12 @@ class Transaction extends StatelessWidget {
 }
 
 class Trans extends StatelessWidget {
-  Trans({
-    Key? key,
+  const Trans({
+    super.key,
     required this.expenseName,
     required this.amount,
     required this.description,
-  }) : super(key: key);
+  });
 
   final String expenseName;
   final String description;
@@ -81,7 +81,7 @@ class Trans extends StatelessWidget {
               onPressed: () {
                 Navigator.pushNamed(context, '/Expense');
               },
-              child: Icon(Icons.add),
+              child: const Icon(Icons.add),
             ),
           ),
         ],

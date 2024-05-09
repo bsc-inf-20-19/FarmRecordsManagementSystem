@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -5,16 +6,31 @@ class DatabaseHelper {
   static Future<Database> _openDatabase() async {
     final databasePath = await getDatabasesPath();
     final path = join(databasePath, 'my_database.db');
+
+    // Check if the database file is read-only
+    if (await File(path).exists()) {
+      final fileStat = await File(path).stat();
+      final hasWritePermission =
+          (fileStat.mode & 0200) != 0; // Check write permissions
+
+      if (!hasWritePermission) {
+        // If the file is read-only, delete and recreate it
+        await File(path).delete();
+        await File(path).writeAsBytes(await File(path).readAsBytes(), mode: FileMode.write);
+      }
+    }
+
     return openDatabase(
       path,
-      version: 2, // Increment when the schema changes
+      version: 2, // Increment this to trigger schema upgrades
       onCreate: _createDatabase,
       onUpgrade: _onUpgrade,
     );
   }
 
   static Future<void> _createDatabase(Database db, int version) async {
-    await db.execute('''
+    await db.execute(
+      '''
       CREATE TABLE IF NOT EXISTS treatments (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         date TEXT,
@@ -25,14 +41,14 @@ class DatabaseHelper {
         quantity REAL,
         specific_to_planting TEXT
       )
-    ''');
+      ''',
+    );
   }
 
   static Future<void> _onUpgrade(
       Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
-      await _createDatabase(
-          db, newVersion); // Ensure proper schema creation during upgrades
+      await _createDatabase(db, newVersion); // Ensure schema upgrades
     }
   }
 
@@ -48,7 +64,7 @@ class DatabaseHelper {
   }
 
   static Future<Map<String, dynamic>?> getTreatment(int id) async {
-    Database db = await _openDatabase();
+    Database db = await _openDatabase(); // Ensure proper initialization
     List<Map<String, dynamic>> result = await db.query(
       'treatments',
       where: 'id = ?',
@@ -59,7 +75,7 @@ class DatabaseHelper {
   }
 
   static Future<int> deleteTreatment(int id) async {
-    Database db = await _openDatabase();
+    Database db = await _openDatabase(); // Ensure proper initialization
     return await db.delete('treatments', where: 'id = ?', whereArgs: [id]);
   }
 

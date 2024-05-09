@@ -1,6 +1,6 @@
+import 'package:farm_records_management_system/Pages/databaseHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:farm_records_management_system/Pages/databaseHelper.dart';
 
 class AddTreatmentPage extends StatefulWidget {
   final Function(Map<String, dynamic>) onAdd; // Callback for adding treatments
@@ -8,11 +8,11 @@ class AddTreatmentPage extends StatefulWidget {
   final VoidCallback onNewFieldRequested; // Callback to add new fields
 
   const AddTreatmentPage({
-    Key? key,
+    super.key,
     required this.onAdd,
     required this.existingFields,
     required this.onNewFieldRequested,
-  }) : super(key: key);
+  });
 
   @override
   _AddTreatmentPageState createState() => _AddTreatmentPageState();
@@ -22,6 +22,7 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
   final _formKey = GlobalKey<FormState>();
   final _productUsedController = TextEditingController();
   final _quantityController = TextEditingController();
+  final _customTreatmentTypeController = TextEditingController();
   String? _selectedStatus;
   String? _selectedTreatmentType;
   String? _selectedField;
@@ -31,6 +32,7 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
   void dispose() {
     _productUsedController.dispose();
     _quantityController.dispose();
+    _customTreatmentTypeController.dispose();
     super.dispose(); // Proper resource cleanup
   }
 
@@ -47,6 +49,13 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
         _selectedDate = picked;
       });
     }
+  }
+
+  String _formatDate(DateTime? date) {
+    if (date == null) {
+      return 'Invalid Date';
+    }
+    return DateFormat('yyyy-MM-dd').format(date);
   }
 
   @override
@@ -71,8 +80,8 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
                   ),
                   child: Text(
                     _selectedDate != null
-                        ? DateFormat('yyyy-MM-dd').format(_selectedDate!)
-                        : 'Select Date',
+                        ? _formatDate(_selectedDate) // Format the date
+                        : 'Select Date', // Prompt to select a date
                   ),
                 ),
               ),
@@ -87,7 +96,7 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
                     child: Text(status),
                   );
                 }).toList(),
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Status',
                   border: OutlineInputBorder(),
                 ),
@@ -121,7 +130,7 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
                     child: Text(type),
                   );
                 }).toList(),
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Treatment Type',
                   border: OutlineInputBorder(),
                 ),
@@ -139,6 +148,21 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
               ),
               const SizedBox(height: 20),
 
+              if (_selectedTreatmentType == 'Other') ...[
+                TextFormField(
+                  controller: _customTreatmentTypeController,
+                  decoration: const InputDecoration(
+                    labelText: 'Custom Treatment Type',
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a treatment type';
+                    }
+                    return null;
+                  },
+                ),
+              ],
               // Dropdown for Field
               Row(
                 children: [
@@ -151,7 +175,7 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
                           child: Text(field),
                         );
                       }).toList(),
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Field',
                         border: OutlineInputBorder(),
                       ),
@@ -180,7 +204,7 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
               // Product Used TextField
               TextFormField(
                 controller: _productUsedController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Product Used',
                   border: OutlineInputBorder(),
                 ),
@@ -196,7 +220,7 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
               // Quantity TextField
               TextFormField(
                 controller: _quantityController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Quantity',
                   border: OutlineInputBorder(),
                 ),
@@ -211,31 +235,39 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
 
               // Add Treatment Button
               ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    Map<String, dynamic> newTreatment = {
-                      'date': DateFormat("yyyy-MM-dd").format(_selectedDate!),
-                      'status': _selectedStatus,
-                      'treatment_type': _selectedTreatmentType,
-                      'field': _selectedField,
-                      'product_used': _productUsedController.text,
-                      'quantity': double.tryParse(_quantityController
-                          .text), // Default to 0.0 if null or empty
-                    };
+  onPressed: () {
+    if (_formKey.currentState!.validate()){
+      try {
+        // Check for null values and validate them
+        if (_selectedDate == null) {
+          throw Exception('Date is required'); // Custom error message
+        }
+        
+        // Build the new treatment map
+        Map<String, dynamic> newTreatment = {
+          'date': DateFormat("yyyy-MM-dd").format(_selectedDate!), // Ensure non-null date
+          'status': _selectedStatus, // Ensure it's not null
+          'treatment_type': _selectedTreatmentType, // Ensure it's not null
+          'field': _selectedField, // Ensure it's not null
+          'product_used': _productUsedController.text, // Ensure it's not empty
+          'quantity': double.tryParse(_quantityController.text) ?? 0.0, // Avoid null
+        };
+         DatabaseHelper.insertTreatment(newTreatment);
+        // Navigate back to the previous screen
+        Navigator.pop(context);
 
-                    try {
-                      widget.onAdd(newTreatment); // Add the treatment
-                      Navigator.pop(
-                          context); // Navigate back to the previous page
-                    } catch (e) {
-                      debugPrint('Error adding treatment: $e');
-                    }
-                  }
-                },
+      } catch (e) {
+        debugPrint('Error adding treatment: $e'); // Improved error handling
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error adding treatment: $e')), // Display error message
+        );
+      }
+    }
+  },
                 child: const Text('Add Treatment'),
               ),
             ],
-          ),
+          )
         ),
       ),
     );

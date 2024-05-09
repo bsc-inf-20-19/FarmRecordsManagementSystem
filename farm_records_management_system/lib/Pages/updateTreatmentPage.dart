@@ -5,8 +5,7 @@ import 'package:intl/intl.dart';
 class UpdateTreatmentPage extends StatefulWidget {
   final int treatmentId;
 
-  const UpdateTreatmentPage({Key? key, required this.treatmentId})
-      : super(key: key);
+  const UpdateTreatmentPage({super.key, required this.treatmentId});
 
   @override
   _UpdateTreatmentPageState createState() => _UpdateTreatmentPageState();
@@ -76,6 +75,14 @@ class _UpdateTreatmentPageState extends State<UpdateTreatmentPage> {
   }
 
   @override
+  void dispose() {
+    _productUsedController.text = '';
+    _quantityController.text = '';
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -102,7 +109,7 @@ class _UpdateTreatmentPageState extends State<UpdateTreatmentPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               DropdownButtonFormField<String>(
                 value: _selectedStatus,
                 items: ['Planned', 'Done'].map((status) {
@@ -111,7 +118,7 @@ class _UpdateTreatmentPageState extends State<UpdateTreatmentPage> {
                     child: Text(status),
                   );
                 }).toList(),
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Status',
                   border: OutlineInputBorder(),
                 ),
@@ -125,7 +132,7 @@ class _UpdateTreatmentPageState extends State<UpdateTreatmentPage> {
                   return null;
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               DropdownButtonFormField<String>(
                 value: _selectedTreatmentType,
                 items: [
@@ -141,7 +148,7 @@ class _UpdateTreatmentPageState extends State<UpdateTreatmentPage> {
                     child: Text(type),
                   );
                 }).toList(),
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Treatment Type',
                   border: OutlineInputBorder(),
                 ),
@@ -155,10 +162,10 @@ class _UpdateTreatmentPageState extends State<UpdateTreatmentPage> {
                   return null;
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextFormField(
                 controller: _productUsedController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Product Used',
                   border: OutlineInputBorder(),
                 ),
@@ -169,10 +176,10 @@ class _UpdateTreatmentPageState extends State<UpdateTreatmentPage> {
                   return null;
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextFormField(
                 controller: _quantityController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Quantity of Product',
                   border: OutlineInputBorder(),
                 ),
@@ -183,7 +190,7 @@ class _UpdateTreatmentPageState extends State<UpdateTreatmentPage> {
                   return null;
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   _updateTreatment(context);

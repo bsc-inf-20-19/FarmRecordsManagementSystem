@@ -20,11 +20,29 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
     _loadData(); // Load initial data
   }
 
-  void _loadData() async {
-    List<Map<String, dynamic>> result = await DatabaseHelper.getTreatments();
-    setState(() {
-      treatments = result;
-    });
+   Future<void> _loadData() async {
+    try {
+      List<Map<String, dynamic>> result = await DatabaseHelper.getTreatments();
+      setState(() {
+        treatments = result; // Ensure data is stored in the state
+      });
+    } catch (e) {
+      debugPrint('Error loading treatments: $e'); // Handle exceptions
+    }
+  }
+
+  String _formatDate(String? dateStr) {
+    if (dateStr == null || dateStr.isEmpty) {
+      return 'Invalid Date'; // Fallback for null or empty date strings
+    }
+
+    try {
+      final date = DateTime.parse(dateStr); // Attempt to parse the date
+      return DateFormat("yyyy-MM-dd").format(date); // Format the date
+    } catch (e) {
+      debugPrint('Invalid date format: $e'); // Handle parsing exceptions
+      return 'Invalid Date'; // Fallback for invalid format
+    }
   }
 
   @override
@@ -37,9 +55,10 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
         itemCount: treatments.length,
         itemBuilder: (context, index) {
           var treatment = treatments[index];
+          String formattedDate = _formatDate(treatment["date"]); // Format the date
           return ListTile(
             title: Text(
-              '${treatment["status"]} - ${DateFormat("yyyy-MM-dd").format(DateTime.parse(treatment["date"]))}',
+              '${treatment["status"]} - $formattedDate',
             ),
             subtitle: Text(
               'Type: ${treatment["treatment_type"]}, Product: ${treatment["product_used"]}, Field: ${treatment["field"]}, Quantity: ${treatment["quantity"] ?? 0}',
@@ -83,7 +102,7 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
             MaterialPageRoute(
               builder: (context) => AddTreatmentPage(
                 onAdd: _addTreatment,
-                existingFields: ['Maize', 'GroundNuts'],
+                existingFields: const ['Maize', 'GroundNuts'],
                 onNewFieldRequested: () {
                   // Logic for new fields
                 },

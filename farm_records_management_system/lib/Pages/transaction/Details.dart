@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 
 // class Details extends StatelessWidget{
 //   Details({Key? key, required this.cropName, required this.cropDescription, 
