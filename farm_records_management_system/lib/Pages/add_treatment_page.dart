@@ -254,7 +254,7 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
         };
          DatabaseHelper.insertTreatment(newTreatment);
         // Navigate back to the previous screen
-        Navigator.pop(context);
+        Navigator.pop(context, true);
 
       } catch (e) {
         debugPrint('Error adding treatment: $e'); // Improved error handling

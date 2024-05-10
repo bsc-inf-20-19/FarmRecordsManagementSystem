@@ -20,7 +20,7 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
     _loadData(); // Load initial data
   }
 
-   Future<void> _loadData() async {
+  Future<void> _loadData() async {
     try {
       List<Map<String, dynamic>> result = await DatabaseHelper.getTreatments();
       setState(() {
@@ -30,6 +30,7 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
       debugPrint('Error loading treatments: $e'); // Handle exceptions
     }
   }
+
 
   String _formatDate(String? dateStr) {
     if (dateStr == null || dateStr.isEmpty) {
@@ -55,7 +56,8 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
         itemCount: treatments.length,
         itemBuilder: (context, index) {
           var treatment = treatments[index];
-          String formattedDate = _formatDate(treatment["date"]); // Format the date
+          String formattedDate =
+              _formatDate(treatment["date"]); // Format the date
           return ListTile(
             title: Text(
               '${treatment["status"]} - $formattedDate',
@@ -96,12 +98,12 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          final addedTreatment = await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => AddTreatmentPage(
-                onAdd: _addTreatment,
+                onAdd: (newTreatment) => _addTreatment(newTreatment),
                 existingFields: const ['Maize', 'GroundNuts'],
                 onNewFieldRequested: () {
                   // Logic for new fields
@@ -109,15 +111,18 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
               ),
             ),
           );
+          if (addedTreatment != null) {
+            _loadData(); // Refresh after successful addition
+          }
         },
         child: const Icon(Icons.add),
       ),
     );
   }
 
-  void _addTreatment(Map<String, dynamic> newTreatment) {
-    setState(() {
-      treatments.add(newTreatment); // Add new treatment and refresh state
-    });
+  void _addTreatment(Map<String, dynamic> newTreatment) async {
+    await DatabaseHelper.insertTreatment(
+        newTreatment); // Add new treatment and refresh state
+    _loadData();
   }
 }
