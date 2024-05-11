@@ -40,4 +40,6 @@ class DatabaseHelper {
     };
     return await db.insert('expenses', data);
   }
+
+  static insertUser(String name, int age) {}
 }

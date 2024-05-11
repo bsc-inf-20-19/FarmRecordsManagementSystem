@@ -1,45 +1,38 @@
 // import 'package:farm_records_management_system/Pages/crop.dart';
 import 'package:farm_records_management_system/Pages/fields.dart';
+import 'package:farm_records_management_system/screens/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:farm_records_management_system/pages/tasks.dart';
 import 'package:farm_records_management_system/Pages/treatments.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+class ActivityPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Farm Record',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.green,
-        ),
-      ),
-      home: const MyHomePage(title: 'Farm Record'),
+      
+      home: MyActivityPage(),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  final String title;
+class MyActivityPage extends StatelessWidget {
+ 
+const MyActivityPage({Key? key}) : super(key: key);
 
-  const MyHomePage({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        centerTitle: true,
-      ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        color: Colors.white, // background color
-        child: ListView(
+       return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.blue, // Change background color here
+          title: const Text('Activities'),
+          titleTextStyle:
+              const TextStyle(fontStyle: FontStyle.normal, fontSize: 20),
+          centerTitle: true,
+        ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             SizedBox(
               height: 200,
@@ -135,44 +128,20 @@ class MyHomePage extends StatelessWidget {
                   InkWell(
                     onTap: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const FieldsPage()));
+                        context,
+                        MaterialPageRoute(builder: (context) => FieldsPage()),
+                      );
                     },
-                    child: Container(
-                      height: 200,
-                      width: MediaQuery.of(context).size.width / 2 -
-                          32, // minus 32 due to the margin
-                      margin: const EdgeInsets.all(14.0),
-                      padding: const EdgeInsets.all(14.0),
-                      decoration: const BoxDecoration(
-                        color: Colors.white, // background color of the cards
-                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                        boxShadow: [
-                          // this is the shadow of the card
-                          BoxShadow(
-                            color: Colors.black,
-                            spreadRadius: 0.5,
-                            offset: Offset(2.0, 2.0),
-                            blurRadius: 5.0,
-                          ),
-                        ],
-                      ),
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment
-                            .end, // posion the everything to the bottom
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // place here your image
-                          Text("Field",
-                              style: TextStyle(
-                                  fontSize: 20.0,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold)),
-                        ],
-                      ),
-                    ),
-                  )
+                  ),
+                  CardItem(
+                    title: 'Plantings', // New navigation option
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => CropsPage()),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
