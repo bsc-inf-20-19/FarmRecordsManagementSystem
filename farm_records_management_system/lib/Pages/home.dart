@@ -3,6 +3,8 @@ import 'package:farm_records_management_system/screens/crops_livestock.dart';
 import 'package:flutter/material.dart';
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
@@ -53,7 +55,7 @@ class HomePage extends StatelessWidget {
               ListTile(
                 //ignore: prefer_const_constructors
                 leading: Icon(Icons.verified_user),
-                title: Text('Profile'),
+                title: const Text('Profile'),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -67,7 +69,7 @@ class HomePage extends StatelessWidget {
               ListTile(
                 //ignore: prefer_const_constructors
                 leading: Icon(Icons.settings),
-                title: Text('Settings'),
+                title: const Text('Settings'),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -81,7 +83,7 @@ class HomePage extends StatelessWidget {
               ListTile(
                 //ignore: prefer_const_constructors
                 leading: Icon(Icons.logout),
-                title: Text('Logout'),
+                title: const Text('Logout'),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -95,7 +97,7 @@ class HomePage extends StatelessWidget {
               ListTile(
                 //ignore: prefer_const_constructors
                 leading: Icon(Icons.help_center),
-                title: Text('How to use this app'),
+                title: const Text('How to use this app'),
                 onTap: () {
                   Navigator.push(
                     context,

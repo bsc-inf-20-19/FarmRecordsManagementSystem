@@ -1,3 +1,4 @@
+// import 'package:farm_records_management_system/Pages/crop.dart';
 import 'package:farm_records_management_system/Pages/fields.dart';
 import 'package:farm_records_management_system/screens/home_page.dart';
 import 'package:flutter/material.dart';
@@ -33,32 +34,98 @@ const MyActivityPage({Key? key}) : super(key: key);
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Expanded(
+            SizedBox(
+              height: 200,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Card Item for Treatments
-                  CardItem(
-                    title: 'Treatments',
+                  InkWell(
                     onTap: () {
                       Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => TreatmentsPage()),
-                      );
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const TreatmentsPage()));
                     },
+                    child: Container(
+                      height: 200,
+                      width: MediaQuery.of(context).size.width / 2 -
+                          32, // minus 32 due to the margin
+                      margin: const EdgeInsets.all(14.0),
+                      padding: const EdgeInsets.all(14.0),
+                      decoration: const BoxDecoration(
+                        color: Colors.white, // background color of the cards
+                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                        boxShadow: [
+                          // this is the shadow of the card
+                          BoxShadow(
+                            color: Colors.black,
+                            spreadRadius: 0.5,
+                            offset: Offset(2.0, 2.0),
+                            blurRadius: 5.0,
+                          ),
+                        ],
+                      ),
+                      child: const Column(
+                        mainAxisAlignment: MainAxisAlignment
+                            .end, // posion the everything to the bottom
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // place here your image
+                          Text("Treatments",
+                              style: TextStyle(
+                                  fontSize: 20.0,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                    ),
                   ),
-                  CardItem(
-                    title: 'Tasks',
+                  InkWell(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => TasksPage()),
-                      );
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => const TasksPage()));
                     },
-                  ),
-                  CardItem(
-                    title: 'Fields', // New navigation option
+                    child: Container(
+                      height: 200,
+                      width: MediaQuery.of(context).size.width / 2 -
+                          32, // minus 32 due to the margin
+                      margin: const EdgeInsets.all(14.0),
+                      padding: const EdgeInsets.all(14.0),
+                      decoration: const BoxDecoration(
+                        color: Colors.white, // background color of the cards
+                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                        boxShadow: [
+                          // this is the shadow of the card
+                          BoxShadow(
+                            color: Colors.black,
+                            spreadRadius: 0.5,
+                            offset: Offset(2.0, 2.0),
+                            blurRadius: 5.0,
+                          ),
+                        ],
+                      ),
+                      child: const Column(
+                        mainAxisAlignment: MainAxisAlignment
+                            .end, // posion the everything to the bottom
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // place here your image
+                          Text("Tasks",
+                              style: TextStyle(
+                                  fontSize: 20.0,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 200,
+              child: Row(
+                children: [
+                  InkWell(
                     onTap: () {
                       Navigator.push(
                         context,
@@ -89,8 +156,7 @@ class CardItem extends StatelessWidget {
   final String title;
   final VoidCallback onTap;
 
-  const CardItem({Key? key, required this.title, required this.onTap})
-      : super(key: key);
+  const CardItem({super.key, required this.title, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

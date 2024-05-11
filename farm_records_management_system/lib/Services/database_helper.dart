@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:farm_records_management_system/Models/Expenses_model.dart';
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 

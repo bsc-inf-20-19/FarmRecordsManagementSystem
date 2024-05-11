@@ -1,10 +1,8 @@
-import 'package:farm_records_management_system/Models/Expenses_model.dart';
-import 'package:farm_records_management_system/Pages/transaction/transactions.dart';
 import 'package:farm_records_management_system/Services/database_helper.dart';
 import 'package:flutter/material.dart';
 
 class Expense extends StatefulWidget {
-  Expense({Key? key}) : super(key: key);
+  const Expense({super.key});
 
   @override
   _HomeState createState() => _HomeState();
@@ -69,14 +67,14 @@ class _HomeState extends State<Expense> {
         centerTitle: true,
       ),
       body: Container(
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         child: ListView(
           children: [
             TextField(
               decoration: InputDecoration(
                 labelText: 'Select a date',
                 suffixIcon: IconButton(
-                  icon: Icon(Icons.calendar_today),
+                  icon: const Icon(Icons.calendar_today),
                   onPressed: () => _selectDate(context),
                 ),
               ),
@@ -93,8 +91,8 @@ class _HomeState extends State<Expense> {
               value: _selectVal,
               items: _cropTypeList
                   .map((e) => DropdownMenuItem(
-                        child: Text(e),
                         value: e,
+                        child: Text(e),
                       ))
                   .toList(),
               onChanged: (val) {
@@ -113,8 +111,8 @@ class _HomeState extends State<Expense> {
               value: _selectFieldVal,
               items: _fieldList
                   .map((e) => DropdownMenuItem(
-                        child: Text(e),
                         value: e,
+                        child: Text(e),
                       ))
                   .toList(),
               onChanged: (val) {
@@ -125,10 +123,10 @@ class _HomeState extends State<Expense> {
               icon: const Icon(
                 Icons.arrow_drop_down_circle_outlined,
               ),
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   labelText: "Select field", border: UnderlineInputBorder()),
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
 
             //Textfields for expense details
             MyTextField(
@@ -136,21 +134,21 @@ class _HomeState extends State<Expense> {
               fieldName: "Expense Name",
               id: 'expense',
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             MyTextField(
               myController: _amountController,
               fieldName: "Amount",
               keyboardType: TextInputType.number,
               id: 'amount',
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             MyTextField(
               myController: _descriptionController,
               fieldName: "Description",
               maxLines: 3,
               id: 'descript',
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             myBtn(context)
           ],
         ),
@@ -174,14 +172,13 @@ class _HomeState extends State<Expense> {
           }),
         );
       },
-      child: Text("Add"),
+      child: const Text("Add"),
     );
   }
 }
 
 class MyTextField extends StatelessWidget {
-  MyTextField({
-    Key? key,
+  MyTextField({super.key, 
     required this.myController,
     required this.fieldName,
     this.keyboardType,
