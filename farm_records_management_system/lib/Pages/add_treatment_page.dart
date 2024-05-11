@@ -50,6 +50,9 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
       });
     }
   }
+   String _getStatusFromDate(DateTime date) {
+    return date.isAfter(DateTime.now()) ? 'Planned' : 'Done';
+  }
 
   String _formatDate(DateTime? date) {
     if (date == null) {

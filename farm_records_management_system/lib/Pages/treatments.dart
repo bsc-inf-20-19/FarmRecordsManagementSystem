@@ -13,24 +13,53 @@ class TreatmentsPage extends StatefulWidget {
 
 class _TreatmentsPageState extends State<TreatmentsPage> {
   List<Map<String, dynamic>> treatments = []; // Store treatment data
+  late TextEditingController searchController;
+  bool isSearching = false;
 
   @override
   void initState() {
     super.initState();
     _loadData(); // Load initial data
+    searchController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
   }
 
   Future<void> _loadData() async {
     try {
       List<Map<String, dynamic>> result = await DatabaseHelper.getTreatments();
       setState(() {
-        treatments = result; // Ensure data is stored in the state
+        treatments =
+            result.reversed.toList(); // Ensure data is stored in the state
       });
     } catch (e) {
       debugPrint('Error loading treatments: $e'); // Handle exceptions
     }
   }
 
+  void _applySearchFilter(String lowerCase) {
+    String searchTerm = searchController.text.toLowerCase();
+    setState(() {
+      if (searchTerm.isEmpty) {
+        isSearching = false;
+        _loadData();
+      } else {
+        isSearching = true;
+        treatments = treatments.where((treatment) {
+          // Filter by name, type, or date
+          return treatment['status'].toLowerCase().contains(searchTerm) ||
+              treatment['treatment_type'].toLowerCase().contains(searchTerm) ||
+              treatment['product_used'].toLowerCase().contains(searchTerm) ||
+              treatment['field'].toLowerCase().contains(searchTerm) ||
+              treatment['date'].toLowerCase().contains(searchTerm);
+        }).toList();
+      }
+    });
+  }
 
   String _formatDate(String? dateStr) {
     if (dateStr == null || dateStr.isEmpty) {
@@ -50,8 +79,38 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Treatments'),
+        title: isSearching ? TextField(
+          controller: searchController,
+          onChanged: (value) {
+            _applySearchFilter(value.toLowerCase());
+          },
+          decoration: InputDecoration(
+                  hintText: 'Search by name, type, or date',
+                  border: InputBorder.none,
+        )
+        )
+        : Row(
+          children: [
+            Text('Treatments'), // Treatment title
+            SizedBox(width: 10),  // Spacer between title and search
+            
+          ],
+        ),
+        actions: [
+          IconButton(
+           icon: Icon(isSearching ? Icons.close : Icons.search), 
+           onPressed: () {
+            setState(() {
+              if (isSearching) {
+                  searchController.clear(); // Clear search field when closing
+                }
+                isSearching = !isSearching; // Toggle search state
+            });
+           },
+            ),
+        ],
       ),
+
       body: ListView.builder(
         itemCount: treatments.length,
         itemBuilder: (context, index) {
@@ -121,6 +180,8 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
   }
 
   void _addTreatment(Map<String, dynamic> newTreatment) async {
+    // Automatically fill status based on the selected date
+    newTreatment['status'] = DateFormat("yyyy-MM-dd").parse(newTreatment['date']).isAfter(DateTime.now()) ? 'Planned' : 'Done';  
     await DatabaseHelper.insertTreatment(
         newTreatment); // Add new treatment and refresh state
     _loadData();
