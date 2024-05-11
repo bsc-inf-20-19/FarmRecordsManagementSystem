@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:farm_records_management_system/Pages/home.dart';
 import 'package:farm_records_management_system/screens/home_page.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +20,7 @@ class _SplashPageState extends State<SplashPage> {
         () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => HomePage(),
+              builder: (context) => HomePage(), // imported from the homepage temporarily
             )));
   }
 

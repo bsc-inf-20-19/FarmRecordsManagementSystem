@@ -162,18 +162,17 @@ class _HomeState extends State<Expense> {
     return OutlinedButton(
       style: OutlinedButton.styleFrom(minimumSize: const Size(200, 50)),
       onPressed: () async {
-        _saveData();
-        // Navigator.push(
-        // context,
-        // MaterialPageRoute(builder: (context) {
-        //   return _saveData;
-        // return Trans(
-        //   expenseName: _nameController.text,
-        //   amount: double.parse(_amountController.text),
-        //   description: _descriptionController.text,
-        // );
-        //   }),
-        // );
+        // _saveData();
+        Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) { 
+        return Trans(
+          expenseName: _nameController.text,
+          amount: double.parse(_amountController.text),
+          description: _descriptionController.text,
+        );
+          }),
+        );
       },
       child: Text("Add"),
     );

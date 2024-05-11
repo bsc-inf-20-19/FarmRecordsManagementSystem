@@ -1,3 +1,5 @@
+import 'package:farm_records_management_system/Pages/transaction/transactions.dart';
+import 'package:farm_records_management_system/screens/crops_livestock.dart';
 import 'package:flutter/material.dart';
 
 class MyApp extends StatelessWidget {
@@ -108,15 +110,13 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ),
-
       backgroundColor: Colors.transparent,
-
       appBar: AppBar(
         backgroundColor: Colors.blue, // Change background color here
         title: const Text('Farm Records Management'),
         titleTextStyle:
             const TextStyle(fontStyle: FontStyle.normal, fontSize: 20),
-            centerTitle: true,
+        centerTitle: true,
       ),
       body: Container(
           decoration: const BoxDecoration(
@@ -126,35 +126,38 @@ class HomePage extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
- 
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 10),
-                  
                   child: Expanded(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         CardItem(
-                          title: 'Crops & Fields',
+                          title: 'Fields',
                           onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const LandingPage()),
+                            );
+                          },
+                        ),
+                        CardItem(
+                          title: 'Reports',
+                          onTap: () => {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
                                     const DetailsPage(cardTitle: 'First Card'),
                               ),
-                            );
+                            )
                           },
-                        ),
-                        CardItem(
-                            title: 'Reports',
-                            onTap: () {
-                              navigateToDetailsPage(context, 'reports');
-                            })
+                        )
                       ],
                     ),
                   ),
@@ -168,7 +171,10 @@ class HomePage extends StatelessWidget {
                         CardItem(
                           title: 'Transactions',
                           onTap: () {
-                            Navigator.pushNamed(context, '/transactions');
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Transaction()));
                           },
                         ),
                         CardItem(
@@ -179,40 +185,6 @@ class HomePage extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ),
-                ),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Card(
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const DetailsPage(cardTitle: 'First Card'),
-                              ),
-                            );
-                          },
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Image.asset('images/report.png'),
-                              const Text(
-                                'Crops & Fields',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
                   ),
                 ),
               ],

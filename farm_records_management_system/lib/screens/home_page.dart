@@ -1,14 +1,14 @@
 import 'package:farm_records_management_system/screens/detail_page.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class CropsPage extends StatefulWidget {
+  const CropsPage({Key? key}) : super(key: key);
   
   @override
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<HomePage> {
+class _HomeState extends State<CropsPage> {
 
   DateTime? _selectedDate;
 

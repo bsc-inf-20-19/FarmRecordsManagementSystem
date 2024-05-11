@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 
 // class Details extends StatelessWidget{
 //   Details({Key? key, required this.cropName, required this.cropDescription, 
@@ -41,8 +41,7 @@ import 'package:flutter/material.dart';
 //                 color: Colors.blueAccent),
 //                 onPressed: () {},
 //                 ),
-                
-                
+                         
 //               ),
 //           ],
 //         ),

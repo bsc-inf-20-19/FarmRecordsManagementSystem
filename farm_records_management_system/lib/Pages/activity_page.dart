@@ -1,37 +1,34 @@
 import 'package:farm_records_management_system/Pages/fields.dart';
+import 'package:farm_records_management_system/screens/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:farm_records_management_system/pages/tasks.dart';
 import 'package:farm_records_management_system/Pages/treatments.dart';
 
-class MyApp extends StatelessWidget {
+class ActivityPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Farm Record',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-        appBarTheme: AppBarTheme(
-          backgroundColor: Colors.green,
-        ),
-      ),
-      home: MyHomePage(title: 'Farm Record'),
+      
+      home: MyActivityPage(),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  final String title;
+class MyActivityPage extends StatelessWidget {
+ 
+const MyActivityPage({Key? key}) : super(key: key);
 
-  MyHomePage({Key? key, required this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        centerTitle: true,
-      ),
+       return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.blue, // Change background color here
+          title: const Text('Activities'),
+          titleTextStyle:
+              const TextStyle(fontStyle: FontStyle.normal, fontSize: 20),
+          centerTitle: true,
+        ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -66,6 +63,15 @@ class MyHomePage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => FieldsPage()),
+                      );
+                    },
+                  ),
+                  CardItem(
+                    title: 'Plantings', // New navigation option
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => CropsPage()),
                       );
                     },
                   ),
