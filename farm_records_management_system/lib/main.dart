@@ -1,9 +1,10 @@
-// import 'package:farm_records_management_system/Pages/home.dart';
-// import 'package:farm_records_management_system/Pages/transaction/expense.dart';
-// import 'package:farm_records_management_system/Pages/transaction/transactions.dart';
-import 'package:farm_records_management_system/pages/activity_page.dart';
+import 'package:farm_records_management_system/Screen/home.dart';
+import 'package:farm_records_management_system/Screen/my-form.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
+
+
+
