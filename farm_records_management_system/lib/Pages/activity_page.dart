@@ -1,5 +1,3 @@
-import 'package:farm_records_management_system/Pages/fields.dart';
-import 'package:farm_records_management_system/screens/home_page.dart';
 import 'package:farm_records_management_system/Pages/crop.dart';
 import 'package:farm_records_management_system/Pages/harvests.dart';
 import 'package:farm_records_management_system/screens/new_planting.dart';
