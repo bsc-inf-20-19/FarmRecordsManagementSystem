@@ -223,6 +223,7 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
               // Quantity TextField
               TextFormField(
                 controller: _quantityController,
+                keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
                   labelText: 'Quantity',
                   border: OutlineInputBorder(),
