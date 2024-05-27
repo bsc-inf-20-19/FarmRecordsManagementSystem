@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:farm_records_management_system/Pages/home.dart';
-import 'package:farm_records_management_system/screens/home_page.dart';
+import 'package:farm_records_management_system/screens/new_planting.dart';
 import 'package:flutter/material.dart';
 
 
