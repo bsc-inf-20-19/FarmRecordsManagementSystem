@@ -1,6 +1,7 @@
 import 'package:farm_records_management_system/Pages/activity_page.dart';
-import 'package:farm_records_management_system/screens/Activities.dart';
-import 'package:farm_records_management_system/screens/home_page.dart';
+import 'package:farm_records_management_system/Pages/home.dart';
+// import 'package:farm_records_management_system/screens/Activities.dart';
+import 'package:farm_records_management_system/screens/new_planting.dart';
 import 'package:flutter/material.dart';
 
 class CropsLivestockPage extends StatelessWidget {
@@ -46,7 +47,7 @@ class LandingPage extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => Activity()),
+                                    builder: (context) => ActivityPage()),
                               );
                             }),
 

@@ -7,7 +7,7 @@ class FieldsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Field Management'),
+        title: const Text('Harvests'),
         centerTitle: true,
       ),
       body: Padding(
@@ -20,48 +20,48 @@ class FieldsPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  'Field Input Form',
+                  'New Harvest',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
                   decoration: const InputDecoration(
-                    labelText: 'Field ID',
+                    labelText: 'Harvest Date',
                     border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 10),
                 TextFormField(
                   decoration: const InputDecoration(
-                    labelText: 'Field Name',
+                    labelText: 'Select Planting to harvest',
                     border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 10),
                 TextFormField(
                   decoration: const InputDecoration(
-                    labelText: 'Field Size (in acres)',
+                    labelText: 'Quantity harvested',
                     border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 10),
                 TextFormField(
                   decoration: const InputDecoration(
-                    labelText: 'Crop ID',
+                    labelText: 'Batch number',
                     border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 10),
                 TextFormField(
                   decoration: const InputDecoration(
-                    labelText: 'Treatment ID',
+                    labelText: 'Harvest Quality',
                     border: OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 10),
                 TextFormField(
                   decoration: const InputDecoration(
-                    labelText: 'Harvest ID',
+                    labelText: 'Is this the final harvest for the planting?',
                     border: OutlineInputBorder(),
                   ),
                 ),
@@ -71,11 +71,11 @@ class FieldsPage extends StatelessWidget {
                     // Implement field submission logic here
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('Field data submitted successfully!'),
+                        content: Text('Harvest income(OPtional, can be filled later after selling the harvest)'),
                       ),
                     );
                   },
-                  child: const Text('Submit Field Data'),
+                  child: const Text('Submit Harvest Data'),
                 ),
               ],
             ),
