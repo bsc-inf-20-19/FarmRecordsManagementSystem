@@ -1,11 +1,12 @@
+import 'package:farm_records_management_system/Pages/transaction/Expense.dart';
 import 'package:flutter/material.dart';
 
 class Transaction extends StatelessWidget {
-  const Transaction({Key? key});
+  const Transaction({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Trans(
+    return const Trans(
       expenseName: '',
       amount: 0.0,
       description: '',
@@ -14,12 +15,12 @@ class Transaction extends StatelessWidget {
 }
 
 class Trans extends StatelessWidget {
-  Trans({
-    Key? key,
+  const Trans({
+    super.key,
     required this.expenseName,
     required this.amount,
     required this.description,
-  }) : super(key: key);
+  });
 
   final String expenseName;
   final String description;
@@ -28,8 +29,8 @@ class Trans extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.grey[200],
-        appBar: AppBar(
+      backgroundColor: Colors.grey[200],
+      appBar: AppBar(
         backgroundColor: Colors.blue[900],
         title: const Text('Transactions'),
         centerTitle: true,
@@ -48,7 +49,7 @@ class Trans extends StatelessWidget {
                     icon: const Icon(
                       Icons.bookmark_add_outlined,
                       color: Colors.blueAccent,
-                    ),  
+                    ),
                     onPressed: () {},
                   ),
                   title: Text(
@@ -57,11 +58,8 @@ class Trans extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       fontSize: 18.0,
                     ),
-                   
                   ),
-                  subtitle: Text(
-                    description
-                  ),
+                  subtitle: Text(description),
                   isThreeLine: true,
                   trailing: IconButton(
                     icon: const Icon(
@@ -79,9 +77,10 @@ class Trans extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: FloatingActionButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/Expense');
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Expense()));
               },
-              child: Icon(Icons.add),
+              child: const Icon(Icons.add),
             ),
           ),
         ],
