@@ -1,4 +1,3 @@
-// import 'package:farm_records_management_system/Pages/crop.dart';
 import 'package:farm_records_management_system/Pages/fields.dart';
 import 'package:farm_records_management_system/screens/home_page.dart';
 import 'package:flutter/material.dart';
@@ -9,27 +8,23 @@ class ActivityPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      
       home: MyActivityPage(),
     );
   }
 }
 
 class MyActivityPage extends StatelessWidget {
- 
-const MyActivityPage({Key? key}) : super(key: key);
-
+  const MyActivityPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-       return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.blue, // Change background color here
-          title: const Text('Activities'),
-          titleTextStyle:
-              const TextStyle(fontStyle: FontStyle.normal, fontSize: 20),
-          centerTitle: true,
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        title: const Text('Activities'),
+        titleTextStyle: const TextStyle(fontStyle: FontStyle.normal, fontSize: 20),
+        centerTitle: true,
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -40,22 +35,17 @@ const MyActivityPage({Key? key}) : super(key: key);
                 children: [
                   InkWell(
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const TreatmentsPage()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const TreatmentsPage()));
                     },
                     child: Container(
                       height: 200,
-                      width: MediaQuery.of(context).size.width / 2 -
-                          32, // minus 32 due to the margin
+                      width: MediaQuery.of(context).size.width / 2 - 32,
                       margin: const EdgeInsets.all(14.0),
                       padding: const EdgeInsets.all(14.0),
                       decoration: const BoxDecoration(
-                        color: Colors.white, // background color of the cards
+                        color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(20.0)),
                         boxShadow: [
-                          // this is the shadow of the card
                           BoxShadow(
                             color: Colors.black,
                             spreadRadius: 0.5,
@@ -65,36 +55,33 @@ const MyActivityPage({Key? key}) : super(key: key);
                         ],
                       ),
                       child: const Column(
-                        mainAxisAlignment: MainAxisAlignment
-                            .end, // posion the everything to the bottom
+                        mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // place here your image
                           Text("Treatments",
-                              style: TextStyle(
-                                  fontSize: 20.0,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold)),
+                            style: TextStyle(
+                              fontSize: 20.0,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold
+                            ),
+                          ),
                         ],
                       ),
                     ),
                   ),
                   InkWell(
                     onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => const TasksPage()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const TasksPage()));
                     },
                     child: Container(
                       height: 200,
-                      width: MediaQuery.of(context).size.width / 2 -
-                          32, // minus 32 due to the margin
+                      width: MediaQuery.of(context).size.width / 2 - 32,
                       margin: const EdgeInsets.all(14.0),
                       padding: const EdgeInsets.all(14.0),
                       decoration: const BoxDecoration(
-                        color: Colors.white, // background color of the cards
+                        color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(20.0)),
                         boxShadow: [
-                          // this is the shadow of the card
                           BoxShadow(
                             color: Colors.black,
                             spreadRadius: 0.5,
@@ -104,20 +91,20 @@ const MyActivityPage({Key? key}) : super(key: key);
                         ],
                       ),
                       child: const Column(
-                        mainAxisAlignment: MainAxisAlignment
-                            .end, // posion the everything to the bottom
+                        mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // place here your image
                           Text("Tasks",
-                              style: TextStyle(
-                                  fontSize: 20.0,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold)),
+                            style: TextStyle(
+                              fontSize: 20.0,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -132,15 +119,16 @@ const MyActivityPage({Key? key}) : super(key: key);
                         MaterialPageRoute(builder: (context) => FieldsPage()),
                       );
                     },
+                    child: CardItem(title: 'Fields', onTap: () {}),
                   ),
-                  CardItem(
-                    title: 'Plantings', // New navigation option
+                  InkWell(
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => CropsPage()),
                       );
                     },
+                    child: CardItem(title: 'Plantings', onTap: () {}),
                   ),
                 ],
               ),
@@ -156,7 +144,7 @@ class CardItem extends StatelessWidget {
   final String title;
   final VoidCallback onTap;
 
-  const CardItem({super.key, required this.title, required this.onTap});
+  const CardItem({Key? key, required this.title, required this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

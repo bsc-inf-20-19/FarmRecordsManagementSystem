@@ -6,6 +6,7 @@ class DatabaseHelper {
   static Future<Database> _openDatabase() async {
     final databasePath = await getDatabasesPath();
     final path = join(databasePath, 'my_database.db');
+    print('Database path: $databasePath');
 
     // Check if the database file is read-only
     if (await File(path).exists()) {
@@ -16,19 +17,23 @@ class DatabaseHelper {
       if (!hasWritePermission) {
         // If the file is read-only, delete and recreate it
         await File(path).delete();
-        await File(path).writeAsBytes(await File(path).readAsBytes(), mode: FileMode.write);
+        await File(path)
+            .writeAsBytes(await File(path).readAsBytes(), mode: FileMode.write);
       }
     }
 
+    // Open the database
     return openDatabase(
       path,
-      version: 2, // Increment this to trigger schema upgrades
+      version: 1, // Increment this to trigger schema upgrades
       onCreate: _createDatabase,
       onUpgrade: _onUpgrade,
     );
   }
 
+  // Method to create the database tables
   static Future<void> _createDatabase(Database db, int version) async {
+    // Create a table for Treatments
     await db.execute(
       '''
       CREATE TABLE IF NOT EXISTS treatments (
@@ -43,12 +48,30 @@ class DatabaseHelper {
       )
       ''',
     );
+
+    // Create a table for Expenses
+    await db.execute(
+  '''
+  CREATE TABLE IF NOT EXISTS expenses (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    date TEXT,
+    expense_type TEXT,
+    field TEXT,
+    amount REAL,
+    description TEXT,
+    specific_to_field TEXT,
+    customer_name TEXT
+  )
+  ''',
+);
+
   }
 
+  // Method to handle database upgrades
   static Future<void> _onUpgrade(
       Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
-      await _createDatabase(db, newVersion); // Ensure schema upgrades
+      // Perform necessary upgrades here
     }
   }
 
@@ -87,5 +110,33 @@ class DatabaseHelper {
       where: 'id = ?',
       whereArgs: [id],
     );
+  }
+
+  // CRUD operations for expenses
+  static Future<int> insertTransaction(Map<String, dynamic> tdata) async {
+    Database db = await _openDatabase();
+    return await db.insert('expenses', tdata);
+  }
+
+  static Future<int> deleteTransaction(int id) async {
+    Database db = await _openDatabase(); // Ensure proper initialization
+    return await db.delete('expenses', where: 'id = ?', whereArgs: [id]);
+  }
+
+  // Getter methods for expenses
+  static Future<Map<String, dynamic>?> getTransaction(int id) async {
+    Database db = await _openDatabase(); // Ensure proper initialization
+    List<Map<String, dynamic>> result = await db.query(
+      'expenses',
+      where: 'id = ?',
+      whereArgs: [id],
+      limit: 1,
+    );
+    return result.isNotEmpty ? result.first : null; 
+  }
+
+  static Future<List<Map<String, dynamic>>> getTransactions() async {
+    Database db = await _openDatabase(); // Ensure proper initialization
+    return await db.query('expenses');
   }
 }
