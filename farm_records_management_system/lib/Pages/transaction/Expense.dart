@@ -1,5 +1,6 @@
-import 'package:farm_records_management_system/Services/database_helper.dart';
-import 'package:flutter/material.dart';
+import 'package:farm_records_management_system/Pages/databaseHelper.dart';
+import 'package:farm_records_management_system/Pages/transaction/transactions.dart';
+  import 'package:flutter/material.dart';
 
 class Expense extends StatefulWidget {
   const Expense({super.key});
@@ -37,13 +38,6 @@ class _HomeState extends State<Expense> {
   final _amountController = TextEditingController();
   final _descriptionController = TextEditingController();
 
-  _saveData() async {
-    final expenseName = _nameController.text;
-    final description = _descriptionController.text;
-    final amount = double.tryParse(_amountController.text) ?? 0;
-
-    await DatabaseHelper.insertExpense(expenseName, description, amount);
-  }
 
   final _cropTypeList = ["Maize", "Tobacco", "G. Nuts", "Beans"];
   String? _selectVal = "";
