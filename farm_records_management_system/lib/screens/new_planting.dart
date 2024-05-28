@@ -56,16 +56,16 @@ class _HomeState extends State<NewPlantPage> {
 
   @override
   void dispose() {
-    _dateController.dispose();
-    _cropController.dispose();
-    _cropDecController.dispose();
-    _cropCompanyController.dispose();
-    _cropTypeController.dispose();
-    _cropLotController.dispose();
-    _cropHarvestController.dispose();
-    _cropDropdownController.dispose();
-    _fieldDropdownController.dispose();
-    super.dispose();
+   _dateController.dispose();
+   _cropController.dispose();
+   _cropDecController.dispose();
+   _cropCompanyController.dispose();
+   _cropTypeController.dispose();
+   _cropLotController.dispose();
+   _cropHarvestController.dispose();
+   _cropDropdownController.dispose();
+   _fieldDropdownController.dispose();
+   super.dispose(); 
   }
 
   @override
