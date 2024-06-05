@@ -8,16 +8,17 @@ class FieldSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      color: Colors.white,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            height: 200,
-            width: MediaQuery.of(context).size.width,
-            child: Row(
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.all(8.0),
+        color: Colors.white,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              height: 200,
+              width: MediaQuery.of(context).size.width,
+           child: Row(
               children: [
                 Expanded(
                   child: InkWell(
@@ -25,11 +26,11 @@ class FieldSection extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CropsFieldPage(), // Assuming CropsFieldPage exists
+                          builder: (context) => const CropsFieldPage(), // Assuming CropsFieldPage exists
                         ),
                       );
                     },
-                    child: CropCard(),
+                    child: const CropCard(),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -39,17 +40,18 @@ class FieldSection extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CropsFieldPage(), // Assuming CropsFieldPage exists
+                          builder: (context) => const CropsFieldPage(), // Assuming CropsFieldPage exists
                         ),
                       );
                     },
-                    child: LivestockCard(),
+                    child: const LivestockCard(),
                   ),
                 ),
               ],
             ),
-          ),
-        ],
+            )// Additional content can be added here if needed
+          ],
+        ),
       ),
     );
   }

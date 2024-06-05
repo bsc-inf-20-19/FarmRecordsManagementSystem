@@ -33,16 +33,14 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
     try {
       List<Map<String, dynamic>> result = await DatabaseHelper.getTreatments();
       setState(() {
-        treatments =
-            result.reversed.toList(); // Ensure data is stored in the state
+        treatments = result.reversed.toList(); // Ensure data is stored in the state
       });
     } catch (e) {
       debugPrint('Error loading treatments: $e'); // Handle exceptions
     }
   }
 
-  void _applySearchFilter(String lowerCase) {
-    String searchTerm = searchController.text.toLowerCase();
+  void _applySearchFilter(String searchTerm) {
     setState(() {
       if (searchTerm.isEmpty) {
         isSearching = false;
@@ -50,7 +48,6 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
       } else {
         isSearching = true;
         treatments = treatments.where((treatment) {
-          // Filter by name, type, or date
           return treatment['status'].toLowerCase().contains(searchTerm) ||
               treatment['treatment_type'].toLowerCase().contains(searchTerm) ||
               treatment['product_used'].toLowerCase().contains(searchTerm) ||
@@ -75,83 +72,153 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
     }
   }
 
+  Widget _buildRow(String label, String value) {
+    return Row(
+      children: [
+        Text(
+          label,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+        Expanded(
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Padding(
+              padding: EdgeInsets.only(right: 50, bottom: 10),
+              child: Text(
+                value,
+                style: TextStyle(fontStyle: FontStyle.italic, fontSize: 18),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Future<void> _showDeleteConfirmationDialog(BuildContext context, int treatmentId) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // User must tap a button to dismiss the dialog
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm Deletion'),
+          content: const Text('Are you sure you want to delete this treatment?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+            TextButton(
+              child: const Text('Confirm'),
+              onPressed: () async {
+                await DatabaseHelper.deleteTreatment(treatmentId);
+                _loadData(); // Refresh after deletion
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: isSearching ? TextField(
-          controller: searchController,
-          onChanged: (value) {
-            _applySearchFilter(value.toLowerCase());
-          },
-          decoration: InputDecoration(
+        title: isSearching
+            ? TextField(
+                controller: searchController,
+                onChanged: (value) => _applySearchFilter(value.toLowerCase()),
+                decoration: InputDecoration(
                   hintText: 'Search by name, type, or date',
                   border: InputBorder.none,
-        )
-        )
-        : Row(
-          children: [
-            Text('Treatments'), // Treatment title
-            SizedBox(width: 10),  // Spacer between title and search
-            
-          ],
-        ),
+                ),
+              )
+            : Text('Treatments'), // Treatment title
         actions: [
           IconButton(
-           icon: Icon(isSearching ? Icons.close : Icons.search), 
-           onPressed: () {
-            setState(() {
-              if (isSearching) {
+            icon: Icon(isSearching ? Icons.close : Icons.search),
+            onPressed: () {
+              setState(() {
+                if (isSearching) {
                   searchController.clear(); // Clear search field when closing
                 }
                 isSearching = !isSearching; // Toggle search state
-            });
-           },
-            ),
+              });
+            },
+          ),
         ],
       ),
-
       body: ListView.builder(
         itemCount: treatments.length,
         itemBuilder: (context, index) {
           var treatment = treatments[index];
-          String formattedDate =
-              _formatDate(treatment["date"]); // Format the date
-          return ListTile(
-            title: Text(
-              '${treatment["status"]} - $formattedDate',
-            ),
-            subtitle: Text(
-              'Type: ${treatment["treatment_type"]}, Product: ${treatment["product_used"]}, Field: ${treatment["field"]}, Quantity: ${treatment["quantity"] ?? 0}',
-            ),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => UpdateTreatmentPage(
-                          treatmentId: treatment['id'],
+          String formattedDate = _formatDate(treatment["date"]); // Format the date
+          return Card(
+            elevation: 2,
+            margin: EdgeInsets.all(10),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: PopupMenuButton<String>(
+                            onSelected: (value) async {
+                              if (value == 'edit') {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => UpdateTreatmentPage(
+                                      treatmentId: treatment['id'],
+                                    ),
+                                  ),
+                                ).then((result) {
+                                  if (result == true) {
+                                    _loadData(); // Refresh after update
+                                  }
+                                });
+                              } else if (value == 'delete') {
+                                _showDeleteConfirmationDialog(context, treatment['id']);
+                              }
+                            },
+                            itemBuilder: (context) => [
+                              const PopupMenuItem(
+                                value: 'edit',
+                                child: Text('Edit'),
+                              ),
+                              const PopupMenuItem(
+                                value: 'delete',
+                                child: Text('Delete'),
+                              ),
+                            ],
+                            icon: const Icon(Icons.more_vert),
+                          ),
                         ),
-                      ),
-                    ).then((result) {
-                      if (result == true) {
-                        _loadData(); // Refresh after update
-                      }
-                    });
-                  },
-                  icon: const Icon(Icons.edit, color: Colors.green),
-                ),
-                IconButton(
-                  onPressed: () async {
-                    await DatabaseHelper.deleteTreatment(treatment['id']);
-                    _loadData(); // Refresh after deletion
-                  },
-                  icon: const Icon(Icons.delete, color: Colors.red),
-                ),
-              ],
+                        Text(
+                          '${treatment["status"]} - $formattedDate',
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        Divider(thickness: .5, color: Colors.black54),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  _buildRow('Status:', treatment['status']),
+                  _buildRow('Treatment Type:', treatment['treatment_type']),
+                  _buildRow('Product Used:', treatment['product_used']),
+                  _buildRow('Field:', treatment['field']),
+                  _buildRow('Quantity:', treatment['quantity'].toString()),
+                  _buildRow('Date:', formattedDate),
+                ],
+              ),
             ),
           );
         },
@@ -181,9 +248,12 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
 
   void _addTreatment(Map<String, dynamic> newTreatment) async {
     // Automatically fill status based on the selected date
-    newTreatment['status'] = DateFormat("yyyy-MM-dd").parse(newTreatment['date']).isAfter(DateTime.now()) ? 'Planned' : 'Done';  
-    await DatabaseHelper.insertTreatment(
-        newTreatment); // Add new treatment and refresh state
+    newTreatment['status'] = DateFormat("yyyy-MM-dd")
+            .parse(newTreatment['date'])
+            .isAfter(DateTime.now())
+        ? 'Planned'
+        : 'Done';
+    await DatabaseHelper.insertTreatment(newTreatment); // Add new treatment and refresh state
     _loadData();
   }
 }

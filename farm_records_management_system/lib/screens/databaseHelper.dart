@@ -11,8 +11,7 @@ class DatabaseHelper {
     // Check if the database file is read-only
     if (await File(path).exists()) {
       final fileStat = await File(path).stat();
-      final hasWritePermission =
-          (fileStat.mode & 0200) != 0; // Check write permissions
+      final hasWritePermission = (fileStat.mode & 0200) != 0; // Check write permissions
 
       if (!hasWritePermission) {
         // If the file is read-only, delete and recreate it
@@ -51,20 +50,19 @@ class DatabaseHelper {
 
     // Create a table for Expenses
     await db.execute(
-  '''
-  CREATE TABLE IF NOT EXISTS expenses (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    date TEXT,
-    expense_type TEXT,
-    field TEXT,
-    amount REAL,
-    description TEXT,
-    specific_to_field TEXT,
-    customer_name TEXT
-  )
-  ''',
-);
-
+      '''
+      CREATE TABLE IF NOT EXISTS expenses (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        date TEXT,
+        expense_type TEXT,
+        field TEXT,
+        amount REAL,
+        description TEXT,
+        specific_to_field TEXT,
+        customer_name TEXT
+      )
+      ''',
+    );
   }
 
   // Method to handle database upgrades

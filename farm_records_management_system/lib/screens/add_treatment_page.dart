@@ -50,7 +50,8 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
       });
     }
   }
-   String _getStatusFromDate(DateTime date) {
+
+  String _getStatusFromDate(DateTime date) {
     return date.isAfter(DateTime.now()) ? 'Planned' : 'Done';
   }
 
@@ -89,7 +90,6 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
                 ),
               ),
               const SizedBox(height: 20),
-
               // Dropdown for Status
               DropdownButtonFormField<String>(
                 value: _selectedStatus,
@@ -116,7 +116,6 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
                 },
               ),
               const SizedBox(height: 20),
-
               // Dropdown for Treatment Type
               DropdownButtonFormField<String>(
                 value: _selectedTreatmentType,
@@ -150,7 +149,6 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
                 },
               ),
               const SizedBox(height: 20),
-
               if (_selectedTreatmentType == 'Other') ...[
                 TextFormField(
                   controller: _customTreatmentTypeController,
@@ -166,6 +164,7 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
                   },
                 ),
               ],
+              const SizedBox(height: 20),
               // Dropdown for Field
               Row(
                 children: [
@@ -203,7 +202,6 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
                 ],
               ),
               const SizedBox(height: 20),
-
               // Product Used TextField
               TextFormField(
                 controller: _productUsedController,
@@ -219,7 +217,6 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
                 },
               ),
               const SizedBox(height: 20),
-
               // Quantity TextField
               TextFormField(
                 controller: _quantityController,
@@ -235,42 +232,39 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
                 },
               ),
               const SizedBox(height: 20),
-
               // Add Treatment Button
               ElevatedButton(
-  onPressed: () {
-    if (_formKey.currentState!.validate()){
-      try {
-        // Check for null values and validate them
-        if (_selectedDate == null) {
-          throw Exception('Date is required'); // Custom error message
-        }
-        
-        // Build the new treatment map
-        Map<String, dynamic> newTreatment = {
-          'date': DateFormat("yyyy-MM-dd").format(_selectedDate!), // Ensure non-null date
-          'status': _selectedStatus, // Ensure it's not null
-          'treatment_type': _selectedTreatmentType, // Ensure it's not null
-          'field': _selectedField, // Ensure it's not null
-          'product_used': _productUsedController.text, // Ensure it's not empty
-          'quantity': double.tryParse(_quantityController.text) ?? 0.0, // Avoid null
-        };
-         DatabaseHelper.insertTreatment(newTreatment);
-        // Navigate back to the previous screen
-        Navigator.pop(context, true);
-
-      } catch (e) {
-        debugPrint('Error adding treatment: $e'); // Improved error handling
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error adding treatment: $e')), // Display error message
-        );
-      }
-    }
-  },
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    try {
+                      // Check for null values and validate them
+                      if (_selectedDate == null) {
+                        throw Exception('Date is required'); // Custom error message
+                      }
+                      // Build the new treatment map
+                      Map<String, dynamic> newTreatment = {
+                        'date': DateFormat("yyyy-MM-dd").format(_selectedDate!), // Ensure non-null date
+                        'status': _selectedStatus, // Ensure it's not null
+                        'treatment_type': _selectedTreatmentType, // Ensure it's not null
+                        'field': _selectedField, // Ensure it's not null
+                        'product_used': _productUsedController.text, // Ensure it's not empty
+                        'quantity': double.tryParse(_quantityController.text) ?? 0.0, // Avoid null
+                      };
+                      DatabaseHelper.insertTreatment(newTreatment);
+                      // Navigate back to the previous screen
+                      Navigator.pop(context, true);
+                    } catch (e) {
+                      debugPrint('Error adding treatment: $e'); // Improved error handling
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Error adding treatment: $e')), // Display error message
+                      );
+                    }
+                  }
+                },
                 child: const Text('Add Treatment'),
               ),
             ],
-          )
+          ),
         ),
       ),
     );
