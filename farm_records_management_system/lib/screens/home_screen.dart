@@ -5,14 +5,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
-          AppBarWidget(),
+          const AppBarWidget(),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
             child: Container(
@@ -36,15 +36,15 @@ class MyHomePage extends StatelessWidget {
                   children: [
                     const Icon(
                       CupertinoIcons.search,
-                      color: Color(0xFF3388E3C),
+                      color: Color(0xff3388e3c),
                     ),
-                    Container(
+                    SizedBox(
                       height: 50,
                       width: 300,
                       child:  Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
                         child: TextFormField(
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: "Search farm...",
                             border: InputBorder.none,
                           ),
@@ -60,7 +60,7 @@ class MyHomePage extends StatelessWidget {
           const Expanded(child: HomeSection()),
         ],
       ),
-      drawer: DrawerWidget(),
+      drawer: const DrawerWidget(),
     );
   }
 }

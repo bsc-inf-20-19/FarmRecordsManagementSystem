@@ -13,7 +13,7 @@ class CropsSection extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         color: Colors.white,
         child: ListView(children: [
-          Container(
+          SizedBox(
               height: 200,
               child: Row(children: [
                 InkWell(
@@ -21,18 +21,18 @@ class CropsSection extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ActivityPage()));
+                            builder: (context) => const ActivityPage()));
                   },
-                  child: CropListCard(),
+                  child: const CropListCard(),
                 ),
                 InkWell(
                   onTap: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => ActivityPage()));
+                            builder: (context) => const ActivityPage()));
                   },
-                  child: ActivityCard(),
+                  child: const ActivityCard(),
                 ),
               ])),
         ]));

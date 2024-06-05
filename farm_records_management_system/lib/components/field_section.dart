@@ -14,7 +14,7 @@ class FieldSection extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
+          SizedBox(
             height: 200,
             width: MediaQuery.of(context).size.width,
             child: Row(
@@ -25,11 +25,11 @@ class FieldSection extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CropsFieldPage(), // Assuming CropsFieldPage exists
+                          builder: (context) => const CropsFieldPage(), // Assuming CropsFieldPage exists
                         ),
                       );
                     },
-                    child: CropCard(),
+                    child: const CropCard(),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -39,11 +39,11 @@ class FieldSection extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CropsFieldPage(), // Assuming CropsFieldPage exists
+                          builder: (context) => const CropsFieldPage(), // Assuming CropsFieldPage exists
                         ),
                       );
                     },
-                    child: LivestockCard(),
+                    child: const LivestockCard(),
                   ),
                 ),
               ],

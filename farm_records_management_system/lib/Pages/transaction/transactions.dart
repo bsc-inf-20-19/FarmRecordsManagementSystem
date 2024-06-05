@@ -1,6 +1,6 @@
-import 'package:farm_records_management_system/Pages/databaseHelper.dart';
 import 'package:farm_records_management_system/Pages/transaction/Expense.dart';
-import 'package:farm_records_management_system/Pages/updateTransactionPage.dart';
+import 'package:farm_records_management_system/screens/databaseHelper.dart';
+import 'package:farm_records_management_system/screens/updateTransactionPage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -40,10 +40,7 @@ class _TransactionPageState extends State<TransactionPage> {
     }
   }
 
-  
-
-  void _applySearchFilter(String lowerCase) {
-    String searchTerm = searchController.text.toLowerCase();
+  void _applySearchFilter(String searchTerm) {
     setState(() {
       if (searchTerm.isEmpty) {
         isSearching = false;
@@ -83,10 +80,8 @@ class _TransactionPageState extends State<TransactionPage> {
         title: isSearching
             ? TextField(
                 controller: searchController,
-                onChanged: (value) {
-                  _applySearchFilter(value.toLowerCase());
-                },
-                decoration: InputDecoration(
+                onChanged: _applySearchFilter,
+                decoration: const InputDecoration(
                   hintText: 'Search by name, type, or date',
                   border: InputBorder.none,
                 ),
@@ -110,8 +105,7 @@ class _TransactionPageState extends State<TransactionPage> {
         itemCount: transactions.length,
         itemBuilder: (context, index) {
           var transaction = transactions[index];
-          String formattedDate =
-              _formatDate(transaction["date"]); // Format the date
+          String formattedDate = _formatDate(transaction["date"]); // Format the date
           return ListTile(
             title: Text(
               formattedDate,
@@ -157,7 +151,7 @@ class _TransactionPageState extends State<TransactionPage> {
             context,
             MaterialPageRoute(
               builder: (context) => ExpensePage(
-                onAdd: (newTransaction) => _addTransaction(newTransaction),
+                onAdd: _addTransaction,
                 existingExpense: const ['Maize', 'GroundNuts'],
                 onNewExpenseRequested: () {
                   // Logic for new fields
@@ -198,7 +192,7 @@ class _TransactionPageState extends State<TransactionPage> {
         'amount': amount,
       };
 
-      await DatabaseHelper.insertTransaction(newExpense);
+      DatabaseHelper.insertTransaction(newExpense);
       // Navigate back to the previous screen
       Navigator.pop(context, true);
     } catch (e) {

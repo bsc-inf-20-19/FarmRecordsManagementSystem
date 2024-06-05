@@ -51,20 +51,36 @@ class DatabaseHelper {
 
     // Create a table for Expenses
     await db.execute(
-  '''
-  CREATE TABLE IF NOT EXISTS expenses (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    date TEXT,
-    expense_type TEXT,
-    field TEXT,
-    amount REAL,
-    description TEXT,
-    specific_to_field TEXT,
-    customer_name TEXT
-  )
-  ''',
-);
+      '''
+      CREATE TABLE IF NOT EXISTS expenses (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        date TEXT,
+        expense_type TEXT,
+        field TEXT,
+        amount REAL,
+        description TEXT,
+        specific_to_field TEXT,
+        customer_name TEXT
+      )
+      ''',
+    );
 
+    // Create a table for Plantings (New table)
+    await db.execute(
+      '''
+      CREATE TABLE IF NOT EXISTS plantings (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        date TEXT,
+        crop TEXT,
+        field TEXT,
+        description TEXT,
+        cropCompany TEXT,
+        cropType TEXT,
+        cropLotNumber TEXT,
+        cropHarvest TEXT
+      )
+      ''',
+    );
   }
 
   // Method to handle database upgrades
@@ -138,5 +154,42 @@ class DatabaseHelper {
   static Future<List<Map<String, dynamic>>> getTransactions() async {
     Database db = await _openDatabase(); // Ensure proper initialization
     return await db.query('expenses');
+  }
+
+  // CRUD operations for plantings
+  static Future<int> insertPlanting(Map<String, dynamic> data) async {
+    Database db = await _openDatabase();
+    return await db.insert('plantings', data);
+  }
+
+  static Future<List<Map<String, dynamic>>> getPlantings() async {
+    Database db = await _openDatabase();
+    return await db.query('plantings');
+  }
+
+  static Future<Map<String, dynamic>?> getPlanting(int id) async {
+    Database db = await _openDatabase();
+    List<Map<String, dynamic>> result = await db.query(
+      'plantings',
+      where: 'id = ?',
+      whereArgs: [id],
+      limit: 1,
+    );
+    return result.isNotEmpty ? result.first : null;
+  }
+
+  static Future<int> deletePlanting(int id) async {
+    Database db = await _openDatabase();
+    return await db.delete('plantings', where: 'id = ?', whereArgs: [id]);
+  }
+
+  static Future<int> updatePlanting(int id, Map<String, dynamic> data) async {
+    Database db = await _openDatabase();
+    return await db.update(
+      'plantings',
+      data,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 }

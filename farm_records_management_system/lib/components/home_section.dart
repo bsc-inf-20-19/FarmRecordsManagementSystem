@@ -18,7 +18,7 @@ class HomeSection extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
+          SizedBox(
             height: 200,
             child: Row(
               children: [
@@ -30,7 +30,7 @@ class HomeSection extends StatelessWidget {
                         MaterialPageRoute(builder: (context) => const FieldScreen()),
                       );
                     },
-                    child: FieldsCard(),
+                    child: const FieldsCard(),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -42,14 +42,14 @@ class HomeSection extends StatelessWidget {
                         MaterialPageRoute(builder: (context) => const TransactionPage()),
                       );
                     },
-                    child: TransCard(),
+                    child: const TransCard(),
                   ),
                 ),
               ],
             ),
           ),
           const SizedBox(height: 8),
-          Container(
+          SizedBox(
             height: 200,
             child: Row(
               children: [
@@ -61,7 +61,7 @@ class HomeSection extends StatelessWidget {
                         MaterialPageRoute(builder: (context) => const MyHomePage()),
                       );
                     },
-                    child: ReportCard(),
+                    child: const ReportCard(),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -73,7 +73,7 @@ class HomeSection extends StatelessWidget {
                         MaterialPageRoute(builder: (context) => const MyHomePage()),
                       );
                     },
-                    child: SetupCard(),
+                    child: const SetupCard(),
                   ),
                 ),
               ],

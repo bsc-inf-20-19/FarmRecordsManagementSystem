@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 //import 'my-form.dart';
 
 class MyForm extends StatefulWidget {
-  const MyForm({Key? key}) : super(key: key);
+  const MyForm({super.key});
   
   @override
   _FormState createState() => _FormState();
@@ -92,7 +92,7 @@ class _FormState extends State<MyForm> {
             DropdownButtonFormField(
               value: _selectVal,
               items: _livestockTypeList.map(
-              (e) => DropdownMenuItem(child: Text(e), value: e,)
+              (e) => DropdownMenuItem(value: e,child: Text(e),)
               ).toList(), 
             onChanged: (val) {
               setState(() {
@@ -102,16 +102,16 @@ class _FormState extends State<MyForm> {
             icon: const Icon(
               Icons.arrow_drop_down_circle_outlined,
             ),
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: "Select Livestock Type",
               border: UnderlineInputBorder()
             ),
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             DropdownButtonFormField(
               value: _selectFieldVal,
               items: _fieldList.map(
-              (e) => DropdownMenuItem(child: Text(e), value: e,)
+              (e) => DropdownMenuItem(value: e,child: Text(e),)
               ).toList(), 
             onChanged: (val) {
               setState(() {
@@ -121,24 +121,24 @@ class _FormState extends State<MyForm> {
             icon: const Icon(
               Icons.arrow_drop_down_circle_outlined,
             ),
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: "Select field",
               border: UnderlineInputBorder()
             ),
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
 
             //Textfields for seeds infomation
              MyTextField(
               myController: _livestockDescdriptionController,
               fieldName: "LiveStock quantity(Number of offsprings)",
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
              MyTextField(
               myController: _livestockBreedController,
               fieldName: "Livestock Breed",
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
              MyTextField(
               myController: _livestockTypeController,
               fieldName: "Livestock type",
@@ -153,7 +153,7 @@ class _FormState extends State<MyForm> {
             //   myController: _livestockQuantityController,
             //   fieldName: "Estimated hrarvest",
             // ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             myBtn(context)
           ],
         ),
@@ -178,14 +178,14 @@ OutlinedButton myBtn(BuildContext context) {
         }),
       );        
       },
-    child: Text("Save"),
+    child: const Text("Save"),
   );
 }
 }
 
 class MyTextField extends StatelessWidget {
-  MyTextField({
-    Key? key,
+  MyTextField({super.key, 
+    Key,
     required this.myController,
     required this.fieldName,
     this.myIcon = Icons.verified_user_outlined,

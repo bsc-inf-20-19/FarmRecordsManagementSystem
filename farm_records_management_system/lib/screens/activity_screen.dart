@@ -1,6 +1,5 @@
 import 'package:farm_records_management_system/components/activity_section.dart';
 import 'package:farm_records_management_system/widgets/crops/activity/activity_bar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ActivityPage extends StatelessWidget {
@@ -10,7 +9,7 @@ class ActivityPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
-        children: [
+        children: const [
           ActivityBarWidget(),
           //Activities
           ActivitySection(),

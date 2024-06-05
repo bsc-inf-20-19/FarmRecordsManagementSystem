@@ -17,7 +17,7 @@ class ActivitySection extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         color: Colors.white,
         child: ListView(children: [
-          Container(
+          SizedBox(
               height: 200,
               child: Row(children: [
                 InkWell(
@@ -25,19 +25,19 @@ class ActivitySection extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => NewPlantPage()));
+                            builder: (context) => const NewPlantPage()));
                   },
-                  child: PlantingCard(),
+                  child: const PlantingCard(),
                 ),
                 InkWell(
                   onTap: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MyHomePage()));
+                        MaterialPageRoute(builder: (context) => const MyHomePage()));
                   },
-                  child: HarvestCard(),
+                  child: const HarvestCard(),
                 ),
               ])),
-          Container(
+          SizedBox(
               height: 200,
               child: Row(children: [
                 InkWell(
@@ -45,16 +45,16 @@ class ActivitySection extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => TreatmentsPage()));
+                            builder: (context) => const TreatmentsPage()));
                   },
-                  child: TreatmentCard(),
+                  child: const TreatmentCard(),
                 ),
                 InkWell(
                   onTap: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MyHomePage()));
+                        MaterialPageRoute(builder: (context) => const MyHomePage()));
                   },
-                  child: TasksCard(),
+                  child: const TasksCard(),
                 ),
               ]))
         ]));

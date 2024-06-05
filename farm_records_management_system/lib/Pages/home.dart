@@ -3,7 +3,7 @@ import 'package:farm_records_management_system/screens/crops_livestock.dart';
 import 'package:flutter/material.dart';
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key});
+  const MyApp({super.key, Key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key});
+  const HomePage({super.key, Key});
 
   void navigateToDetailsPage(BuildContext context, String cardTitle) {
     Navigator.push(
@@ -169,7 +169,7 @@ class HomePage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => TransactionPage(),
+                              builder: (context) => const TransactionPage(),
                             ),
                           );
                         },
@@ -198,7 +198,7 @@ class CardItem extends StatelessWidget {
   final String title;
   final VoidCallback onTap;
 
-  const CardItem({Key? key, required this.title, required this.onTap});
+  const CardItem({super.key, Key, required this.title, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -227,7 +227,7 @@ class CardItem extends StatelessWidget {
 class DetailsPage extends StatelessWidget {
   final String cardTitle;
 
-  const DetailsPage({Key? key, required this.cardTitle});
+  const DetailsPage({super.key, Key, required this.cardTitle});
 
   @override
   Widget build(BuildContext context) {

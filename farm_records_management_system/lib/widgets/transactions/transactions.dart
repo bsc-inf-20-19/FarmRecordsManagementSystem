@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class TransactionPage extends StatefulWidget {
-  const TransactionPage({Key? key}) : super(key: key);
+  const TransactionPage({super.key});
 
   @override
   _TransactionPageState createState() => _TransactionPageState();
@@ -88,7 +88,7 @@ class _TransactionPageState extends State<TransactionPage> {
                 onChanged: (value) {
                   _applySearchFilter(value.toLowerCase());
                 },
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Search by name, type, or date',
                   border: InputBorder.none,
                 ),
@@ -200,7 +200,7 @@ class _TransactionPageState extends State<TransactionPage> {
         'amount': amount,
       };
 
-      await DatabaseHelper.insertTransaction(newExpense);
+      DatabaseHelper.insertTransaction(newExpense);
       // Navigate back to the previous screen
       Navigator.pop(context, true);
     } catch (e) {

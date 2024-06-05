@@ -1,10 +1,11 @@
-import 'package:farm_records_management_system/Pages/activity_page.dart';
 import 'package:farm_records_management_system/Pages/home.dart';
-import 'package:farm_records_management_system/screens/Activities.dart';
 import 'package:farm_records_management_system/screens/new_planting.dart';
+import 'package:farm_records_management_system/widgets/crops_page.dart';
 import 'package:flutter/material.dart';
 
 class CropsLivestockPage extends StatelessWidget {
+  const CropsLivestockPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
@@ -18,7 +19,7 @@ class CropsLivestockPage extends StatelessWidget {
 }
 
 class LandingPage extends StatelessWidget {
-  const LandingPage({Key? key});
+  const LandingPage({super.key, Key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,7 @@ class LandingPage extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => MyActivityPage()),
+                      MaterialPageRoute(builder: (context) => const MyActivityPage()),
                     );
                   },
                 ),
@@ -50,7 +51,7 @@ class LandingPage extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => CropsPage()),
+                      MaterialPageRoute(builder: (context) => const NewPlantPage()),
                     );
                   },
                 ),

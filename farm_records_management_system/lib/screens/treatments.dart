@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class TreatmentsPage extends StatefulWidget {
-  const TreatmentsPage({Key? key}) : super(key: key);
+  const TreatmentsPage({super.key});
 
   @override
   _TreatmentsPageState createState() => _TreatmentsPageState();
@@ -40,6 +40,7 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
       debugPrint('Error loading treatments: $e'); // Handle exceptions
     }
   }
+  
 
   void _applySearchFilter(String lowerCase) {
     String searchTerm = searchController.text.toLowerCase();
@@ -84,12 +85,12 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
           onChanged: (value) {
             _applySearchFilter(value.toLowerCase());
           },
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
                   hintText: 'Search by name, type, or date',
                   border: InputBorder.none,
         )
         )
-        : Row(
+        : const Row(
           children: [
             Text('Treatments'), // Treatment title
             SizedBox(width: 10),  // Spacer between title and search
