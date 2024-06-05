@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:farm_records_management_system/Pages/databaseHelper.dart';
 import 'package:intl/intl.dart';
 
-class UpdateTreatmentPage extends StatefulWidget {
-  final int treatmentId;
+class UpdateExpensePage extends StatefulWidget {
+  final int transactionId;
 
-  const UpdateTreatmentPage({super.key, required this.treatmentId});
+  const UpdateExpensePage({super.key, required this.transactionId});
 
   @override
-  _UpdateTreatmentPageState createState() => _UpdateTreatmentPageState();
+  _UpdateExpensePageState createState() => _UpdateExpensePageState();
 }
 
-class _UpdateTreatmentPageState extends State<UpdateTreatmentPage> {
+class _UpdateExpensePageState extends State<UpdateExpensePage> {
   final _formKey = GlobalKey<FormState>();
   final _productUsedController = TextEditingController();
   final _quantityController = TextEditingController();
@@ -22,7 +22,7 @@ class _UpdateTreatmentPageState extends State<UpdateTreatmentPage> {
 
   void fetchTreatment() async {
     Map<String, dynamic>? treatmentData =
-        await DatabaseHelper.getTreatment(widget.treatmentId);
+        await DatabaseHelper.getTreatment(widget.transactionId);
 
     if (treatmentData != null) {
       setState(() {
@@ -69,7 +69,7 @@ class _UpdateTreatmentPageState extends State<UpdateTreatmentPage> {
       };
 
       await DatabaseHelper.updateTreatment(
-          widget.treatmentId, updatedTreatment);
+          widget.transactionId, updatedTreatment);
       Navigator.pop(context, true);
     }
   }
@@ -86,7 +86,7 @@ class _UpdateTreatmentPageState extends State<UpdateTreatmentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Update Treatment'),
+        title: const Text('Update Expense'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -195,7 +195,7 @@ class _UpdateTreatmentPageState extends State<UpdateTreatmentPage> {
                 onPressed: () {
                   _updateTreatment(context);
                 },
-                child: const Text('Update Treatment'),
+                child: const Text('Update Expense'),
               ),
             ],
           ),

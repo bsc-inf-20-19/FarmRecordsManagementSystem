@@ -1,6 +1,6 @@
-import 'package:farm_records_management_system/Pages/databaseHelper.dart';
-import 'package:farm_records_management_system/Pages/transaction/Expense.dart';
-import 'package:farm_records_management_system/Pages/updateTransactionPage.dart';
+import 'package:farm_records_management_system/screens/databaseHelper.dart';
+import 'package:farm_records_management_system/widgets/transactions/Expense.dart';
+import 'package:farm_records_management_system/widgets/transactions/updateTransactionPage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -31,16 +31,16 @@ class _TransactionPageState extends State<TransactionPage> {
 
   Future<void> _loadData() async {
     try {
-      List<Map<String, dynamic>> result = await DatabaseHelper.getTransactions();
+      List<Map<String, dynamic>> result =
+          await DatabaseHelper.getTransactions();
       setState(() {
-        transactions = result.reversed.toList(); // Ensure data is stored in the state
+        transactions =
+            result.reversed.toList(); // Ensure data is stored in the state
       });
     } catch (e) {
       debugPrint('Error loading transactions: $e'); // Handle exceptions
     }
   }
-
-  
 
   void _applySearchFilter(String lowerCase) {
     String searchTerm = searchController.text.toLowerCase();
@@ -52,7 +52,9 @@ class _TransactionPageState extends State<TransactionPage> {
         isSearching = true;
         transactions = transactions.where((transaction) {
           // Filter by name, type, or date
-          return transaction['description'].toLowerCase().contains(searchTerm) ||
+          return transaction['description']
+                  .toLowerCase()
+                  .contains(searchTerm) ||
               transaction['expense_type'].toLowerCase().contains(searchTerm) ||
               transaction['customer_name'].toLowerCase().contains(searchTerm) ||
               transaction['field'].toLowerCase().contains(searchTerm) ||
@@ -204,7 +206,9 @@ class _TransactionPageState extends State<TransactionPage> {
     } catch (e) {
       debugPrint('Error adding transaction: $e'); // Improved error handling
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error adding transaction: $e')), // Display error message
+        SnackBar(
+            content:
+                Text('Error adding transaction: $e')), // Display error message
       );
     }
   }

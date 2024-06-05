@@ -3,7 +3,7 @@ import 'package:farm_records_management_system/screens/crops_livestock.dart';
 import 'package:flutter/material.dart';
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  const HomePage({Key? key});
 
   void navigateToDetailsPage(BuildContext context, String cardTitle) {
     Navigator.push(
@@ -44,66 +44,59 @@ class HomePage extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.blue,
                   ),
-                  child: Text('My Farm Manager',
-                      // ignore: prefer_const_constructors
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                      )),
+                  child: Text(
+                    'My Farm Manager',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
+                  ),
                 ),
               ),
               ListTile(
-                //ignore: prefer_const_constructors
-                leading: Icon(Icons.verified_user),
+                leading: const Icon(Icons.verified_user),
                 title: const Text('Profile'),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          const DetailsPage(cardTitle: 'First Card'),
+                      builder: (context) => const DetailsPage(cardTitle: 'First Card'),
                     ),
                   );
                 },
               ),
               ListTile(
-                //ignore: prefer_const_constructors
-                leading: Icon(Icons.settings),
+                leading: const Icon(Icons.settings),
                 title: const Text('Settings'),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          const DetailsPage(cardTitle: 'First Card'),
+                      builder: (context) => const DetailsPage(cardTitle: 'First Card'),
                     ),
                   );
                 },
               ),
               ListTile(
-                //ignore: prefer_const_constructors
-                leading: Icon(Icons.logout),
+                leading: const Icon(Icons.logout),
                 title: const Text('Logout'),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          const DetailsPage(cardTitle: 'First Card'),
+                      builder: (context) => const DetailsPage(cardTitle: 'First Card'),
                     ),
                   );
                 },
               ),
               ListTile(
-                //ignore: prefer_const_constructors
-                leading: Icon(Icons.help_center),
+                leading: const Icon(Icons.help_center),
                 title: const Text('How to use this app'),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          const DetailsPage(cardTitle: 'First Card'),
+                      builder: (context) => const DetailsPage(cardTitle: 'First Card'),
                     ),
                   );
                 },
@@ -114,84 +107,89 @@ class HomePage extends StatelessWidget {
       ),
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        backgroundColor: Colors.blue, // Change background color here
+        backgroundColor: Colors.blue,
         title: const Text('Farm Records Management'),
-        titleTextStyle:
-            const TextStyle(fontStyle: FontStyle.normal, fontSize: 20),
+        titleTextStyle: const TextStyle(fontStyle: FontStyle.normal, fontSize: 20),
         centerTitle: true,
       ),
       body: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(
-                  'images/background.png'), // Replace with your image file
-              fit: BoxFit.cover,
-            ),
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('images/background.png'),
+            fit: BoxFit.cover,
           ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        CardItem(
-                          title: 'Fields',
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const LandingPage()),
-                            );
-                          },
-                        ),
-                        CardItem(
-                          title: 'Reports',
-                          onTap: () => {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const DetailsPage(cardTitle: 'First Card'),
-                              ),
-                            )
-                          },
-                        )
-                      ],
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      child: CardItem(
+                        title: 'Fields',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const LandingPage(),
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        CardItem(
-                          title: 'Transactions',
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Transaction()));
-                          },
-                        ),
-                        CardItem(
-                          title: 'Crops Comparison',
-                          onTap: () {
-                            navigateToDetailsPage(context, 'Card 2');
-                          },
-                        ),
-                      ],
+                    Expanded(
+                      child: CardItem(
+                        title: 'Reports',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const DetailsPage(cardTitle: 'First Card'),
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
-          )),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      child: CardItem(
+                        title: 'Transactions',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => TransactionPage(),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      child: CardItem(
+                        title: 'Crops Comparison',
+                        onTap: () {
+                          navigateToDetailsPage(context, 'Card 2');
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -200,7 +198,7 @@ class CardItem extends StatelessWidget {
   final String title;
   final VoidCallback onTap;
 
-  const CardItem({super.key, required this.title, required this.onTap});
+  const CardItem({Key? key, required this.title, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -229,7 +227,7 @@ class CardItem extends StatelessWidget {
 class DetailsPage extends StatelessWidget {
   final String cardTitle;
 
-  const DetailsPage({super.key, required this.cardTitle});
+  const DetailsPage({Key? key, required this.cardTitle});
 
   @override
   Widget build(BuildContext context) {
