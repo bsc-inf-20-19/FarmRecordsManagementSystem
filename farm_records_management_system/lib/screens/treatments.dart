@@ -1,5 +1,5 @@
+import 'package:farm_records_management_system/database/databaseHelper.dart';
 import 'package:farm_records_management_system/screens/add_treatment_page.dart';
-import 'package:farm_records_management_system/screens/databaseHelper.dart';
 import 'package:farm_records_management_system/screens/updateTreatmentPage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -72,12 +72,12 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
     }
   }
 
-  Widget _buildRow(String label, String value) {
+  Widget _buildRow(String label, String value, {Color? color}) {
     return Row(
       children: [
         Text(
           label,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: color),
         ),
         Expanded(
           child: Align(
@@ -86,7 +86,7 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
               padding: EdgeInsets.only(right: 50, bottom: 10),
               child: Text(
                 value,
-                style: TextStyle(fontStyle: FontStyle.italic, fontSize: 18),
+                style: TextStyle(fontStyle: FontStyle.italic, fontSize: 18, color: color),
               ),
             ),
           ),
@@ -157,6 +157,9 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
         itemBuilder: (context, index) {
           var treatment = treatments[index];
           String formattedDate = _formatDate(treatment["date"]); // Format the date
+          String status = treatment['status'];
+          Color statusColor = status == 'Done' ? Colors.green : Colors.yellow;
+
           return Card(
             elevation: 2,
             margin: EdgeInsets.all(10),
@@ -204,14 +207,14 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
                         ),
                         Text(
                           '${treatment["status"]} - $formattedDate',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: statusColor),
                         ),
                         Divider(thickness: .5, color: Colors.black54),
                       ],
                     ),
                   ),
                   SizedBox(height: 10),
-                  _buildRow('Status:', treatment['status']),
+                  _buildRow('Status:', treatment['status'], color: statusColor),
                   _buildRow('Treatment Type:', treatment['treatment_type']),
                   _buildRow('Product Used:', treatment['product_used']),
                   _buildRow('Field:', treatment['field']),
@@ -230,7 +233,6 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
             MaterialPageRoute(
               builder: (context) => AddTreatmentPage(
                 onAdd: (newTreatment) => _addTreatment(newTreatment),
-                existingFields: const ['Maize', 'GroundNuts'],
                 onNewFieldRequested: () {
                   // Logic for new fields
                 },
@@ -250,9 +252,9 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
     // Automatically fill status based on the selected date
     newTreatment['status'] = DateFormat("yyyy-MM-dd")
             .parse(newTreatment['date'])
-            .isAfter(DateTime.now())
-        ? 'Planned'
-        : 'Done';
+            .isBefore(DateTime.now())
+        ? 'Done'
+        : 'Planned';
     await DatabaseHelper.insertTreatment(newTreatment); // Add new treatment and refresh state
     _loadData();
   }

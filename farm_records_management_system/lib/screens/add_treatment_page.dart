@@ -1,16 +1,15 @@
-import 'package:farm_records_management_system/screens/databaseHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:farm_records_management_system/database/databaseHelper.dart';
+import 'package:farm_records_management_system/Pages/newField.dart';
 
 class AddTreatmentPage extends StatefulWidget {
-  final Function(Map<String, dynamic>) onAdd; // Callback for adding treatments
-  final List<String> existingFields; // List of existing fields for dropdown
-  final VoidCallback onNewFieldRequested; // Callback to add new fields
+  final Function(Map<String, dynamic>) onAdd;
+  final VoidCallback onNewFieldRequested;
 
   const AddTreatmentPage({
     super.key,
     required this.onAdd,
-    required this.existingFields,
     required this.onNewFieldRequested,
   });
 
@@ -27,13 +26,27 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
   String? _selectedTreatmentType;
   String? _selectedField;
   DateTime? _selectedDate;
+  List<String> _existingFields = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFields();
+  }
+
+  Future<void> _loadFields() async {
+    final fields = await DatabaseHelper.getFields();
+    setState(() {
+      _existingFields = fields.map((field) => field['fieldName'].toString()).toList();
+    });
+  }
 
   @override
   void dispose() {
     _productUsedController.dispose();
     _quantityController.dispose();
     _customTreatmentTypeController.dispose();
-    super.dispose(); // Proper resource cleanup
+    super.dispose();
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -49,10 +62,6 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
         _selectedDate = picked;
       });
     }
-  }
-
-  String _getStatusFromDate(DateTime date) {
-    return date.isAfter(DateTime.now()) ? 'Planned' : 'Done';
   }
 
   String _formatDate(DateTime? date) {
@@ -84,13 +93,12 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
                   ),
                   child: Text(
                     _selectedDate != null
-                        ? _formatDate(_selectedDate) // Format the date
-                        : 'Select Date', // Prompt to select a date
+                        ? _formatDate(_selectedDate)
+                        : 'Select Date',
                   ),
                 ),
               ),
               const SizedBox(height: 20),
-              // Dropdown for Status
               DropdownButtonFormField<String>(
                 value: _selectedStatus,
                 items: ['Planned', 'Done'].map((status) {
@@ -116,7 +124,6 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
                 },
               ),
               const SizedBox(height: 20),
-              // Dropdown for Treatment Type
               DropdownButtonFormField<String>(
                 value: _selectedTreatmentType,
                 items: [
@@ -165,13 +172,12 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
                 ),
               ],
               const SizedBox(height: 20),
-              // Dropdown for Field
               Row(
                 children: [
                   Expanded(
                     child: DropdownButtonFormField<String>(
                       value: _selectedField,
-                      items: widget.existingFields.map((field) {
+                      items: _existingFields.map((field) {
                         return DropdownMenuItem(
                           value: field,
                           child: Text(field),
@@ -195,14 +201,25 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
                     ),
                   ),
                   IconButton(
-                    onPressed: widget.onNewFieldRequested,
-                    icon: const Icon(Icons.add),
+                    onPressed: () async {
+                      final result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => NewFieldPage(onAdd: (newField) {
+                          setState(() {
+                            _existingFields.add(newField['fieldName']);
+                          });
+                        })),
+                      );
+                      if (result == true) {
+                        await _loadFields();
+                      }
+                    },
+                    icon: Icon(Icons.add),
                     tooltip: 'Add New Field',
                   ),
                 ],
               ),
               const SizedBox(height: 20),
-              // Product Used TextField
               TextFormField(
                 controller: _productUsedController,
                 decoration: const InputDecoration(
@@ -217,7 +234,6 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
                 },
               ),
               const SizedBox(height: 20),
-              // Quantity TextField
               TextFormField(
                 controller: _quantityController,
                 decoration: const InputDecoration(
@@ -232,31 +248,27 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
                 },
               ),
               const SizedBox(height: 20),
-              // Add Treatment Button
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     try {
-                      // Check for null values and validate them
                       if (_selectedDate == null) {
-                        throw Exception('Date is required'); // Custom error message
+                        throw Exception('Date is required');
                       }
-                      // Build the new treatment map
                       Map<String, dynamic> newTreatment = {
-                        'date': DateFormat("yyyy-MM-dd").format(_selectedDate!), // Ensure non-null date
-                        'status': _selectedStatus, // Ensure it's not null
-                        'treatment_type': _selectedTreatmentType, // Ensure it's not null
-                        'field': _selectedField, // Ensure it's not null
-                        'product_used': _productUsedController.text, // Ensure it's not empty
-                        'quantity': double.tryParse(_quantityController.text) ?? 0.0, // Avoid null
+                        'date': DateFormat("yyyy-MM-dd").format(_selectedDate!),
+                        'status': _selectedStatus,
+                        'treatment_type': _selectedTreatmentType,
+                        'field': _selectedField,
+                        'product_used': _productUsedController.text,
+                        'quantity': double.tryParse(_quantityController.text) ?? 0.0,
                       };
                       DatabaseHelper.insertTreatment(newTreatment);
-                      // Navigate back to the previous screen
                       Navigator.pop(context, true);
                     } catch (e) {
-                      debugPrint('Error adding treatment: $e'); // Improved error handling
+                      debugPrint('Error adding treatment: $e');
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Error adding treatment: $e')), // Display error message
+                        SnackBar(content: Text('Error adding treatment: $e')),
                       );
                     }
                   }

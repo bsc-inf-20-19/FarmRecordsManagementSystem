@@ -63,11 +63,25 @@ class DatabaseHelper {
       )
       ''',
     );
+
+    // Create a table for Fields
+    await db.execute(
+      '''
+      CREATE TABLE IF NOT EXISTS fields (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        fieldName TEXT,
+        fieldType TEXT,
+        lightProfile TEXT,
+        fieldStatus TEXT,
+        fieldSize REAL,
+        notes TEXT
+      )
+      ''',
+    );
   }
 
   // Method to handle database upgrades
-  static Future<void> _onUpgrade(
-      Database db, int oldVersion, int newVersion) async {
+  static Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
       // Perform necessary upgrades here
     }
@@ -121,7 +135,6 @@ class DatabaseHelper {
     return await db.delete('expenses', where: 'id = ?', whereArgs: [id]);
   }
 
-  // Getter methods for expenses
   static Future<Map<String, dynamic>?> getTransaction(int id) async {
     Database db = await _openDatabase(); // Ensure proper initialization
     List<Map<String, dynamic>> result = await db.query(
@@ -130,11 +143,48 @@ class DatabaseHelper {
       whereArgs: [id],
       limit: 1,
     );
-    return result.isNotEmpty ? result.first : null; 
+    return result.isNotEmpty ? result.first : null;
   }
 
   static Future<List<Map<String, dynamic>>> getTransactions() async {
     Database db = await _openDatabase(); // Ensure proper initialization
     return await db.query('expenses');
+  }
+
+  // CRUD operations for fields
+  static Future<int> insertField(Map<String, dynamic> data) async {
+    Database db = await _openDatabase(); // Ensure proper initialization
+    return await db.insert('fields', data);
+  }
+
+  static Future<List<Map<String, dynamic>>> getFields() async {
+    Database db = await _openDatabase(); // Ensure proper initialization
+    return await db.query('fields');
+  }
+
+  static Future<Map<String, dynamic>?> getField(int id) async {
+    Database db = await _openDatabase(); // Ensure proper initialization
+    List<Map<String, dynamic>> result = await db.query(
+      'fields',
+      where: 'id = ?',
+      whereArgs: [id],
+      limit: 1,
+    );
+    return result.isNotEmpty ? result.first : null;
+  }
+
+  static Future<int> deleteField(int id) async {
+    Database db = await _openDatabase(); // Ensure proper initialization
+    return await db.delete('fields', where: 'id = ?', whereArgs: [id]);
+  }
+
+  static Future<int> updateField(int id, Map<String, dynamic> data) async {
+    Database db = await _openDatabase(); // Ensure proper initialization
+    return await db.update(
+      'fields',
+      data,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 }
