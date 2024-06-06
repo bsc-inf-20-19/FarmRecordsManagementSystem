@@ -34,8 +34,6 @@ class _NewPlantPageState extends State<NewPlantPage> {
     _fieldDropdownController.text = _fieldList[0];
   }
 
-  final _dateController = TextEditingController();
-  final _cropController = TextEditingController();
   final _cropDecController = TextEditingController();
   final _cropCompanyController = TextEditingController();
   final _cropTypeController = TextEditingController();
@@ -43,7 +41,6 @@ class _NewPlantPageState extends State<NewPlantPage> {
   final _cropHarvestController = TextEditingController();
 
   final List<String> _cropTypeList = ["Maize", "Tobacco", "G. Nuts", "Beans"];
-
   final _cropDropdownController = TextEditingController();
 
   final List<String> _fieldList = [
@@ -52,13 +49,10 @@ class _NewPlantPageState extends State<NewPlantPage> {
     "G01 Field",
     "B01 Field"
   ];
-
   final _fieldDropdownController = TextEditingController();
 
   @override
   void dispose() {
-    _dateController.dispose();
-    _cropController.dispose();
     _cropDecController.dispose();
     _cropCompanyController.dispose();
     _cropTypeController.dispose();
@@ -99,6 +93,8 @@ class _NewPlantPageState extends State<NewPlantPage> {
               ),
               readOnly: true,
             ),
+            const SizedBox(height: 10.0),
+
             // DropDown crop name and field
             DropdownButtonFormField(
               value: _cropDropdownController.text,
@@ -177,9 +173,9 @@ class _NewPlantPageState extends State<NewPlantPage> {
         // Create a map to hold the data
         Map<String, dynamic> plantingData = {
           'date': _selectedDate != null ? '${_selectedDate!.toLocal()}'.split(' ')[0] : '',
-          // 'cropList': _cropDropdownController.text,
-          // 'fieldList': _fieldDropdownController.text,
-          // 'cropDescription': _cropDecController.text,
+          'crop': _cropDropdownController.text,
+          'field': _fieldDropdownController.text,
+          'description': _cropDecController.text,
           'cropCompany': _cropCompanyController.text,
           'cropType': _cropTypeController.text,
           'cropLotNumber': _cropLotController.text,
@@ -194,9 +190,6 @@ class _NewPlantPageState extends State<NewPlantPage> {
           context,
           MaterialPageRoute(builder: (context) {
             return Details(
-              // cropList: _cropDropdownController.text,
-              // fieldList: _fieldDropdownController.text,
-              // cropDescription: _cropDecController.text,
               cropCompany: _cropCompanyController.text,
               cropType: _cropTypeController.text,
               cropLotNumber: _cropLotController.text,

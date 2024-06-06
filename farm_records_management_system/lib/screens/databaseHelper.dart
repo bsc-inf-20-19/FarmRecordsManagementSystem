@@ -65,7 +65,7 @@ class DatabaseHelper {
       ''',
     );
 
-    // Create a table for Plantings (New table)
+    // Create a table for Plantings
     await db.execute(
       '''
       CREATE TABLE IF NOT EXISTS plantings (
@@ -93,17 +93,17 @@ class DatabaseHelper {
 
   // CRUD operations for treatments
   static Future<int> insertTreatment(Map<String, dynamic> data) async {
-    Database db = await _openDatabase(); // Ensure proper initialization
+    Database db = await _openDatabase();
     return await db.insert('treatments', data);
   }
 
   static Future<List<Map<String, dynamic>>> getTreatments() async {
-    Database db = await _openDatabase(); // Ensure proper initialization
+    Database db = await _openDatabase();
     return await db.query('treatments');
   }
 
   static Future<Map<String, dynamic>?> getTreatment(int id) async {
-    Database db = await _openDatabase(); // Ensure proper initialization
+    Database db = await _openDatabase();
     List<Map<String, dynamic>> result = await db.query(
       'treatments',
       where: 'id = ?',
@@ -114,12 +114,12 @@ class DatabaseHelper {
   }
 
   static Future<int> deleteTreatment(int id) async {
-    Database db = await _openDatabase(); // Ensure proper initialization
+    Database db = await _openDatabase();
     return await db.delete('treatments', where: 'id = ?', whereArgs: [id]);
   }
 
   static Future<int> updateTreatment(int id, Map<String, dynamic> data) async {
-    Database db = await _openDatabase(); // Ensure proper initialization
+    Database db = await _openDatabase();
     return await db.update(
       'treatments',
       data,
@@ -135,24 +135,24 @@ class DatabaseHelper {
   }
 
   static Future<int> deleteTransaction(int id) async {
-    Database db = await _openDatabase(); // Ensure proper initialization
+    Database db = await _openDatabase();
     return await db.delete('expenses', where: 'id = ?', whereArgs: [id]);
   }
 
   // Getter methods for expenses
   static Future<Map<String, dynamic>?> getTransaction(int id) async {
-    Database db = await _openDatabase(); // Ensure proper initialization
+    Database db = await _openDatabase();
     List<Map<String, dynamic>> result = await db.query(
       'expenses',
       where: 'id = ?',
       whereArgs: [id],
       limit: 1,
     );
-    return result.isNotEmpty ? result.first : null; 
+    return result.isNotEmpty ? result.first : null;
   }
 
   static Future<List<Map<String, dynamic>>> getTransactions() async {
-    Database db = await _openDatabase(); // Ensure proper initialization
+    Database db = await _openDatabase();
     return await db.query('expenses');
   }
 
