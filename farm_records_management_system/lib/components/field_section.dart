@@ -1,11 +1,11 @@
-import 'package:farm_records_management_system/screens/crop_screen.dart'; // Assuming CropScreen exists
-import 'package:farm_records_management_system/screens/fieldScreen.dart';
+import 'package:farm_records_management_system/Pages/fieldListScreen.dart';
+import 'package:farm_records_management_system/screens/crop_screen.dart';
 import 'package:farm_records_management_system/widgets/crop_card.dart';
 import 'package:farm_records_management_system/widgets/fieldCard.dart';
 import 'package:flutter/material.dart';
 
 class FieldSection extends StatelessWidget {
-  const FieldSection({Key? key});
+  const FieldSection({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,32 +34,20 @@ class FieldSection extends StatelessWidget {
                       child: const CropCard(),
                     ),
                   ),
-                  const SizedBox(width: 8),
                   Expanded(
                     child: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const FieldListScreen(), // Corrected to FieldListScreen
-                          ),
-                        );
+                      onTap: () => {
+                        Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => const FieldListScreen())
+                        )
                       },
-                      child: FieldCard(
-                        fieldData: {}, // Provide actual field data here
-                        onTap: () {
-                          // Example implementation of onTap
-                          // Navigates to a specific screen when the card is tapped
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => FieldListScreen(), // Assuming FieldDetailsScreen exists
-                            ),
-                          );
-                        },
-                    ),
-                  ),
-                  ),
+                      child: const FieldCard(),
+                    )
+                 )
+
+
+
+
                 ],
               ),
             ),

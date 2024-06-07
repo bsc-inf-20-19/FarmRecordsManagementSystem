@@ -1,21 +1,37 @@
 import 'package:flutter/material.dart';
 
 class FieldCard extends StatelessWidget {
-  final Map<String, dynamic> fieldData;
-  final VoidCallback onTap;
-
-  const FieldCard({required this.fieldData, required this.onTap, Key? key}) : super(key: key);
+  const FieldCard({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 2,
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      child: ListTile(
-        title: Text(fieldData['field_name'] ?? 'No Name'),
-        subtitle: Text(fieldData['field_type'] ?? 'No Type'),
-        trailing: const Icon(Icons.arrow_forward),
-        onTap: onTap,
+    return Container(
+      height: 200,
+      width: double.infinity,
+      margin: const EdgeInsets.all(14.0),
+      padding: const EdgeInsets.all(14.0),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black,
+            spreadRadius: 0.5,
+            offset: Offset(2.0, 2.0),
+            blurRadius: 5.0,
+          ),
+        ],
+      ),
+      child: const Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Add Fields",
+              style: TextStyle(
+                  fontSize: 20.0,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold)),
+        ],
       ),
     );
   }
