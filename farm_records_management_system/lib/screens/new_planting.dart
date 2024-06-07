@@ -204,13 +204,13 @@ class _NewPlantPageState extends State<NewPlantPage> {
 }
 
 class MyTextField extends StatelessWidget {
-  MyTextField({
-    Key? key,
+  const MyTextField({
+    super.key,
     required this.myController,
     required this.fieldName,
     this.myIcon = Icons.verified_user_outlined,
     this.prefixIconColor = Colors.blueAccent,
-  }) : super(key: key);
+  });
 
   final TextEditingController myController;
   final String fieldName;
