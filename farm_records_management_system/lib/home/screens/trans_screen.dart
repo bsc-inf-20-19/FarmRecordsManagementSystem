@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 
+
+
 class TransactionListScreen extends StatefulWidget {
   @override
   _TransactionListScreenState createState() => _TransactionListScreenState();
@@ -69,6 +71,7 @@ class _TransactionListScreenState extends State<TransactionListScreen> with Sing
               ],
             ),
           ),
+          
           Expanded(
             child: TabBarView(
               controller: _tabController,
@@ -76,28 +79,32 @@ class _TransactionListScreenState extends State<TransactionListScreen> with Sing
                 ListView(
                   children: [
                     TransactionCard(title: 'Farm lease', date: 'April 1st, 2024', amount: 'MWK100,000'),
-                    TransactionCard(title: 'Labor', date: 'April 1st, 2024', amount: 'MWK50,000'),
-                    TransactionCard(title: 'Seeds (30 KG)', date: 'April 1st, 2024', amount: 'MWK50,000'),
                     TransactionCard(title: 'Fertilizer (100 Kg)', date: 'April 1st, 2024', amount: 'MWK140,000'),
                     TransactionCard(title: 'Pesticides', date: 'April 1st, 2024', amount: 'MWK70,000'),
-                    TransactionCard(title: 'Farming Tools', date: 'April 1st, 2014', amount: 'MWK300,000'),
+                    TransactionCard(title: 'Farming Tools rent', date: 'April 1st, 2014', amount: 'MWK30,000'),
                   ],
                 ),
-                Center(
-                  child: Text('Income transactions will be listed here'),
+                ListView(
+                  children: [
+                    TransactionCard(title: 'Harvest sales', date: 'April 1st, 2024', amount: 'MWK5,000,000'),
+                    TransactionCard(title: 'Products sales', date: 'April 1st, 2024', amount: 'MWK6,500,000'),
+                  ],
                 ),
               ],
             ),
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Handle add new transaction
-        },
-        child: Icon(Icons.add),
-        backgroundColor: Colors.green,
-      ),
+      floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            // Handle add new transaction
+          },
+          icon: Icon(Icons.add, color: Colors.white),
+          label: Text('Add Transaction', style: TextStyle(color: Colors.white)),
+          backgroundColor: Colors.green,
+          foregroundColor: Colors.white,
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
@@ -122,9 +129,16 @@ class TransactionCard extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         subtitle: Text(date),
-        trailing: Text(
-          amount,
-          style: TextStyle(fontWeight: FontWeight.bold),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              amount,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            SizedBox(width: 10),
+            Icon(Icons.more_vert),
+          ],
         ),
       ),
     );

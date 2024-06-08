@@ -17,45 +17,33 @@ class MyHomePage extends StatelessWidget {
 
           //Search bar
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-            child: Container(
-              width: double.infinity,
-              height: 50,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        blurRadius: 5,
-                        spreadRadius: 1,
-                        offset: Offset(0, 3))
-                  ]),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  children: [
-                    Icon(
-                      CupertinoIcons.search,
-                      color: Color(0xFF3388E3C),
-                    ),
-                    Container(
-                      height: 50,
-                      width: 300,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                              hintText: "Search farm...",
-                              border: InputBorder.none),
-                        ),
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.search),
+                      hintText: 'Search farm',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide.none,
                       ),
+                      filled: true,
+                      fillColor: Colors.grey[200],
                     ),
-                  ],
+                  ),
                 ),
-              ),
+                IconButton(
+                  icon: Icon(Icons.filter_list),
+                  onPressed: () {
+                    // Handle filter button press
+                  },
+                ),
+              ],
             ),
           ),
+          
           SizedBox(height: 20,),
           //Home Cards
           HomeSection()
