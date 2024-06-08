@@ -1,4 +1,5 @@
 import 'package:farm_records_management_system/home/components/details/harvestDetailView.dart';
+import 'package:farm_records_management_system/home/screens/databaseHelper.dart';
 import 'package:flutter/material.dart';
 
 class AddHarvestPage extends StatefulWidget {
@@ -182,8 +183,20 @@ OutlinedButton myBtn(BuildContext context) {
     onPressed: () async{
 
       Map<String, dynamic> newHarvest = {
-        'date': _selectedDate != null ? ''
-      }
+        'date': _selectedDate != null ? '${_selectedDate!.toLocal()}'.split(' ')[0] : '',
+        'cropList': _cropDropdownController.text,
+        'batchNo': _batchController.text,
+        'harvestQuantity': _harvestQuantityController.text,
+        'harvestQuality': _harvestQualityController.text,
+       ' unitCost': _unitCostController.text,
+        'harvestIncome': _harvestIncomeController.text,
+        'harvestNotes': __harvestNotesController.text,
+
+      };
+
+      // Insert data into the database
+        await DatabaseHelper.insertHarvest(newHarvest);
+
       //Navigate to HarverstDetailView
       Navigator.push(
         context,

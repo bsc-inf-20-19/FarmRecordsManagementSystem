@@ -71,6 +71,7 @@ class DatabaseHelper {
       CREATE TABLE IF NOT EXISTS harvests (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         date TEXT,
+        cropList TEXT,
         batchNo TEXT,
         harvestQuantity TEXT,
         harvestQuality TEXT,
