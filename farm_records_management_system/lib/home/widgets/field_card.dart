@@ -29,12 +29,12 @@ class FieldsCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end, // posion the everything to the bottom
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Insert your image here
+            //Insert image here
             Image(
-              image: NetworkImage(''), // URL of the image
+              image: AssetImage('images/report.png'), // URL of the image
               width: 100.0, // Set the width of the image
               height: 100.0, // Set the height of the image
-              fit: BoxFit.cover, // Optional: defines how the image should be inscribed into the widget
+              fit: BoxFit.cover, 
             ),
             Text("Fields",
                 style: TextStyle(

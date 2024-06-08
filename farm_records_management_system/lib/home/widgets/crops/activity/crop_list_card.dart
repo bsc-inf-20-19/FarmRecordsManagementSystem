@@ -30,7 +30,13 @@ class CropListCard extends StatelessWidget {
               .end, // posion the everything to the bottom
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(Icons.more_vert),
+            //Insert image here
+            Image(
+              image: AssetImage('images/report.png'), // URL of the image
+              width: 100.0, // Set the width of the image
+              height: 100.0, // Set the height of the image
+              fit: BoxFit.cover, 
+            ),
             Text("Crop Lists",
                 style: TextStyle(
                     fontSize: 20.0,

@@ -51,17 +51,16 @@ class CroplistCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.blueGrey[800],
+      
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
       margin: EdgeInsets.symmetric(vertical: 8),
       child: ListTile(
-        leading: Icon(Icons.autorenew, color: Colors.white),
+        leading: Icon(Icons.autorenew),
         title: Text(
           'Maize',
           style: TextStyle(
-            color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -73,7 +72,7 @@ class CroplistCard extends StatelessWidget {
             ),
           ],
         ),
-        trailing: Icon(Icons.arrow_forward_ios, color: Colors.white),
+        trailing: Icon(Icons.arrow_forward_ios), //color: Colors.white),
       ),
     );
   }

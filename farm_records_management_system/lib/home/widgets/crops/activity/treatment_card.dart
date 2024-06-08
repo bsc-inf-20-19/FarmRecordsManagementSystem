@@ -30,7 +30,13 @@ class TreatmentCard extends StatelessWidget {
               .end, // posion the everything to the bottom
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // place here your image
+            //Insert image here
+            Image(
+              image: AssetImage('images/report.png'), // URL of the image
+              width: 100.0, // Set the width of the image
+              height: 100.0, // Set the height of the image
+              fit: BoxFit.cover, 
+            ),
             Text("Treatment",
                 style: TextStyle(
                     fontSize: 20.0,

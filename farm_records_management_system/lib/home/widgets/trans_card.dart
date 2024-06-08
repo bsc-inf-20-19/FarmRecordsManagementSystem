@@ -32,10 +32,10 @@ class TransCard extends StatelessWidget {
           children: <Widget>[
             //Insert image here
             Image(
-              image: NetworkImage(''), // URL of the image
+              image: AssetImage('images/report.png'), // URL of the image
               width: 100.0, // Set the width of the image
               height: 100.0, // Set the height of the image
-              fit: BoxFit.cover, // Optional: defines how the image should be inscribed into the widget
+              fit: BoxFit.cover, 
             ),
             SizedBox(height: 10),
             Text(
