@@ -1,6 +1,5 @@
 import 'package:farm_records_management_system/home/screens/add_treatment_page.dart';
 import 'package:farm_records_management_system/home/screens/databaseHelper.dart';
-import 'package:farm_records_management_system/home/screens/updateTreatmentPage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
