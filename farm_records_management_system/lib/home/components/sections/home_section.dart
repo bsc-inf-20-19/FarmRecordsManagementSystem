@@ -5,7 +5,6 @@ import 'package:farm_records_management_system/home/widgets/field_card.dart';
 import 'package:farm_records_management_system/home/widgets/report_card.dart';
 import 'package:farm_records_management_system/home/widgets/setup_card.dart';
 import 'package:farm_records_management_system/home/widgets/trans_card.dart';
-import 'package:farm_records_management_system/home/widgets/go_premium_widget.dart';
 import 'package:flutter/material.dart';
 
 class HomeSection extends StatelessWidget {
@@ -69,7 +68,7 @@ class HomeSection extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => GoPremium()
+                      builder: (context) => SetupCard(),
                     )
                   );
                 },

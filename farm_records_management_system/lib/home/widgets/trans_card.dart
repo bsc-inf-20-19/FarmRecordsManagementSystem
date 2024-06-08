@@ -31,6 +31,12 @@ class TransCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             //Insert image here
+            Image(
+              image: NetworkImage(''), // URL of the image
+              width: 100.0, // Set the width of the image
+              height: 100.0, // Set the height of the image
+              fit: BoxFit.cover, // Optional: defines how the image should be inscribed into the widget
+            ),
             SizedBox(height: 10),
             Text(
               'Transaction',

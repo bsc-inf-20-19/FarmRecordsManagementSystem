@@ -30,8 +30,14 @@ class SetupCard extends StatelessWidget {
               .end, // posion the everything to the bottom
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // place here your image
-            Text("Farm Setup",
+             //Insert image here
+            Image(
+              image: NetworkImage(''), // URL of the image
+              width: 100.0, // Set the width of the image
+              height: 100.0, // Set the height of the image
+              fit: BoxFit.cover, // Optional: defines how the image should be inscribed into the widget
+            ),
+            Text("Farm Tools",
                 style: TextStyle(
                     fontSize: 20.0,
                     color: Colors.black,

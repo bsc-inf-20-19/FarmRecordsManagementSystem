@@ -5,7 +5,6 @@ import 'package:farm_records_management_system/home/widgets/crops/activity/harve
 import 'package:farm_records_management_system/home/widgets/crops/activity/planting_card.dart';
 import 'package:farm_records_management_system/home/widgets/crops/activity/tasks_card.dart';
 import 'package:farm_records_management_system/home/widgets/crops/activity/treatment_card.dart';
-import 'package:farm_records_management_system/home/widgets/go_premium_widget.dart';
 import 'package:flutter/material.dart';
 
 class ActivitySection extends StatelessWidget {
@@ -58,7 +57,7 @@ class ActivitySection extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => GoPremium()
+                      builder: (context) => FarmTaskPage()
                     )
                   );
                 },
