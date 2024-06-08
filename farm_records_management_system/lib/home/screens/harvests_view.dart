@@ -13,7 +13,7 @@ class HarvestsViewPage extends StatefulWidget {
 }
 
 class _HarvestsViewPageState extends State<HarvestsViewPage> {
-  List<Map<String, dynamic>> treatments = []; // Store treatment data
+  List<Map<String, dynamic>> harvests = []; // Store treatment data
   late TextEditingController searchController;
   bool isSearching = false;
 
@@ -32,12 +32,12 @@ class _HarvestsViewPageState extends State<HarvestsViewPage> {
 
   Future<void> _loadData() async {
     try {
-      List<Map<String, dynamic>> result = await DatabaseHelper.getTreatments();
+      List<Map<String, dynamic>> result = await DatabaseHelper.getHarvests();
       setState(() {
-        treatments = result.reversed.toList(); // Ensure data is stored in the state
+        harvests = result.reversed.toList(); // Ensure data is stored in the state
       });
     } catch (e) {
-      debugPrint('Error loading treatments: $e'); // Handle exceptions
+      debugPrint('Error loading harvests: $e'); // Handle exceptions
     }
   }
 
@@ -48,12 +48,13 @@ class _HarvestsViewPageState extends State<HarvestsViewPage> {
         _loadData();
       } else {
         isSearching = true;
-        treatments = treatments.where((treatment) {
-          return treatment['status'].toLowerCase().contains(searchTerm) ||
-              treatment['treatment_type'].toLowerCase().contains(searchTerm) ||
-              treatment['product_used'].toLowerCase().contains(searchTerm) ||
-              treatment['field'].toLowerCase().contains(searchTerm) ||
-              treatment['date'].toLowerCase().contains(searchTerm);
+        harvests = harvests.where((harvest) {
+          return harvest['batch'].toLowerCase().contains(searchTerm) ||
+              harvest['harvest_quantity'].toLowerCase().contains(searchTerm) ||
+              harvest['harvest_quality'].toLowerCase().contains(searchTerm) ||
+              harvest['unity-cost'].toLowerCase().contains(searchTerm) ||
+              harvest['harvest_income'].toLowerCase().contains(searchTerm) ||
+              harvest['date'].toLowerCase().contains(searchTerm);
         }).toList();
       }
     });
@@ -154,12 +155,12 @@ class _HarvestsViewPageState extends State<HarvestsViewPage> {
         ],
       ),
       body: ListView.builder(
-        itemCount: treatments.length,
+        itemCount: harvests.length,
         itemBuilder: (context, index) {
-          var treatment = treatments[index];
-          String formattedDate = _formatDate(treatment["date"]); // Format the date
-          String status = treatment['status'];
-          Color statusColor = status == 'Done' ? Colors.green : Colors.yellow;
+          var harvest = harvests[index];
+          String formattedDate = _formatDate(harvest["date"]); // Format the date
+          // String status = harvest['status'];
+          // Color statusColor = status == 'Done' ? Colors.green : Colors.yellow;
 
           return 
            //Change ListTile to Card
@@ -173,7 +174,8 @@ class _HarvestsViewPageState extends State<HarvestsViewPage> {
                   Row(
                     children: [
                       Text(
-                        '${treatment["treatment_type"]}',
+                        //Harvested Crop Name
+                        '${harvest["harvest_type"]}',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -188,8 +190,8 @@ class _HarvestsViewPageState extends State<HarvestsViewPage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => UpdateTreatmentPage(
-                                      treatmentId: treatment['id'],
+                                    builder: (context) => UpdateHarvestPage(
+                                     harvestId:harvest['id'],
                                     ),
                                   ),
                                 ).then((result) {
@@ -198,7 +200,7 @@ class _HarvestsViewPageState extends State<HarvestsViewPage> {
                                   }
                                 });
                               } else if (value == 'delete') {
-                                _showDeleteConfirmationDialog(context, treatment['id']);
+                                _showDeleteConfirmationDialog(context,harvest['id']);
                               }
                             },
                             itemBuilder: (context) => [
@@ -220,11 +222,12 @@ class _HarvestsViewPageState extends State<HarvestsViewPage> {
                   Divider(thickness: .5, color: Colors.black54),
                   SizedBox(height: 8),
                   HarvestItem(label: 'Harvest date', value: '$formattedDate'),
-                  HarvestItem(label: 'Crops harvested', value: '${treatment["status"]} - $formattedDate'),
-                  HarvestItem(label: 'Treatment type', value: '${treatment["treatment_type"]}'),
-                  HarvestItem(label: 'Field name', value: ' ${treatment["field"]}'),
-                  HarvestItem(label: 'Product used', value: '${treatment["product_used"]}'),
-                  HarvestItem(label: 'Quantity', value: '${treatment["quantity"] ?? 0}'),
+                  HarvestItem(label: 'Batch No', value: '${harvest["batch"]}'),
+                  HarvestItem(label: 'Harvest Quantity', value: '${harvest["harvest_quantity"]}'),
+                  HarvestItem(label: 'Harvest quality', value: ' ${harvest["harvest_quality"]}'),
+                  HarvestItem(label: 'Unit cost', value: '${harvest["unity-cost"]}'),
+                  HarvestItem(label: 'Harvest income', value: '${harvest["harvest_income"] ?? 0}'),
+                  HarvestItem(label: 'Harvest Note', value: '${harvest["harvest_note"] ?? 0}'),
                 ],
               ),
             ),
@@ -266,7 +269,7 @@ class _HarvestsViewPageState extends State<HarvestsViewPage> {
   }
 }
 
-
+// ignore: must_be_immutable
 class HarvestItem extends StatelessWidget {
   final String label;
   final String value;

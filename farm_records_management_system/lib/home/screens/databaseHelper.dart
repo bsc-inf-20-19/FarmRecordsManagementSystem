@@ -163,7 +163,7 @@ class DatabaseHelper {
     return await db.insert('harvests', data);
   }
 
-  static Future<List<Map<String, dynamic>>> getharvests() async {
+  static Future<List<Map<String, dynamic>>> getHarvests() async {
     Database db = await _openDatabase();
     return await db.query('harvests');
   }
