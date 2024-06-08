@@ -9,7 +9,7 @@ class CropListScreen extends StatelessWidget {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: Icon(Icons.menu),
+            icon: Icon(Icons.search_outlined),
             onPressed: () {},
           ),
         ],
@@ -21,7 +21,7 @@ class CropListScreen extends StatelessWidget {
           return CroplistCard();
         },
       ),
-    );
+         );
   }
 }
 

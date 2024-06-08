@@ -1,80 +1,131 @@
 import 'package:flutter/material.dart';
 
-class Transview extends StatelessWidget {
+
+class TransactionListScreen extends StatefulWidget {
+  @override
+  _TransactionListScreenState createState() => _TransactionListScreenState();
+}
+
+class _TransactionListScreenState extends State<TransactionListScreen> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.all(16.0),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Text(
-                  'Summary',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Spacer(),
-                Icon(Icons.more_vert),
-              ],
-            ),
-            SizedBox(height: 8),
-            SummaryItem(
-              label: 'Total Income',
-              value: '\$180.00',
-              color: Colors.green,
-              icon: Icons.attach_money,
-            ),
-            SummaryItem(
-              label: 'Total Expenses',
-              value: '\$25.00',
-              color: Colors.red,
-              icon: Icons.money_off,
-            ),
-            SummaryItem(
-              label: 'Total Credit Limit',
-              value: '\$25.00',
-              color: Colors.red,
-              icon: Icons.credit_card,
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            // Handle back button press
+          },
+        ),
+        title: Text('Transaction'),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: [
+            Tab(text: 'Expenses'),
+            Tab(text: 'Income'),
           ],
         ),
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.search),
+                      hintText: 'Search',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.filter_list),
+                  onPressed: () {
+                    // Handle filter button press
+                  },
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                ListView(
+                  children: [
+                    TransactionCard(title: 'Farm lease', date: 'April 1st, 2024', amount: 'MWK100,000'),
+                    TransactionCard(title: 'Labor', date: 'April 1st, 2024', amount: 'MWK50,000'),
+                    TransactionCard(title: 'Seeds (30 KG)', date: 'April 1st, 2024', amount: 'MWK50,000'),
+                    TransactionCard(title: 'Fertilizer (100 Kg)', date: 'April 1st, 2024', amount: 'MWK140,000'),
+                    TransactionCard(title: 'Pesticides', date: 'April 1st, 2024', amount: 'MWK70,000'),
+                    TransactionCard(title: 'Farming Tools', date: 'April 1st, 2014', amount: 'MWK300,000'),
+                  ],
+                ),
+                Center(
+                  child: Text('Income transactions will be listed here'),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Handle add new transaction
+        },
+        child: Icon(Icons.add),
+        backgroundColor: Colors.green,
       ),
     );
   }
 }
 
-class SummaryItem extends StatelessWidget {
-  final String label;
-  final String value;
-  final Color color;
-  final IconData icon;
+class TransactionCard extends StatelessWidget {
+  final String title;
+  final String date;
+  final String amount;
 
-  SummaryItem({required this.label, required this.value, required this.color, required this.icon});
+  TransactionCard({required this.title, required this.date, required this.amount});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        children: [
-          Icon(icon, color: color),
-          SizedBox(width: 8),
-          Text(label),
-          Spacer(),
-          Text(
-            value,
-            style: TextStyle(
-              color: color,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: ListTile(
+        title: Text(
+          title,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(date),
+        trailing: Text(
+          amount,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }

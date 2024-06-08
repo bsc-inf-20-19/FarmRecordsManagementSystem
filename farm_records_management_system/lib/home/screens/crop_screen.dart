@@ -30,7 +30,8 @@ class CropsFieldPage extends StatelessWidget {
                   ]),
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
+                child: 
+                Row(
                   children: [
                     Icon(
                       CupertinoIcons.search,
@@ -50,6 +51,7 @@ class CropsFieldPage extends StatelessWidget {
                     ),
                   ],
                 ),
+              
               ),
             ),
           ),

@@ -42,7 +42,7 @@ class FieldBarWidget extends StatelessWidget {
             onTap: () {},
             child: Container(
               padding: EdgeInsets.all(8),
-              child: Icon(Icons.notifications),
+              child: Icon(Icons.search_off_outlined),
             ),
           )
         ],

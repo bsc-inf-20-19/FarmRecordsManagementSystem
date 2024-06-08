@@ -39,7 +39,7 @@ class HomeSection extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Transview()
+                      builder: (context) => TransactionListScreen()
                     )
                   );
                 },
