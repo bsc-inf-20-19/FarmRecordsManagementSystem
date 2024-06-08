@@ -1,4 +1,4 @@
-import 'package:farm_records_management_system/home/screens/add_treatment_page.dart';
+import 'package:farm_records_management_system/home/screens/add_harvest_page.dart';
 import 'package:farm_records_management_system/home/screens/databaseHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -12,7 +12,7 @@ class HarvestsViewPage extends StatefulWidget {
 }
 
 class _HarvestsViewPageState extends State<HarvestsViewPage> {
-  List<Map<String, dynamic>> harvests = []; // Store treatment data
+  List<Map<String, dynamic>> harvests = []; // Store Harvest data
   late TextEditingController searchController;
   bool isSearching = false;
 
@@ -96,14 +96,14 @@ class _HarvestsViewPageState extends State<HarvestsViewPage> {
     );
   }
 
-  Future<void> _showDeleteConfirmationDialog(BuildContext context, int treatmentId) async {
+  Future<void> _showDeleteConfirmationDialog(BuildContext context, int harvestId) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // User must tap a button to dismiss the dialog
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Confirm Deletion'),
-          content: const Text('Are you sure you want to delete this treatment?'),
+          content: const Text('Are you sure you want to delete this data?'),
           actions: <Widget>[
             TextButton(
               child: const Text('Cancel'),
@@ -114,7 +114,7 @@ class _HarvestsViewPageState extends State<HarvestsViewPage> {
             TextButton(
               child: const Text('Confirm'),
               onPressed: () async {
-                await DatabaseHelper.deleteTreatment(treatmentId);
+                await DatabaseHelper.deleteHarvest(harvestId);
                 _loadData(); // Refresh after deletion
                 Navigator.of(context).pop(); // Close the dialog
               },
@@ -181,40 +181,7 @@ class _HarvestsViewPageState extends State<HarvestsViewPage> {
                         ),
                       ),
                       Spacer(),
-                      Align(
-                          alignment: Alignment.topRight,
-                          child: PopupMenuButton<String>(
-                            onSelected: (value) async {
-                              if (value == 'edit') {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => UpdateHarvestPage(
-                                     harvestId:harvest['id'],
-                                    ),
-                                  ),
-                                ).then((result) {
-                                  if (result == true) {
-                                    _loadData(); // Refresh after update
-                                  }
-                                });
-                              } else if (value == 'delete') {
-                                _showDeleteConfirmationDialog(context,harvest['id']);
-                              }
-                            },
-                            itemBuilder: (context) => [
-                              const PopupMenuItem(
-                                value: 'edit',
-                                child: Text('Edit'),
-                              ),
-                              const PopupMenuItem(
-                                value: 'delete',
-                                child: Text('Delete'),
-                              ),
-                            ],
-                            icon: const Icon(Icons.more_vert),
-                          ),
-                        ),
+
                       // Icon(Icons.more_vert),
                     ],
                   ),
@@ -236,18 +203,18 @@ class _HarvestsViewPageState extends State<HarvestsViewPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final addedTreatment = await Navigator.push(
+          final addedHarvest = await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AddTreatmentPage(
-                onAdd: (newHarvest) => _addTreatment(newHarvest),
+              builder: (context) => AddHarvestPage(
+                onAdd: (newHarvest) => _addHarvest(newHarvest),
                 onNewFieldRequested: () {
                   // Logic for new fields
                 }, existingFields: [],
               ),
             ),
           );
-          if (addedTreatment != null) {
+          if (addedHarvest != null) {
             _loadData(); // Refresh after successful addition
           }
         },
@@ -256,7 +223,7 @@ class _HarvestsViewPageState extends State<HarvestsViewPage> {
     );
   }
 
-  void _addTreatment(Map<String, dynamic> newHarvest) async {
+  void _addHarvest(Map<String, dynamic> newHarvest) async {
     // Automatically fill status based on the selected date
     newHarvest['status'] = DateFormat("yyyy-MM-dd")
             .parse(newHarvest['date'])

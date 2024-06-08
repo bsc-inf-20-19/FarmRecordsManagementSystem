@@ -1,6 +1,7 @@
 import 'package:farm_records_management_system/home/components/forms/addCrop.dart';
 import 'package:farm_records_management_system/home/screens/activity_screen.dart';
 import 'package:farm_records_management_system/home/components/details/notes.dart';
+import 'package:farm_records_management_system/home/widgets/crop_lists.dart';
 import 'package:farm_records_management_system/home/widgets/crops/activity/activity_card.dart';
 import 'package:farm_records_management_system/home/widgets/crops/activity/crop_list_card.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class CropsSection extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FarmNotesPage()
+                      builder: (context) => CropListScreen()
                     )
                   );
                 },

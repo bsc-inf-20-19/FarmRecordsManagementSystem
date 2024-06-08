@@ -3,7 +3,7 @@ import 'package:farm_records_management_system/home/screens/databaseHelper.dart'
 import 'package:flutter/material.dart';
 
 class AddHarvestPage extends StatefulWidget {
-  const AddHarvestPage({Key? key}) : super(key: key);
+  const AddHarvestPage({Key? key, required Null Function() onNewFieldRequested, required void Function(dynamic newHarvest) onAdd, required List existingFields}) : super(key: key);
   
   @override
   _AddHarvestState createState() => _AddHarvestState();

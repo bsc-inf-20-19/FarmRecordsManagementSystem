@@ -1,47 +1,53 @@
+import 'package:farm_records_management_system/home/components/details/harvestDetailView.dart';
 import 'package:farm_records_management_system/home/screens/databaseHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class UpdateHarvestPage extends StatefulWidget {
-  final int treatmentId;
+  final Map<String, dynamic> harvestData;
 
-  const UpdateHarvestPage({super.key, required this.treatmentId});
+  const UpdateHarvestPage({Key? key, required this.harvestData}) : super(key: key);
 
   @override
-  _UpdateHarvestPageState createState() => _UpdateHarvestPageState();
+  _UpdateHarvestState createState() => _UpdateHarvestState();
 }
 
-class _UpdateHarvestPageState extends State<UpdateHarvestPage> {
-  final _formKey = GlobalKey<FormState>();
-  final _productUsedController = TextEditingController();
-  final _quantityController = TextEditingController();
-  String? _selectedStatus;
-  String? _selectedTreatmentType;
-  String? _selectedField;
+class _UpdateHarvestState extends State<UpdateHarvestPage> {
   DateTime? _selectedDate;
+  final _dateController = TextEditingController(); 
+  final _batchController = TextEditingController();
+  final _harvestQuantityController = TextEditingController();
+  final _harvestQualityController = TextEditingController();
+  final _unitCostController = TextEditingController();
+  final _harvestIncomeController = TextEditingController();
+  final _harvestNotesController = TextEditingController();
+  final _cropDropdownController = TextEditingController();
+  final _fieldDropdownController = TextEditingController();
 
-  void fetchTreatment() async {
-    Map<String, dynamic>? treatmentData =
-        await DatabaseHelper.getTreatment(widget.treatmentId);
-
-    if (treatmentData != null) {
-      setState(() {
-        _selectedDate = DateTime.parse(treatmentData['date']);
-        _selectedStatus = treatmentData['status'];
-        _selectedTreatmentType = treatmentData['treatment_type'];
-        _selectedField = treatmentData['field'];
-        _productUsedController.text = treatmentData['product_used'];
-        _quantityController.text = treatmentData['quantity'].toString();
-      });
-    }
-  }
+  List<String> _harvestQualityList = ["Maize", "Tobacco", "G. Nuts", "Beans"];
+  List<String> _fieldList = ["M01 Field", "T01 Field", "G01 Field", "B01 Field"];
 
   @override
   void initState() {
-    fetchTreatment();
     super.initState();
+    _initializeFields();
   }
 
+  void _initializeFields() {
+    _selectedDate = DateTime.parse(widget.harvestData['date']);
+    _dateController.text = _selectedDate != null
+        ? '${_selectedDate!.toLocal()}'.split(' ')[0]
+        : '';
+    _cropDropdownController.text = widget.harvestData['cropList'];
+    _batchController.text = widget.harvestData['batchNo'];
+    _harvestQuantityController.text = widget.harvestData['harvestQuantity'];
+    _harvestQualityController.text = widget.harvestData['harvestQuality'];
+    _unitCostController.text = widget.harvestData['unitCost'];
+    _harvestIncomeController.text = widget.harvestData['harvestIncome'];
+    _harvestNotesController.text = widget.harvestData['harvestNotes'];
+  }
+
+  // Function to show the date picker and set the selected date
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -50,155 +56,196 @@ class _UpdateHarvestPageState extends State<UpdateHarvestPage> {
       lastDate: DateTime(2100),
     );
 
+    // If the user picked a date, set the selected date state
     if (picked != null && picked != _selectedDate) {
       setState(() {
         _selectedDate = picked;
+        _dateController.text = '${_selectedDate!.toLocal()}'.split(' ')[0];
       });
-    }
-  }
-
-  void _updateTreatment(BuildContext context) async {
-    if (_formKey.currentState!.validate()) {
-      Map<String, dynamic> updatedTreatment = {
-        'date': DateFormat("yyyy-MM-dd").format(_selectedDate!),
-        'status': _selectedStatus,
-        'treatment_type': _selectedTreatmentType,
-        'field': _selectedField,
-        'product_used': _productUsedController.text,
-        'quantity': double.tryParse(_quantityController.text),
-      };
-
-      await DatabaseHelper.updateTreatment(
-          widget.treatmentId, updatedTreatment);
-      Navigator.pop(context, true);
     }
   }
 
   @override
   void dispose() {
-    _productUsedController.text = '';
-    _quantityController.text = '';
-
-    super.dispose();
+    _dateController.dispose();
+    _batchController.dispose();
+    _harvestQuantityController.dispose();
+    _harvestQualityController.dispose();
+    _unitCostController.dispose();
+    _harvestIncomeController.dispose();
+    _cropDropdownController.dispose();
+    _fieldDropdownController.dispose();
+    _harvestNotesController.dispose();
+    super.dispose(); 
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Update Treatment'),
+        title: const Text('Update Harvest'),
+        centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              GestureDetector(
-                onTap: () => _selectDate(context),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Text(
-                    _selectedDate != null
-                        ? DateFormat('yyyy-MM-dd').format(_selectedDate!)
-                        : 'Select Date',
-                  ),
+      body: Container(
+        padding: EdgeInsets.all(20.0),
+        child: ListView(
+          children: [
+            //Harvest date
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Harvest date',
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.calendar_today),
+                  onPressed: () => _selectDate(context),
+                ),
+                border: const OutlineInputBorder(),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blue.shade300),
                 ),
               ),
-              const SizedBox(height: 20),
-              DropdownButtonFormField<String>(
-                value: _selectedStatus,
-                items: ['Planned', 'Done'].map((status) {
-                  return DropdownMenuItem(
-                    value: status,
-                    child: Text(status),
-                  );
-                }).toList(),
-                decoration: const InputDecoration(
-                  labelText: 'Status',
-                  border: OutlineInputBorder(),
-                ),
-                onChanged: (value) {
-                  _selectedStatus = value;
-                },
-                validator: (value) {
-                  if (value == null) {
-                    return 'Please select a status';
-                  }
-                  return null;
-                },
+              controller: _dateController,
+              readOnly: true,
+            ),
+            //DropDown crop name  and field
+            DropdownButtonFormField(
+              value: _cropDropdownController.text,
+              items: _harvestQualityList.map(
+                (e) => DropdownMenuItem(child: Text(e), value: e,)
+              ).toList(), 
+              onChanged: (val) {
+                setState(() {
+                  _cropDropdownController.text = val as String;
+                });
+              },
+              icon: const Icon(
+                Icons.arrow_drop_down_outlined,
               ),
-              const SizedBox(height: 20),
-              DropdownButtonFormField<String>(
-                value: _selectedTreatmentType,
-                items: [
-                  'Fertilizer',
-                  'Fungicide',
-                  'Herbicide',
-                  'Insecticide',
-                  'Nutrients',
-                  'Other',
-                ].map((type) {
-                  return DropdownMenuItem(
-                    value: type,
-                    child: Text(type),
-                  );
-                }).toList(),
-                decoration: const InputDecoration(
-                  labelText: 'Treatment Type',
-                  border: OutlineInputBorder(),
-                ),
-                onChanged: (value) {
-                  _selectedTreatmentType = value;
-                },
-                validator: (value) {
-                  if (value == null) {
-                    return 'Please select a treatment type';
-                  }
-                  return null;
-                },
+              decoration: InputDecoration(
+                labelText: "Select crop to harvest",
+                border: UnderlineInputBorder()
               ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _productUsedController,
-                decoration: const InputDecoration(
-                  labelText: 'Product Used',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the product used';
-                  }
-                  return null;
-                },
+            ),
+            SizedBox(height: 10.0),
+            DropdownButtonFormField(
+              value: _fieldDropdownController.text,
+              items: _fieldList.map(
+                (e) => DropdownMenuItem(child: Text(e), value: e,)
+              ).toList(), 
+              onChanged: (val) {
+                setState(() {
+                  _fieldDropdownController.text = val as String;
+                });
+              },
+              icon: const Icon(
+                Icons.arrow_drop_down_outlined,
               ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _quantityController,
-                decoration: const InputDecoration(
-                  labelText: 'Quantity of Product',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the quantity';
-                  }
-                  return null;
-                },
+              decoration: InputDecoration(
+                labelText: "Select field",
+                border: OutlineInputBorder()
               ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  _updateTreatment(context);
-                },
-                child: const Text('Update Treatment'),
-              ),
-            ],
-          ),
+            ),
+            SizedBox(height: 10.0),
+            //Textfields for harvest information
+            MyTextField(
+              myController: _batchController,
+              fieldName: "Batch No",
+            ),
+            SizedBox(height: 10.0),
+            MyTextField(
+              myController: _harvestQuantityController,
+              fieldName: "Harvest quantity",
+            ),
+            SizedBox(height: 10.0),
+            MyTextField(
+              myController: _harvestQualityController,
+              fieldName: "Harvest quality",
+            ),
+            SizedBox(height: 10.0),
+            MyTextField(
+              myController: _unitCostController,
+              fieldName: "Unit cost",
+            ),
+            SizedBox(height: 10.0),
+            MyTextField(
+              myController: _harvestIncomeController,
+              fieldName: "Estimated harvest income",
+            ),
+            SizedBox(height: 10.0),
+            MyTextField(
+              myController: _harvestNotesController,
+              fieldName: "Notes",
+            ),
+            SizedBox(height: 10.0),
+            myUpdateBtn(context)
+          ],
+        ),
+      ),
+    );
+  }
+
+  OutlinedButton myUpdateBtn(BuildContext context) {
+    return OutlinedButton(
+      style: OutlinedButton.styleFrom(minimumSize: Size(200, 50)),
+      onPressed: () async {
+        Map<String, dynamic> updatedHarvest = {
+          'date': _selectedDate != null ? '${_selectedDate!.toLocal()}'.split(' ')[0] : '',
+          'cropList': _cropDropdownController.text,
+          'batchNo': _batchController.text,
+          'harvestQuantity': _harvestQuantityController.text,
+          'harvestQuality': _harvestQualityController.text,
+          'unitCost': _unitCostController.text,
+          'harvestIncome': _harvestIncomeController.text,
+          'harvestNotes': _harvestNotesController.text,
+        };
+
+        // Update data in the database
+        await DatabaseHelper.updateHarvest(widget.harvestData['id'], updatedHarvest);
+
+        // Navigate to HarvestDetailView
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) {
+            return HarvestDetailView(
+              cropList: _cropDropdownController.text,
+              batchNo: _batchController.text,
+              harvestQuantity: _harvestQuantityController.text,
+              harvestQuality: _harvestQualityController.text,
+              unitCost: _unitCostController.text,
+              harvestIncome: _harvestIncomeController.text,
+              harvestNotes: _harvestNotesController.text,
+            );
+          }),
+        );
+      },
+      child: Text("Update"),
+    );
+  }
+}
+
+// ignore: must_be_immutable
+class MyTextField extends StatelessWidget {
+  MyTextField({
+    Key? key,
+    required this.myController,
+    required this.fieldName,
+    this.myIcon = Icons.verified_user_outlined,
+    this.prefixIconColor = Colors.blueAccent,
+  });
+
+  final TextEditingController myController;
+  String fieldName;
+  final IconData myIcon;
+  Color prefixIconColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: myController,
+      decoration: InputDecoration(
+        labelText: fieldName,
+        border: const OutlineInputBorder(),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.green.shade300),
         ),
       ),
     );

@@ -110,6 +110,8 @@ class _UpdateTreatmentPageState extends State<UpdateTreatmentPage> {
                 ),
               ),
               const SizedBox(height: 20),
+
+              // Dropdown for Status
               DropdownButtonFormField<String>(
                 value: _selectedStatus,
                 items: ['Planned', 'Done'].map((status) {
@@ -133,6 +135,8 @@ class _UpdateTreatmentPageState extends State<UpdateTreatmentPage> {
                 },
               ),
               const SizedBox(height: 20),
+
+              // Dropdown for Treatment Type
               DropdownButtonFormField<String>(
                 value: _selectedTreatmentType,
                 items: [
@@ -163,6 +167,7 @@ class _UpdateTreatmentPageState extends State<UpdateTreatmentPage> {
                 },
               ),
               const SizedBox(height: 20),
+              // Product Used TextField
               TextFormField(
                 controller: _productUsedController,
                 decoration: const InputDecoration(
@@ -177,6 +182,8 @@ class _UpdateTreatmentPageState extends State<UpdateTreatmentPage> {
                 },
               ),
               const SizedBox(height: 20),
+
+              // Quantity TextField
               TextFormField(
                 controller: _quantityController,
                 decoration: const InputDecoration(
