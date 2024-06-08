@@ -65,6 +65,22 @@ class DatabaseHelper {
   ''',
 );
 
+ // Create a table for harvests
+    await db.execute(
+      '''
+      CREATE TABLE IF NOT EXISTS harvests (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        date TEXT,
+        batchNo TEXT,
+        harvestQuantity TEXT,
+        harvestQuality TEXT,
+        unitCost TEXT,
+        harvestIncome TEXT,
+        harvestNotes TEXT,
+      )
+      ''',
+    );
+
   }
 
   // Method to handle database upgrades
@@ -139,4 +155,44 @@ class DatabaseHelper {
     Database db = await _openDatabase(); // Ensure proper initialization
     return await db.query('expenses');
   }
+
+    // CRUD operations for harvests
+  static Future<int> insertHarvest(Map<String, dynamic> data) async {
+    Database db = await _openDatabase();
+    return await db.insert('harvests', data);
+  }
+
+  static Future<List<Map<String, dynamic>>> getharvests() async {
+    Database db = await _openDatabase();
+    return await db.query('harvests');
+  }
+
+  static Future<Map<String, dynamic>?> getHarvest(int id) async {
+    Database db = await _openDatabase();
+    List<Map<String, dynamic>> result = await db.query(
+      'harvests',
+      where: 'id = ?',
+      whereArgs: [id],
+      limit: 1,
+    );
+    return result.isNotEmpty ? result.first : null;
+  }
+
+  
+  static Future<int> deleteHarvest(int id) async {
+    Database db = await _openDatabase(); // Ensure proper initialization
+    return await db.delete('harvests', where: 'id = ?', whereArgs: [id]);
+  }
+
+  static Future<int> updateHarvest(int id, Map<String, dynamic> data) async {
+    Database db = await _openDatabase(); // Ensure proper initialization
+    return await db.update(
+      'harvests',
+      data,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+
 }

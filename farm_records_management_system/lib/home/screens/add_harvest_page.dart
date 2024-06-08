@@ -77,12 +77,12 @@ class _AddHarvestState extends State<AddHarvestPage> {
         padding: EdgeInsets.all(20.0),
         child: ListView(
           children: [
-            
-            TextField(
+            //Harvest date
+             TextField(
               decoration: InputDecoration(
                 labelText: 'Harvest date',
                 suffixIcon: IconButton(
-                  icon: Icon(Icons.calendar_today),
+                  icon: const Icon(Icons.calendar_today),
                   onPressed: () => _selectDate(context),
                 ),
                 border: const OutlineInputBorder(),
@@ -93,7 +93,7 @@ class _AddHarvestState extends State<AddHarvestPage> {
               controller: TextEditingController(
                 text: _selectedDate != null
                     ? '${_selectedDate!.toLocal()}'.split(' ')[0]
-                    : '', 
+                    : '',
               ),
               readOnly: true,
             ),
@@ -179,7 +179,12 @@ class _AddHarvestState extends State<AddHarvestPage> {
 OutlinedButton myBtn(BuildContext context) {
   return OutlinedButton(
     style: OutlinedButton.styleFrom(minimumSize: Size(200, 50)),
-    onPressed: () {
+    onPressed: () async{
+
+      Map<String, dynamic> newHarvest = {
+        'date': _selectedDate != null ? ''
+      }
+      //Navigate to HarverstDetailView
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context){
