@@ -21,28 +21,6 @@ class CropListScreen extends StatelessWidget {
           return CroplistCard();
         },
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        type: BottomNavigationBarType.fixed,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.apps),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bed),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: '',
-          ),
-        ],
-      ),
     );
   }
 }
@@ -67,8 +45,8 @@ class CroplistCard extends StatelessWidget {
         subtitle: Row(
           children: [
             Text(
-              'Planted',
-              style: TextStyle(color: Colors.green),
+              'Kanyani',
+              style: TextStyle(color: Colors.grey),
             ),
           ],
         ),
