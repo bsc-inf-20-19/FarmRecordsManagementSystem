@@ -241,7 +241,7 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
                 onAdd: (newTreatment) => _addTreatment(newTreatment),
                 onNewFieldRequested: () {
                   // Logic for new fields
-                },
+                }, existingFields: [],
               ),
             ),
           );
