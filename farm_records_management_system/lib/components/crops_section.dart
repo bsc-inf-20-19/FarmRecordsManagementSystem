@@ -23,7 +23,7 @@ class CropsSection extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Details(cropCompany: '',cropHarvest: '', cropLotNumber: '', cropType: '',)),
+                      MaterialPageRoute(builder: (context) => Details(cropCompany: '',cropHarvest: '', cropPlotNumber: '', cropType: '',)),
                     );
                   },
                   child: const CropListCard(),

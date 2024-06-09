@@ -37,7 +37,7 @@ class _NewPlantPageState extends State<NewPlantPage> {
   final _cropDecController = TextEditingController();
   final _cropCompanyController = TextEditingController();
   final _cropTypeController = TextEditingController();
-  final _cropLotController = TextEditingController();
+  final _cropPlotController = TextEditingController();
   final _cropHarvestController = TextEditingController();
 
   final List<String> _cropTypeList = ["Maize", "Tobacco", "G. Nuts", "Beans"];
@@ -56,7 +56,7 @@ class _NewPlantPageState extends State<NewPlantPage> {
     _cropDecController.dispose();
     _cropCompanyController.dispose();
     _cropTypeController.dispose();
-    _cropLotController.dispose();
+    _cropPlotController.dispose();
     _cropHarvestController.dispose();
     _cropDropdownController.dispose();
     _fieldDropdownController.dispose();
@@ -150,8 +150,8 @@ class _NewPlantPageState extends State<NewPlantPage> {
             ),
             const SizedBox(height: 10.0),
             MyTextField(
-              myController: _cropLotController,
-              fieldName: "Seed lot number",
+              myController: _cropPlotController,
+              fieldName: "Seed plot number",
             ),
             const SizedBox(height: 10.0),
             MyTextField(
@@ -178,7 +178,7 @@ class _NewPlantPageState extends State<NewPlantPage> {
           'description': _cropDecController.text,
           'cropCompany': _cropCompanyController.text,
           'cropType': _cropTypeController.text,
-          'cropLotNumber': _cropLotController.text,
+          'cropPlotNumber': _cropPlotController.text,
           'cropHarvest': _cropHarvestController.text,
         };
 
@@ -192,7 +192,7 @@ class _NewPlantPageState extends State<NewPlantPage> {
             return Details(
               cropCompany: _cropCompanyController.text,
               cropType: _cropTypeController.text,
-              cropLotNumber: _cropLotController.text,
+              cropPlotNumber: _cropPlotController.text,
               cropHarvest: _cropHarvestController.text,
             );
           }),

@@ -76,7 +76,7 @@ class DatabaseHelper {
         description TEXT,
         cropCompany TEXT,
         cropType TEXT,
-        cropLotNumber TEXT,
+        cropPlotNumber TEXT,
         cropHarvest TEXT
       )
       ''',

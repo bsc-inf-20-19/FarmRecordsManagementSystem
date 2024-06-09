@@ -1,3 +1,4 @@
+import 'package:farm_records_management_system/screens/activity_screen.dart';
 import 'package:farm_records_management_system/screens/databaseHelper.dart';
 import 'package:farm_records_management_system/screens/new_planting.dart';
 import 'package:flutter/material.dart';
@@ -9,16 +10,16 @@ import 'dart:io';
 
 class Details extends StatefulWidget {
   const Details({
-    super.key,
+    Key? key,
     required this.cropCompany,
     required this.cropType,
-    required this.cropLotNumber,
+    required this.cropPlotNumber,
     required this.cropHarvest,
   });
 
   final String cropCompany;
   final String cropType;
-  final String cropLotNumber;
+  final String cropPlotNumber;
   final String cropHarvest;
 
   @override
@@ -42,8 +43,34 @@ class _DetailsState extends State<Details> {
   }
 
   Future<void> _deletePlanting(int id) async {
-    await DatabaseHelper.deletePlanting(id);
-    _fetchPlantings(); // Refresh the list after deletion
+    bool confirmDelete = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Deletion'),
+          content: Text('Are you sure you want to delete this record?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false); // Dismiss the dialog and return false
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true); // Dismiss the dialog and return true
+              },
+              child: Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmDelete == true) {
+      await DatabaseHelper.deletePlanting(id);
+      _fetchPlantings(); // Refresh the list after deletion
+    }
   }
 
   Future<void> _editPlanting(Map<String, dynamic> planting) async {
@@ -83,7 +110,7 @@ class _DetailsState extends State<Details> {
                       pw.SizedBox(height: 10),
                       pw.Text('Seed Type: ${planting['cropType'] ?? 'N/A'}', style: const pw.TextStyle(fontSize: 16)),
                       pw.SizedBox(height: 10),
-                      pw.Text('Seed Lot Number: ${planting['cropLotNumber'] ?? 'N/A'}', style: const pw.TextStyle(fontSize: 16)),
+                      pw.Text('Seed Plot Number: ${planting['cropPlotNumber'] ?? 'N/A'}', style: const pw.TextStyle(fontSize: 16)),
                       pw.SizedBox(height: 10),
                       pw.Text('Estimated Harvest: ${planting['cropHarvest'] ?? 'N/A'}', style: const pw.TextStyle(fontSize: 16)),
                       pw.SizedBox(height: 10),
@@ -121,7 +148,7 @@ class _DetailsState extends State<Details> {
       'Seed Quantity',
       'Seed Company',
       'Seed Type',
-      'Seed Lot Number',
+      'Seed Plot Number',
       'Estimated Harvest',
       'Date',
     ]);
@@ -133,7 +160,7 @@ class _DetailsState extends State<Details> {
         planting['description'] ?? 'N/A',
         planting['cropCompany'] ?? 'N/A',
         planting['cropType'] ?? 'N/A',
-        planting['cropLotNumber'] ?? 'N/A',
+        planting['cropPlotNumber'] ?? 'N/A',
         planting['cropHarvest'] ?? 'N/A',
         planting['date'] ?? 'N/A',
       ]);
@@ -241,7 +268,7 @@ class _DetailsState extends State<Details> {
                               ),
                               const SizedBox(height: 10),
                               Text(
-                                'Seed Lot Number: ${planting['cropLotNumber'] ?? 'N/A'}',
+                                'Seed Plot Number: ${planting['cropPlotNumber'] ?? 'N/A'}',
                                 style: const TextStyle(fontSize: 16),
                               ),
                               const SizedBox(height: 10),
@@ -279,7 +306,7 @@ class _DetailsState extends State<Details> {
 class EditPlantingPage extends StatefulWidget {
   final Map<String, dynamic> planting;
 
-  const EditPlantingPage({super.key, required this.planting});
+  const EditPlantingPage({Key? key, required this.planting}) : super(key: key);
 
   @override
   _EditPlantingPageState createState() => _EditPlantingPageState();
@@ -292,7 +319,7 @@ class _EditPlantingPageState extends State<EditPlantingPage> {
   late TextEditingController _descriptionController;
   late TextEditingController _cropCompanyController;
   late TextEditingController _cropTypeController;
-  late TextEditingController _cropLotNumberController;
+  late TextEditingController _cropPlotNumberController;
   late TextEditingController _cropHarvestController;
 
   @override
@@ -304,7 +331,7 @@ class _EditPlantingPageState extends State<EditPlantingPage> {
     _descriptionController = TextEditingController(text: widget.planting['description']);
     _cropCompanyController = TextEditingController(text: widget.planting['cropCompany']);
     _cropTypeController = TextEditingController(text: widget.planting['cropType']);
-    _cropLotNumberController = TextEditingController(text: widget.planting['cropLotNumber']);
+    _cropPlotNumberController = TextEditingController(text: widget.planting['cropPlotNumber']);
     _cropHarvestController = TextEditingController(text: widget.planting['cropHarvest']);
   }
 
@@ -316,7 +343,7 @@ class _EditPlantingPageState extends State<EditPlantingPage> {
     _descriptionController.dispose();
     _cropCompanyController.dispose();
     _cropTypeController.dispose();
-    _cropLotNumberController.dispose();
+    _cropPlotNumberController.dispose();
     _cropHarvestController.dispose();
     super.dispose();
   }
@@ -329,7 +356,7 @@ class _EditPlantingPageState extends State<EditPlantingPage> {
       'description': _descriptionController.text,
       'cropCompany': _cropCompanyController.text,
       'cropType': _cropTypeController.text,
-      'cropLotNumber': _cropLotNumberController.text,
+      'cropPlotNumber': _cropPlotNumberController.text,
       'cropHarvest': _cropHarvestController.text,
     };
 
@@ -372,8 +399,8 @@ class _EditPlantingPageState extends State<EditPlantingPage> {
               decoration: const InputDecoration(labelText: 'Seed Type'),
             ),
             TextField(
-              controller: _cropLotNumberController,
-              decoration: const InputDecoration(labelText: 'Seed Lot Number'),
+              controller: _cropPlotNumberController,
+              decoration: const InputDecoration(labelText: 'Seed Plot Number'),
             ),
             TextField(
               controller: _cropHarvestController,
