@@ -1,38 +1,40 @@
-import 'package:farm_records_management_system/Pages/databaseHelper.dart';
+import 'package:farm_records_management_system/screens/databaseHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class AddTreatmentPage extends StatefulWidget {
-  final Function(Map<String, dynamic>) onAdd; // Callback for adding treatments
-  final List<String> existingFields; // List of existing fields for dropdown
-  final VoidCallback onNewFieldRequested; // Callback to add new fields
+class ExpensePage extends StatefulWidget {
+  final Function(Map<String, dynamic>) onAdd;
+  final List<String> existingExpense;
+  final VoidCallback onNewExpenseRequested;
 
-  const AddTreatmentPage({
+   const ExpensePage({
     super.key,
     required this.onAdd,
-    required this.existingFields,
-    required this.onNewFieldRequested,
+    required this.existingExpense,
+    required this.onNewExpenseRequested,
   });
 
   @override
-  _AddTreatmentPageState createState() => _AddTreatmentPageState();
+  _ExpensePageState createState() => _ExpensePageState();
 }
 
-class _AddTreatmentPageState extends State<AddTreatmentPage> {
+class _ExpensePageState extends State<ExpensePage> {
+  
   final _formKey = GlobalKey<FormState>();
-  final _productUsedController = TextEditingController();
-  final _quantityController = TextEditingController();
-  final _customTreatmentTypeController = TextEditingController();
-  String? _selectedStatus;
-  String? _selectedTreatmentType;
+  final _amountController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  final _customerNameController = TextEditingController();
+  // String? _customerNameController;
+  String? _selectedTransactionType;
   String? _selectedField;
   DateTime? _selectedDate;
+  // String? _chooseCategory;
 
   @override
   void dispose() {
-    _productUsedController.dispose();
-    _quantityController.dispose();
-    _customTreatmentTypeController.dispose();
+    _amountController.dispose();
+    _descriptionController.dispose();
+    _customerNameController.dispose();
     super.dispose(); // Proper resource cleanup
   }
 
@@ -50,9 +52,9 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
       });
     }
   }
-   String _getStatusFromDate(DateTime date) {
-    return date.isAfter(DateTime.now()) ? 'Planned' : 'Done';
-  }
+  //  String _getStatusFromDate(DateTime date) {
+  //   return date.isAfter(DateTime.now()) ? 'Planned' : 'Done';
+  // }
 
   String _formatDate(DateTime? date) {
     if (date == null) {
@@ -65,7 +67,7 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add New Treatment'),
+        title: const Text('New Expense'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -90,42 +92,13 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
               ),
               const SizedBox(height: 20),
 
-              // Dropdown for Status
-              DropdownButtonFormField<String>(
-                value: _selectedStatus,
-                items: ['Planned', 'Done'].map((status) {
-                  return DropdownMenuItem(
-                    value: status,
-                    child: Text(status),
-                  );
-                }).toList(),
-                decoration: const InputDecoration(
-                  labelText: 'Status',
-                  border: OutlineInputBorder(),
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedStatus = value;
-                  });
-                },
-                validator: (value) {
-                  if (value == null) {
-                    return 'Please select a status';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
+              // const SizedBox(height: 20),
 
-              // Dropdown for Treatment Type
+              // Dropdown for expense Type
               DropdownButtonFormField<String>(
-                value: _selectedTreatmentType,
+                value: _selectedTransactionType,
                 items: [
-                  'Fertilizer',
-                  'Fungicide',
-                  'Herbicide',
-                  'Insecticide',
-                  'Nutrients',
+                  'Choose category',
                   'Other',
                 ].map((type) {
                   return DropdownMenuItem(
@@ -134,33 +107,33 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
                   );
                 }).toList(),
                 decoration: const InputDecoration(
-                  labelText: 'Treatment Type',
+                  labelText: 'expense Type',
                   border: OutlineInputBorder(),
                 ),
                 onChanged: (value) {
                   setState(() {
-                    _selectedTreatmentType = value;
+                    _selectedTransactionType = value;
                   });
                 },
                 validator: (value) {
                   if (value == null) {
-                    return 'Please select a treatment type';
+                    return 'Please select a expense type';
                   }
                   return null;
                 },
               ),
               const SizedBox(height: 20),
 
-              if (_selectedTreatmentType == 'Other') ...[
+              if (_selectedTransactionType == 'Other') ...[
                 TextFormField(
-                  controller: _customTreatmentTypeController,
+                  controller: TextEditingController(),// changes here
                   decoration: const InputDecoration(
-                    labelText: 'Custom Treatment Type',
+                    labelText: 'Specify expense Type',
                     border: OutlineInputBorder(),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a treatment type';
+                      return 'Please enter a expense type';
                     }
                     return null;
                   },
@@ -172,7 +145,7 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
                   Expanded(
                     child: DropdownButtonFormField<String>(
                       value: _selectedField,
-                      items: widget.existingFields.map((field) {
+                      items: widget.existingExpense.map((field) {
                         return DropdownMenuItem(
                           value: field,
                           child: Text(field),
@@ -196,7 +169,7 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
                     ),
                   ),
                   IconButton(
-                    onPressed: widget.onNewFieldRequested,
+                    onPressed: widget.onNewExpenseRequested,
                     icon: const Icon(Icons.add),
                     tooltip: 'Add New Field',
                   ),
@@ -206,14 +179,30 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
 
               // Product Used TextField
               TextFormField(
-                controller: _productUsedController,
+              controller: _amountController,
+              keyboardType: TextInputType.number,  // Set keyboard type to number
+              decoration: const InputDecoration(
+                labelText: 'How much did you spend?',
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter the amount spent';
+                }
+                return null;
+              },
+            ),
+              const SizedBox(height: 20),
+
+               TextFormField(
+                controller: _customerNameController,
                 decoration: const InputDecoration(
-                  labelText: 'Product Used',
+                  labelText: 'customer name',
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter the product used';
+                    return 'Please enter the customer name';
                   }
                   return null;
                 },
@@ -222,22 +211,21 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
 
               // Quantity TextField
               TextFormField(
-                controller: _quantityController,
-                keyboardType: TextInputType.number,
+                controller: _descriptionController,
                 decoration: const InputDecoration(
-                  labelText: 'Quantity',
+                  labelText: 'Write notes...',
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter the quantity';
+                    return 'Please enter the notes';
                   }
                   return null;
                 },
               ),
               const SizedBox(height: 20),
 
-              // Add Treatment Button
+              // Add expense Button
               ElevatedButton(
   onPressed: () {
     if (_formKey.currentState!.validate()){
@@ -247,28 +235,28 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
           throw Exception('Date is required'); // Custom error message
         }
         
-        // Build the new treatment map
-        Map<String, dynamic> newTreatment = {
+        // Build the new expense map
+        Map<String, dynamic> newExpense = {
           'date': DateFormat("yyyy-MM-dd").format(_selectedDate!), // Ensure non-null date
-          'status': _selectedStatus, // Ensure it's not null
-          'treatment_type': _selectedTreatmentType, // Ensure it's not null
+          'customer_name': _customerNameController.text, // Ensure it's not null
+          'expense_type': _selectedTransactionType, // Ensure it's not null
           'field': _selectedField, // Ensure it's not null
-          'product_used': _productUsedController.text, // Ensure it's not empty
-          'quantity': double.tryParse(_quantityController.text) ?? 0.0, // Avoid null
+          'description': _descriptionController.text, // Ensure it's not empty
+          'amount': double.tryParse(_amountController.text) ?? 0.0, // Avoid null
         };
-         DatabaseHelper.insertTreatment(newTreatment);
+         DatabaseHelper.insertTransaction(newExpense);
         // Navigate back to the previous screen
         Navigator.pop(context, true);
 
       } catch (e) {
-        debugPrint('Error adding treatment: $e'); // Improved error handling
+        debugPrint('Error adding expense: $e'); // Improved error handling
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error adding treatment: $e')), // Display error message
+          SnackBar(content: Text('Error adding expense: $e')), // Display error message
         );
       }
     }
   },
-                child: const Text('Add Treatment'),
+                child: const Text('Add Expense'),
               ),
             ],
           )
