@@ -61,35 +61,40 @@ class _DetailsState extends State<Details> {
     final pdf = pw.Document();
 
     pdf.addPage(
-      pw.Page(
+      pw.MultiPage(
         build: (pw.Context context) {
-          return pw.ListView.builder(
-            itemCount: _plantings.length,
-            itemBuilder: (context, index) {
-              final planting = _plantings[index];
-              return pw.Container(
-                padding: const pw.EdgeInsets.all(8),
-                child: pw.Column(
-                  crossAxisAlignment: pw.CrossAxisAlignment.start,
-                  children: [
-                    pw.Text('Crop: ${planting['crop'] ?? 'N/A'}', style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold)),
-                    pw.SizedBox(height: 10),
-                    pw.Text('Field: ${planting['field'] ?? 'N/A'}', style: const pw.TextStyle(fontSize: 16)),
-                    pw.SizedBox(height: 10),
-                    pw.Text('Seed Quantity: ${planting['description'] ?? 'N/A'}', style: const pw.TextStyle(fontSize: 16)),
-                    pw.SizedBox(height: 10),
-                    pw.Text('Seed Company: ${planting['cropCompany'] ?? 'N/A'}', style: const pw.TextStyle(fontSize: 16)),
-                    pw.SizedBox(height: 10),
-                    pw.Text('Seed Type: ${planting['cropType'] ?? 'N/A'}', style: const pw.TextStyle(fontSize: 16)),
-                    pw.SizedBox(height: 10),
-                    pw.Text('Seed Lot Number: ${planting['cropLotNumber'] ?? 'N/A'}', style: const pw.TextStyle(fontSize: 16)),
-                    pw.SizedBox(height: 10),
-                    pw.Text('Estimated Harvest: ${planting['cropHarvest'] ?? 'N/A'}', style: const pw.TextStyle(fontSize: 16)),
-                  ],
-                ),
-              );
-            },
-          );
+          return [
+            pw.ListView.builder(
+              itemCount: _plantings.length,
+              itemBuilder: (context, index) {
+                final planting = _plantings[index];
+                return pw.Container(
+                  padding: const pw.EdgeInsets.all(8),
+                  child: pw.Column(
+                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                    children: [
+                      pw.Text('Crop: ${planting['crop'] ?? 'N/A'}', style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold)),
+                      pw.SizedBox(height: 10),
+                      pw.Text('Field: ${planting['field'] ?? 'N/A'}', style: const pw.TextStyle(fontSize: 16)),
+                      pw.SizedBox(height: 10),
+                      pw.Text('Seed Quantity: ${planting['description'] ?? 'N/A'}', style: const pw.TextStyle(fontSize: 16)),
+                      pw.SizedBox(height: 10),
+                      pw.Text('Seed Company: ${planting['cropCompany'] ?? 'N/A'}', style: const pw.TextStyle(fontSize: 16)),
+                      pw.SizedBox(height: 10),
+                      pw.Text('Seed Type: ${planting['cropType'] ?? 'N/A'}', style: const pw.TextStyle(fontSize: 16)),
+                      pw.SizedBox(height: 10),
+                      pw.Text('Seed Lot Number: ${planting['cropLotNumber'] ?? 'N/A'}', style: const pw.TextStyle(fontSize: 16)),
+                      pw.SizedBox(height: 10),
+                      pw.Text('Estimated Harvest: ${planting['cropHarvest'] ?? 'N/A'}', style: const pw.TextStyle(fontSize: 16)),
+                      pw.SizedBox(height: 10),
+                      pw.Text('Date: ${planting['date'] ?? 'N/A'}', style: const pw.TextStyle(fontSize: 16)),
+                      pw.Divider(),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ];
         },
       ),
     );
@@ -118,6 +123,7 @@ class _DetailsState extends State<Details> {
       'Seed Type',
       'Seed Lot Number',
       'Estimated Harvest',
+      'Date',
     ]);
 
     for (final planting in _plantings) {
@@ -129,6 +135,7 @@ class _DetailsState extends State<Details> {
         planting['cropType'] ?? 'N/A',
         planting['cropLotNumber'] ?? 'N/A',
         planting['cropHarvest'] ?? 'N/A',
+        planting['date'] ?? 'N/A',
       ]);
     }
 
@@ -240,6 +247,11 @@ class _DetailsState extends State<Details> {
                               const SizedBox(height: 10),
                               Text(
                                 'Estimated Harvest: ${planting['cropHarvest'] ?? 'N/A'}',
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                'Date: ${planting['date'] ?? 'N/A'}',
                                 style: const TextStyle(fontSize: 16),
                               ),
                             ],
