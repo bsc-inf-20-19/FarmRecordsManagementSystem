@@ -78,6 +78,21 @@ class DatabaseHelper {
       )
       ''',
     );
+
+    // Create a table for Tasks
+    await db.execute(
+      '''
+      CREATE TABLE IF NOT EXISTS tasks (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        taskName TEXT,
+        status TEXT,
+        date TEXT,
+        isSpecificToPlanting INTEGER,
+        field TEXT,
+        notes TEXT
+      )
+      ''',
+    );
   }
 
   // Method to handle database upgrades
@@ -182,6 +197,43 @@ class DatabaseHelper {
     Database db = await _openDatabase(); // Ensure proper initialization
     return await db.update(
       'fields',
+      data,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  // CRUD operations for tasks
+  static Future<int> insertTask(Map<String, dynamic> task) async {
+    Database db = await _openDatabase();
+    return await db.insert('tasks', task);
+  }
+
+  static Future<List<Map<String, dynamic>>> getTasks() async {
+    Database db = await _openDatabase();
+    return await db.query('tasks');
+  }
+
+  static Future<Map<String, dynamic>?> getTaskById(int id) async {
+    Database db = await _openDatabase();
+    List<Map<String, dynamic>> result = await db.query(
+      'tasks',
+      where: 'id = ?',
+      whereArgs: [id],
+      limit: 1,
+    );
+    return result.isNotEmpty ? result.first : null;
+  }
+
+  static Future<int> deleteTask(int id) async {
+    Database db = await _openDatabase();
+    return await db.delete('tasks', where: 'id = ?', whereArgs: [id]);
+  }
+
+  static Future<int> updateTask(int id, Map<String, dynamic> data) async {
+    Database db = await _openDatabase();
+    return await db.update(
+      'tasks',
       data,
       where: 'id = ?',
       whereArgs: [id],

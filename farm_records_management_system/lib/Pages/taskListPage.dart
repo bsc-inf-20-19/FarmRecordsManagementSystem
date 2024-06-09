@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:farm_records_management_system/database/databaseHelper.dart';
-import 'package:farm_records_management_system/screens/add_treatment_page.dart';
-import 'package:farm_records_management_system/screens/updateTreatmentPage.dart';
+import 'package:farm_records_management_system/screens/taskFormScreen.dart';
 
-class TreatmentsPage extends StatefulWidget {
-  const TreatmentsPage({Key? key}) : super(key: key);
-
+class TaskListScreen extends StatefulWidget {
   @override
-  _TreatmentsPageState createState() => _TreatmentsPageState();
+  _TaskListScreenState createState() => _TaskListScreenState();
 }
 
-class _TreatmentsPageState extends State<TreatmentsPage> {
-  List<Map<String, dynamic>> treatments = [];
+class _TaskListScreenState extends State<TaskListScreen> {
+  List<Map<String, dynamic>> tasks = [];
   late TextEditingController searchController;
   bool isSearching = false;
 
@@ -20,7 +17,7 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
   void initState() {
     super.initState();
     searchController = TextEditingController();
-    _loadData();
+    _loadTasks();
   }
 
   @override
@@ -29,14 +26,14 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
     super.dispose();
   }
 
-  Future<void> _loadData() async {
+  Future<void> _loadTasks() async {
     try {
-      List<Map<String, dynamic>> result = await DatabaseHelper.getTreatments();
+      List<Map<String, dynamic>> result = await DatabaseHelper.getTasks();
       setState(() {
-        treatments = result.reversed.toList();
+        tasks = result.reversed.toList();
       });
     } catch (e) {
-      debugPrint('Error loading treatments: $e');
+      debugPrint('Error loading tasks: $e');
     }
   }
 
@@ -44,11 +41,11 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
     setState(() {
       if (searchTerm.isEmpty) {
         isSearching = false;
-        _loadData();
+        _loadTasks();
       } else {
         isSearching = true;
-        treatments = treatments.where((treatment) {
-          return treatment.values.any((value) =>
+        tasks = tasks.where((task) {
+          return task.values.any((value) =>
               value.toString().toLowerCase().contains(searchTerm.toLowerCase()));
         }).toList();
       }
@@ -68,14 +65,14 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
     }
   }
 
-  Future<void> _showDeleteConfirmationDialog(BuildContext context, int treatmentId) async {
+  Future<void> _showDeleteConfirmationDialog(BuildContext context, int taskId) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Confirm Deletion'),
-          content: const Text('Are you sure you want to delete this treatment?'),
+          content: const Text('Are you sure you want to delete this task?'),
           actions: <Widget>[
             TextButton(
               child: const Text('Cancel'),
@@ -86,8 +83,8 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
             TextButton(
               child: const Text('Confirm'),
               onPressed: () async {
-                await DatabaseHelper.deleteTreatment(treatmentId);
-                _loadData();
+                await DatabaseHelper.deleteTask(taskId);
+                _loadTasks();
                 Navigator.of(context).pop();
               },
             ),
@@ -97,31 +94,28 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
     );
   }
 
-  void _navigateToAddTreatmentPage() async {
-    final addedTreatment = await Navigator.push(
+  void _navigateToAddTaskPage() async {
+    final addedTask = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AddTreatmentPage(
-          onAdd: (newTreatment) => _addTreatment(newTreatment),
-          onNewFieldRequested: () {
-            // Handle new field request logic here
-          },
-        ),
+        builder: (context) => TaskFormScreen(),
       ),
     );
-    if (addedTreatment != null) {
-      _loadData();
+    if (addedTask != null) {
+      _loadTasks();
     }
   }
 
-  void _addTreatment(Map<String, dynamic> newTreatment) async {
-    newTreatment['status'] = DateFormat("yyyy-MM-dd")
-            .parse(newTreatment['date'])
-            .isBefore(DateTime.now())
-        ? 'Done'
-        : 'Planned';
-    await DatabaseHelper.insertTreatment(newTreatment);
-    _loadData();
+  void _navigateToEditTaskPage(int taskId) async {
+    final updatedTask = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TaskFormScreen(taskId: taskId),
+      ),
+    );
+    if (updatedTask != null) {
+      _loadTasks();
+    }
   }
 
   @override
@@ -133,11 +127,11 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
                 controller: searchController,
                 onChanged: (value) => _applySearchFilter(value),
                 decoration: InputDecoration(
-                  hintText: 'Search by name, type, or date',
+                  hintText: 'Search by task name, status, or date',
                   border: InputBorder.none,
                 ),
               )
-            : const Text('Treatments'),
+            : const Text('Task List'),
         actions: [
           IconButton(
             icon: Icon(isSearching ? Icons.close : Icons.search),
@@ -153,15 +147,18 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
         ],
       ),
       body: ListView.builder(
-        itemCount: treatments.length,
+        itemCount: tasks.length,
         itemBuilder: (context, index) {
-          var treatment = treatments[index];
-          String formattedDate = _formatDate(treatment["date"]);
-          String status = treatment['status'];
-          Color statusColor = status == 'Done' ? Colors.green : Colors.yellow;
+          final task = tasks[index];
+          final taskName = task['taskName'] ?? 'N/A';
+          final status = task['status'] ?? 'N/A';
+          final date = task['date'] ?? 'N/A';
+          final field = task['field'] ?? 'N/A';
+          final notes = task['notes'] ?? 'N/A';
 
           return Card(
-            margin: EdgeInsets.all(16.0),
+            elevation: 2.0,
+            margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -170,7 +167,7 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
                   Row(
                     children: [
                       Text(
-                        treatment["treatment_type"],
+                        taskName,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -182,20 +179,9 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
                         child: PopupMenuButton<String>(
                           onSelected: (value) async {
                             if (value == 'edit') {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => UpdateTreatmentPage(
-                                    treatmentId: treatment['id'],
-                                  ),
-                                ),
-                              ).then((result) {
-                                if (result == true) {
-                                  _loadData();
-                                }
-                              });
+                              _navigateToEditTaskPage(task['id']);
                             } else if (value == 'delete') {
-                              _showDeleteConfirmationDialog(context, treatment['id']);
+                              _showDeleteConfirmationDialog(context, task['id']);
                             }
                           },
                           itemBuilder: (context) => [
@@ -215,12 +201,10 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
                   ),
                   Divider(thickness: 0.5, color: Colors.black54),
                   SizedBox(height: 8),
-                  TreatmentItem(label: 'Treatment date', value: formattedDate),
-                  TreatmentItem(label: 'Status', value: '$status - $formattedDate', color: statusColor),
-                  TreatmentItem(label: 'Treatment type', value: treatment["treatment_type"]),
-                  TreatmentItem(label: 'Field name', value: treatment["field"]),
-                  TreatmentItem(label: 'Product used', value: treatment["product_used"]),
-                  TreatmentItem(label: 'Quantity', value: treatment["quantity"].toString()),
+                  TaskItem(label: 'Status', value: status, color: Colors.green),
+                  TaskItem(label: 'Date', value: _formatDate(date), color: Colors.blue),
+                  TaskItem(label: 'Field', value: field, color: Colors.orange),
+                  TaskItem(label: 'Notes', value: notes, color: Colors.purple),
                 ],
               ),
             ),
@@ -228,19 +212,19 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _navigateToAddTreatmentPage,
+        onPressed: _navigateToAddTaskPage,
         child: const Icon(Icons.add),
       ),
     );
   }
 }
 
-class TreatmentItem extends StatelessWidget {
+class TaskItem extends StatelessWidget {
   final String label;
   final String value;
   final Color? color;
 
-  const TreatmentItem({
+  const TaskItem({
     required this.label,
     required this.value,
     this.color,

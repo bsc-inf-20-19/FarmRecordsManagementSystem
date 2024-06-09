@@ -85,19 +85,18 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
             children: [
               GestureDetector(
                 onTap: () => _selectDate(context),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Text(
-                    _selectedDate != null
-                        ? _formatDate(_selectedDate)
-                        : 'Select Date',
-                  ),
+                child: InputDecorator(
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                ),
+                child: Text(
+                  _selectedDate != null
+                      ? _formatDate(_selectedDate)
+                      : 'Select Date',
                 ),
               ),
+            ),
               const SizedBox(height: 20),
               DropdownButtonFormField<String>(
                 value: _selectedStatus,
@@ -214,7 +213,7 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
                         await _loadFields();
                       }
                     },
-                    icon: Icon(Icons.add),
+                    icon: const Icon(Icons.add),
                     tooltip: 'Add New Field',
                   ),
                 ],
