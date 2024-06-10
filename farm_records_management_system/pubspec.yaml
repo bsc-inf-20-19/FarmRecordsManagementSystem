@@ -33,6 +33,9 @@ dependencies:
   flutter_excel: 1.0.1
   excel: ^2.0.6
   open_file: ^3.2.1
+  file_picker: 8.0.4
+  csv: ^5.0.0
+
 
   #pdf: ^3.3.0
 

@@ -194,4 +194,15 @@ class DatabaseHelper {
   }
 
   static getPlantingsByDate(DateTime selectedDate) {}
+
+  // Method to fetch unique crop names for autocomplete suggestions
+  static Future<List<String>> getCropSuggestions() async {
+    Database db = await _openDatabase();
+    final List<Map<String, dynamic>> crops = await db.query(
+      'plantings',
+      columns: ['crop'],
+      distinct: true,
+    );
+    return crops.map((e) => e['crop'] as String).toList();
+  }
 }

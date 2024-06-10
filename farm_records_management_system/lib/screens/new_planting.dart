@@ -1,6 +1,12 @@
+import 'dart:convert';
+
 import 'package:farm_records_management_system/screens/databaseHelper.dart';
 import 'package:farm_records_management_system/screens/detail_page.dart';
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
+import 'dart:io';
+import 'package:csv/csv.dart';
+import 'package:excel/excel.dart';
 
 class NewPlantPage extends StatefulWidget {
   const NewPlantPage({super.key});
@@ -63,12 +69,74 @@ class _NewPlantPageState extends State<NewPlantPage> {
     super.dispose();
   }
 
+  Future<void> _importFromFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['csv', 'xlsx'],
+    );
+
+    if (result != null) {
+      File file = File(result.files.single.path!);
+
+      if (result.files.single.extension == 'csv') {
+        final input = file.openRead();
+        final fields = await input.transform(utf8.decoder).transform(CsvToListConverter()).toList();
+
+        for (var row in fields) {
+          Map<String, dynamic> plantingData = {
+            'date': row[0],
+            'crop': row[1],
+            'field': row[2],
+            'description': row[3],
+            'cropCompany': row[4],
+            'cropType': row[5],
+            'cropPlotNumber': row[6],
+            'cropHarvest': row[7],
+          };
+          await DatabaseHelper.insertPlanting(plantingData);
+        }
+      } else if (result.files.single.extension == 'xlsx') {
+        var bytes = file.readAsBytesSync();
+        var excel = Excel.decodeBytes(bytes);
+
+        for (var table in excel.tables.keys) {
+          var sheet = excel.tables[table];
+          for (var row in sheet!.rows) {
+            Map<String, dynamic> plantingData = {
+              'date': row[0]?.value,
+              'crop': row[1]?.value,
+              'field': row[2]?.value,
+              'description': row[3]?.value,
+              'cropCompany': row[4]?.value,
+              'cropType': row[5]?.value,
+              'cropPlotNumber': row[6]?.value,
+              'cropHarvest': row[7]?.value,
+            };
+            await DatabaseHelper.insertPlanting(plantingData);
+          }
+        }
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Data imported successfully')),
+      );
+    } else {
+      // User canceled the picker
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('New Planting'),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.file_upload),
+            onPressed: _importFromFile,
+          ),
+        ],
       ),
       body: Container(
         padding: const EdgeInsets.all(20.0),
@@ -159,7 +227,7 @@ class _NewPlantPageState extends State<NewPlantPage> {
               fieldName: "Estimated harvest",
             ),
             const SizedBox(height: 10.0),
-            myBtn(context)
+            myBtn(context),
           ],
         ),
       ),

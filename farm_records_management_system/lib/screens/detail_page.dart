@@ -28,11 +28,14 @@ class Details extends StatefulWidget {
 
 class _DetailsState extends State<Details> {
   List<Map<String, dynamic>> _plantings = [];
+  String _cropFilter = '';
+  List<String> _cropSuggestions = [];
 
   @override
   void initState() {
     super.initState();
     _fetchPlantings();
+    _fetchCropSuggestions();
   }
 
   Future<void> _fetchPlantings() async {
@@ -40,8 +43,21 @@ class _DetailsState extends State<Details> {
     DateTime endDate = DateTime.now().add(const Duration(days: 30));
 
     List<Map<String, dynamic>> plantings = await DatabaseHelper.getPlantings(selectedDate, endDate: null, startDate: null);
+
+    if (_cropFilter.isNotEmpty) {
+      plantings = plantings.where((planting) => (planting['crop'] ?? '').toLowerCase().contains(_cropFilter.toLowerCase())).toList();
+    }
+
     setState(() {
       _plantings = plantings;
+    });
+  }
+
+  Future<void> _fetchCropSuggestions() async {
+    // Fetch crop names from the database
+    List<String> cropSuggestions = await DatabaseHelper.getCropSuggestions();
+    setState(() {
+      _cropSuggestions = cropSuggestions;
     });
   }
 
@@ -206,60 +222,84 @@ class _DetailsState extends State<Details> {
           ),
         ],
       ),
-      body: _plantings.isEmpty
-          ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: _plantings.length,
-              itemBuilder: (context, index) {
-                final planting = _plantings[index];
-                return Card(
-                  elevation: 4,
-                  margin: const EdgeInsets.all(10),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Autocomplete<String>(
+              optionsBuilder: (TextEditingValue textEditingValue) {
+                if (textEditingValue.text.isEmpty) {
+                  return const Iterable<String>.empty();
+                }
+                return _cropSuggestions.where((String option) {
+                  return option.toLowerCase().contains(textEditingValue.text.toLowerCase());
+                });
+              },
+              onSelected: (String selection) {
+                setState(() {
+                  _cropFilter = selection;
+                  _fetchPlantings();
+                });
+              },
+              fieldViewBuilder: (BuildContext context, TextEditingController textEditingController, FocusNode focusNode, VoidCallback onFieldSubmitted) {
+                return TextField(
+                  controller: textEditingController,
+                  focusNode: focusNode,
+                  decoration: InputDecoration(
+                    labelText: 'Filter by Crop Name',
+                    border: OutlineInputBorder(),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: PopupMenuButton<String>(
-                            onSelected: (value) {
-                              if (value == 'delete') {
-                                _deletePlanting(planting['id']);
-                              } else if (value == 'edit') {
-                                _editPlanting(planting);
-                              }
-                            },
-                            itemBuilder: (context) => [
-                              const PopupMenuItem(
-                                value: 'delete',
-                                child: Text('Delete'),
-                              ),
-                              const PopupMenuItem(
-                                value: 'edit',
-                                child: Text('Edit'),
-                              ),
-                            ],
-                          ),
+                  onChanged: (value) {
+                    setState(() {
+                      _cropFilter = value;
+                      _fetchPlantings();
+                    });
+                  },
+                );
+              },
+            ),
+          ),
+          Expanded(
+            child: _plantings.isEmpty
+                ? const Center(child: CircularProgressIndicator())
+                : ListView.builder(
+                    itemCount: _plantings.length,
+                    itemBuilder: (context, index) {
+                      final planting = _plantings[index];
+                      return Card(
+                        elevation: 4,
+                        margin: const EdgeInsets.all(10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
                         ),
-                        Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Icon(
-                                Icons.grass,
-                                color: Colors.green[700],
-                                size: 60,
-                              ),
-                              Text(
-                                planting['crop'] ?? 'N/A',
-                                style: const TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.green,
-                                ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    planting['crop'] ?? 'N/A',
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      IconButton(
+                                        icon: const Icon(Icons.edit),
+                                        onPressed: () => _editPlanting(planting),
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.delete),
+                                        onPressed: () => _deletePlanting(planting['id']),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                               const SizedBox(height: 10),
                               _buildDetailRow('Field', planting['field']),
@@ -272,12 +312,12 @@ class _DetailsState extends State<Details> {
                             ],
                           ),
                         ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
