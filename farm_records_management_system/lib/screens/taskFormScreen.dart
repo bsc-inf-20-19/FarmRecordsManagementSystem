@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:farm_records_management_system/database/databaseHelper.dart';
 
 class TaskFormScreen extends StatefulWidget {
@@ -12,79 +13,80 @@ class TaskFormScreen extends StatefulWidget {
 
 class _TaskFormScreenState extends State<TaskFormScreen> {
   final _formKey = GlobalKey<FormState>();
-  late TextEditingController _taskNameController;
-  late TextEditingController _statusController;
-  late TextEditingController _dateController;
-  late TextEditingController _fieldController;
-  late TextEditingController _notesController;
+  final TextEditingController _taskNameController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  bool _isSpecificToPlanting = false;
+  String? _selectedField;
+  String? _notes;
 
   @override
   void initState() {
     super.initState();
-    _taskNameController = TextEditingController();
-    _statusController = TextEditingController();
-    _dateController = TextEditingController();
-    _fieldController = TextEditingController();
-    _notesController = TextEditingController();
-
     if (widget.taskId != null) {
-      _loadTask();
-    }
-  }
-
-  Future<void> _loadTask() async {
-    if (widget.taskId == null) return;
-
-    try {
-      Map<String, dynamic>? task = await DatabaseHelper.getTaskById(widget.taskId!);
-      if (task != null) {
-        _taskNameController.text = task['taskName'] ?? '';
-        _statusController.text = task['status'] ?? '';
-        _dateController.text = task['date'] ?? '';
-        _fieldController.text = task['field'] ?? '';
-        _notesController.text = task['notes'] ?? '';
-      }
-    } catch (e) {
-      debugPrint('Error loading task: $e');
+      _loadTask(widget.taskId!);
     }
   }
 
   @override
   void dispose() {
     _taskNameController.dispose();
-    _statusController.dispose();
     _dateController.dispose();
-    _fieldController.dispose();
-    _notesController.dispose();
     super.dispose();
   }
 
-  Future<void> _saveTask() async {
-    if (!_formKey.currentState!.validate()) return;
-
-    final task = {
-      'taskName': _taskNameController.text,
-      'status': _statusController.text,
-      'date': _dateController.text,
-      'field': _fieldController.text,
-      'notes': _notesController.text,
-    };
-
-    if (widget.taskId == null) {
-      await DatabaseHelper.insertTask(task);
-    } else {
-      await DatabaseHelper.updateTask(widget.taskId!, task);
+  Future<void> _loadTask(int taskId) async {
+    try {
+      var task = await DatabaseHelper.getTaskById(taskId);
+      if (task != null) {
+        setState(() {
+          _taskNameController.text = task['taskName'] ?? '';
+          _dateController.text = task['date'] ?? '';
+          _isSpecificToPlanting = task['isSpecificToPlanting'] ?? false;
+          _selectedField = task['field'];
+          _notes = task['notes'];
+        });
+      }
+    } catch (e) {
+      debugPrint('Error loading task: $e');
     }
+  }
 
-    Navigator.of(context).pop(true);
+  Future<void> _saveTask() async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+
+      String status = DateFormat("yyyy-MM-dd")
+              .parse(_dateController.text)
+              .isBefore(DateTime.now())
+          ? 'Done'
+          : 'Planned';
+
+      Map<String, dynamic> newTask = {
+        'taskName': _taskNameController.text,
+        'status': status,
+        'isSpecificToPlanting': _isSpecificToPlanting,
+        'field': _selectedField,
+        'notes': _notes,
+        'date': _dateController.text,
+      };
+
+      if (widget.taskId == null) {
+        await DatabaseHelper.insertTask(newTask);
+      } else {
+        await DatabaseHelper.updateTask(widget.taskId!, newTask);
+      }
+      Navigator.pop(context, true);
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> _getFields() async {
+    return await DatabaseHelper.getFields();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.taskId == null ? 'Add Task' : 'Edit Task'),
-      ),
+      appBar: AppBar(title: Text(widget.taskId == null ? 'New Task' : 'Edit Task')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -102,18 +104,22 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
                 },
               ),
               TextFormField(
-                controller: _statusController,
-                decoration: InputDecoration(labelText: 'Status'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a status';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
                 controller: _dateController,
                 decoration: InputDecoration(labelText: 'Date'),
+                readOnly: true, // Set text field as read-only
+                onTap: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2101),
+                  );
+                  if (pickedDate != null) {
+                    setState(() {
+                      _dateController.text = DateFormat("yyyy-MM-dd").format(pickedDate);
+                    });
+                  }
+                },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a date';
@@ -121,24 +127,53 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
                   return null;
                 },
               ),
-              TextFormField(
-                controller: _fieldController,
-                decoration: InputDecoration(labelText: 'Field'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a field';
+              SwitchListTile(
+                title: Text('Specific to a Planting?'),
+                value: _isSpecificToPlanting,
+                onChanged: (value) {
+                  setState(() {
+                    _isSpecificToPlanting = value;
+                  });
+                },
+              ),
+              if (_isSpecificToPlanting) FutureBuilder<List<Map<String, dynamic>>>(
+                future: _getFields(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    List<DropdownMenuItem<String>> items = snapshot.data!
+                        .map((field) => DropdownMenuItem<String>(
+                              value: field['fieldName'],
+                              child: Text(field['fieldName']),
+                            ))
+                        .toList();
+                    return DropdownButtonFormField<String>(
+                      decoration: InputDecoration(labelText: 'Field'),
+                      value: _selectedField,
+                      items: items,
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedField = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (_isSpecificToPlanting && value == null) {
+                          return 'Please select a field';
+                        }
+                        return null;
+                      },
+                    );
                   }
-                  return null;
                 },
               ),
               TextFormField(
-                controller: _notesController,
                 decoration: InputDecoration(labelText: 'Notes'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter notes';
-                  }
-                  return null;
+                maxLines: 3,
+                onSaved: (value) {
+                  _notes = value;
                 },
               ),
               SizedBox(height: 20),

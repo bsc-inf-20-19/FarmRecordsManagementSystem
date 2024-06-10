@@ -66,14 +66,14 @@ class _NewPlantPageState extends State<NewPlantPage> {
         centerTitle: true,
       ),
       body: Container(
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         child: ListView(
           children: [
             TextField(
               decoration: InputDecoration(
                 labelText: 'Select a date',
                 suffixIcon: IconButton(
-                  icon: Icon(Icons.calendar_today),
+                  icon: const Icon(Icons.calendar_today),
                   onPressed: () => _selectDate(context),
                 ),
                 border: const OutlineInputBorder(),
@@ -84,36 +84,36 @@ class _NewPlantPageState extends State<NewPlantPage> {
               controller: _dateController,
               readOnly: true,
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             _buildDropdownField("Select crop", _cropTypeList, _cropDropdownController),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             _buildDropdownField("Select field", _fieldList, _fieldDropdownController),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             MyTextField(
               myController: _cropDecController,
               fieldName: "Seed quantity",
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             MyTextField(
               myController: _cropCompanyController,
               fieldName: "Seed company",
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             MyTextField(
               myController: _cropTypeController,
               fieldName: "Seed type",
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             MyTextField(
               myController: _cropLotController,
               fieldName: "Seed lot number",
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             MyTextField(
               myController: _cropHarvestController,
               fieldName: "Estimated harvest",
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -131,7 +131,7 @@ class _NewPlantPageState extends State<NewPlantPage> {
                   ),
                 );
               },
-              child: Text('Submit'),
+              child: const Text('Submit'),
             ),
           ],
         ),

@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:farm_records_management_system/database/databaseHelper.dart';
 import 'package:farm_records_management_system/screens/add_treatment_page.dart';
 import 'package:farm_records_management_system/screens/updateTreatmentPage.dart';
+import 'package:farm_records_management_system/database/pdfHepher.dart';
 
 class TreatmentsPage extends StatefulWidget {
   const TreatmentsPage({Key? key}) : super(key: key);
@@ -148,6 +149,12 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
                 }
                 isSearching = !isSearching;
               });
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.picture_as_pdf),
+            onPressed: () async {
+              await PDFGenerator.generateAndShareTreatmentPdf(context, treatments);
             },
           ),
         ],
