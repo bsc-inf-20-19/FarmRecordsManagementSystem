@@ -162,7 +162,7 @@ class DatabaseHelper {
     return await db.insert('plantings', data);
   }
 
-  static Future<List<Map<String, dynamic>>> getPlantings() async {
+  static Future<List<Map<String, dynamic>>> getPlantings(DateTime selectedDate, {required endDate, required startDate}) async {
     Database db = await _openDatabase();
     return await db.query('plantings');
   }
@@ -192,4 +192,6 @@ class DatabaseHelper {
       whereArgs: [id],
     );
   }
+
+  static getPlantingsByDate(DateTime selectedDate) {}
 }

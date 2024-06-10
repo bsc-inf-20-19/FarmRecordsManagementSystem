@@ -15,7 +15,7 @@ class Details extends StatefulWidget {
     required this.cropType,
     required this.cropPlotNumber,
     required this.cropHarvest,
-  });
+  }) : super(key: key);
 
   final String cropCompany;
   final String cropType;
@@ -36,7 +36,10 @@ class _DetailsState extends State<Details> {
   }
 
   Future<void> _fetchPlantings() async {
-    List<Map<String, dynamic>> plantings = await DatabaseHelper.getPlantings();
+    DateTime selectedDate = DateTime.now();
+    DateTime endDate = DateTime.now().add(const Duration(days: 30));
+
+    List<Map<String, dynamic>> plantings = await DatabaseHelper.getPlantings(selectedDate, endDate: null, startDate: null);
     setState(() {
       _plantings = plantings;
     });
@@ -47,20 +50,20 @@ class _DetailsState extends State<Details> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirm Deletion'),
-          content: Text('Are you sure you want to delete this record?'),
+          title: const Text('Confirm Deletion'),
+          content: const Text('Are you sure you want to delete this record?'),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(false); // Dismiss the dialog and return false
+                Navigator.of(context).pop(false);
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(true); // Dismiss the dialog and return true
+                Navigator.of(context).pop(true);
               },
-              child: Text('Delete'),
+              child: const Text('Delete'),
             ),
           ],
         );
@@ -69,13 +72,11 @@ class _DetailsState extends State<Details> {
 
     if (confirmDelete == true) {
       await DatabaseHelper.deletePlanting(id);
-      _fetchPlantings(); // Refresh the list after deletion
+      _fetchPlantings();
     }
   }
 
   Future<void> _editPlanting(Map<String, dynamic> planting) async {
-    // Navigate to a new page with a form to edit the planting details
-    // After editing, refresh the list
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -100,7 +101,10 @@ class _DetailsState extends State<Details> {
                   child: pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
-                      pw.Text('Crop: ${planting['crop'] ?? 'N/A'}', style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold)),
+                      pw.Text(
+                        'Crop: ${planting['crop'] ?? 'N/A'}',
+                        style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold),
+                      ),
                       pw.SizedBox(height: 10),
                       pw.Text('Field: ${planting['field'] ?? 'N/A'}', style: const pw.TextStyle(fontSize: 16)),
                       pw.SizedBox(height: 10),
@@ -191,12 +195,14 @@ class _DetailsState extends State<Details> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.picture_as_pdf),
+            icon: const Icon(Icons.picture_as_pdf, color: Colors.redAccent),
             onPressed: _exportToPdf,
+            tooltip: 'Export to PDF',
           ),
           IconButton(
-            icon: const Icon(Icons.table_chart),
+            icon: const Icon(Icons.table_chart, color: Colors.blueAccent),
             onPressed: _exportToExcel,
+            tooltip: 'Export to Excel',
           ),
         ],
       ),
@@ -207,80 +213,62 @@ class _DetailsState extends State<Details> {
               itemBuilder: (context, index) {
                 final planting = _plantings[index];
                 return Card(
-                  elevation: 2,
+                  elevation: 4,
                   margin: const EdgeInsets.all(10),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: PopupMenuButton<String>(
+                            onSelected: (value) {
+                              if (value == 'delete') {
+                                _deletePlanting(planting['id']);
+                              } else if (value == 'edit') {
+                                _editPlanting(planting);
+                              }
+                            },
+                            itemBuilder: (context) => [
+                              const PopupMenuItem(
+                                value: 'delete',
+                                child: Text('Delete'),
+                              ),
+                              const PopupMenuItem(
+                                value: 'edit',
+                                child: Text('Edit'),
+                              ),
+                            ],
+                          ),
+                        ),
                         Center(
                           child: Column(
                             children: [
-                              Align(
-                                alignment: Alignment.topRight,
-                                child: PopupMenuButton<String>(
-                                  onSelected: (value) {
-                                    if (value == 'delete') {
-                                      _deletePlanting(planting['id']);
-                                    } else if (value == 'edit') {
-                                      _editPlanting(planting);
-                                    }
-                                  },
-                                  itemBuilder: (context) => [
-                                    const PopupMenuItem(
-                                      value: 'delete',
-                                      child: Text('Delete'),
-                                    ),
-                                    const PopupMenuItem(
-                                      value: 'edit',
-                                      child: Text('Edit'),
-                                    ),
-                                  ],
-                                ),
+                              Icon(
+                                Icons.grass,
+                                color: Colors.green[700],
+                                size: 60,
                               ),
                               Text(
                                 planting['crop'] ?? 'N/A',
                                 style: const TextStyle(
-                                  fontSize: 20,
+                                  fontSize: 24,
                                   fontWeight: FontWeight.bold,
+                                  color: Colors.green,
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              Text(
-                                'Field: ${planting['field'] ?? 'N/A'}',
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                'Seed Quantity: ${planting['description'] ?? 'N/A'}',
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                'Seed Company: ${planting['cropCompany'] ?? 'N/A'}',
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                'Seed Type: ${planting['cropType'] ?? 'N/A'}',
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                'Seed Plot Number: ${planting['cropPlotNumber'] ?? 'N/A'}',
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                'Estimated Harvest: ${planting['cropHarvest'] ?? 'N/A'}',
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                'Date: ${planting['date'] ?? 'N/A'}',
-                                style: const TextStyle(fontSize: 16),
-                              ),
+                              _buildDetailRow('Field', planting['field']),
+                              _buildDetailRow('Seed Quantity', planting['description']),
+                              _buildDetailRow('Seed Company', planting['cropCompany']),
+                              _buildDetailRow('Seed Type', planting['cropType']),
+                              _buildDetailRow('Seed Plot Number', planting['cropPlotNumber']),
+                              _buildDetailRow('Estimated Harvest', planting['cropHarvest']),
+                              _buildDetailRow('Date', planting['date']),
                             ],
                           ),
                         ),
@@ -297,7 +285,34 @@ class _DetailsState extends State<Details> {
             MaterialPageRoute(builder: (context) => const NewPlantPage()),
           ).then((_) => _fetchPlantings());
         },
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add, size: 32),
+        backgroundColor: Colors.green,
+        tooltip: 'Add New Planting',
+      ),
+    );
+  }
+
+  Widget _buildDetailRow(String label, String? value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            '$label:',
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          Text(
+            value ?? 'N/A',
+            style: const TextStyle(
+              fontSize: 18,
+              color: Colors.black87,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -376,40 +391,75 @@ class _EditPlantingPageState extends State<EditPlantingPage> {
           children: [
             TextField(
               controller: _dateController,
-              decoration: const InputDecoration(labelText: 'Date'),
+              decoration: const InputDecoration(
+                labelText: 'Date',
+                border: OutlineInputBorder(),
+              ),
             ),
+            const SizedBox(height: 10),
             TextField(
               controller: _cropController,
-              decoration: const InputDecoration(labelText: 'Crop'),
+              decoration: const InputDecoration(
+                labelText: 'Crop',
+                border: OutlineInputBorder(),
+              ),
             ),
+            const SizedBox(height: 10),
             TextField(
               controller: _fieldController,
-              decoration: const InputDecoration(labelText: 'Field'),
+              decoration: const InputDecoration(
+                labelText: 'Field',
+                border: OutlineInputBorder(),
+              ),
             ),
+            const SizedBox(height: 10),
             TextField(
               controller: _descriptionController,
-              decoration: const InputDecoration(labelText: 'Seed Quantity'),
+              decoration: const InputDecoration(
+                labelText: 'Seed Quantity',
+                border: OutlineInputBorder(),
+              ),
             ),
+            const SizedBox(height: 10),
             TextField(
               controller: _cropCompanyController,
-              decoration: const InputDecoration(labelText: 'Seed Company'),
+              decoration: const InputDecoration(
+                labelText: 'Seed Company',
+                border: OutlineInputBorder(),
+              ),
             ),
+            const SizedBox(height: 10),
             TextField(
               controller: _cropTypeController,
-              decoration: const InputDecoration(labelText: 'Seed Type'),
+              decoration: const InputDecoration(
+                labelText: 'Seed Type',
+                border: OutlineInputBorder(),
+              ),
             ),
+            const SizedBox(height: 10),
             TextField(
               controller: _cropPlotNumberController,
-              decoration: const InputDecoration(labelText: 'Seed Plot Number'),
+              decoration: const InputDecoration(
+                labelText: 'Seed Plot Number',
+                border: OutlineInputBorder(),
+              ),
             ),
+            const SizedBox(height: 10),
             TextField(
               controller: _cropHarvestController,
-              decoration: const InputDecoration(labelText: 'Estimated Harvest'),
+              decoration: const InputDecoration(
+                labelText: 'Estimated Harvest',
+                border: OutlineInputBorder(),
+              ),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _updatePlanting,
               child: const Text('Save'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                textStyle: const TextStyle(fontSize: 18),
+              ),
             ),
           ],
         ),
