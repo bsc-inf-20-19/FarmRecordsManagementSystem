@@ -42,9 +42,8 @@ class ReportView extends StatelessWidget {
               ),
             ),
             SummarySection(),
-            AlertsSection(),
-            AccountsSection(),
-            CropSection(),
+            IncomeSection(),
+            ExpensesSection(),
           ],
         ),
       ),
@@ -75,6 +74,7 @@ class SummarySection extends StatelessWidget {
                 Icon(Icons.more_vert),
               ],
             ),
+            Divider(thickness: .5, color: Colors.black54),
             SizedBox(height: 8),
             SummaryItem(
               label: 'Total Income',
@@ -132,7 +132,7 @@ class SummaryItem extends StatelessWidget {
   }
 }
 
-class AlertsSection extends StatelessWidget {
+class ExpensesSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -145,7 +145,7 @@ class AlertsSection extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  'Alerts',
+                  'Expenses',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -155,18 +155,19 @@ class AlertsSection extends StatelessWidget {
                 Icon(Icons.more_vert),
               ],
             ),
+            Divider(thickness: .5, color: Colors.black54),
             SizedBox(height: 8),
-            AlertItem(
-              label: 'Outstanding Income',
+            ExpensesItem(
+              label: 'Outstanding Expenses',
               value: '\$180.00',
-              color: Colors.orange,
-              icon: Icons.warning,
+              color: Colors.red,
+              icon: Icons.money_off,
             ),
-            AlertItem(
+            ExpensesItem(
               label: 'Outstanding Expenses',
               value: '\$25.00',
-              color: Colors.orange,
-              icon: Icons.warning,
+              color: Colors.red,
+              icon: Icons.money_off,
             ),
           ],
         ),
@@ -175,13 +176,13 @@ class AlertsSection extends StatelessWidget {
   }
 }
 
-class AlertItem extends StatelessWidget {
+class ExpensesItem extends StatelessWidget {
   final String label;
   final String value;
   final Color color;
   final IconData icon;
 
-  AlertItem({required this.label, required this.value, required this.color, required this.icon});
+  ExpensesItem({required this.label, required this.value, required this.color, required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -206,7 +207,9 @@ class AlertItem extends StatelessWidget {
   }
 }
 
-class AccountsSection extends StatelessWidget {
+
+
+class IncomeSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -219,7 +222,7 @@ class AccountsSection extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  'Accounts',
+                  'Income',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -229,16 +232,19 @@ class AccountsSection extends StatelessWidget {
                 Icon(Icons.more_vert),
               ],
             ),
+            Divider(thickness: .5, color: Colors.black54),
             SizedBox(height: 8),
-            AccountItem(
-              label: 'Amex(D)',
-              value: '\$23.00',
-              icon: Icons.account_balance_wallet,
+            IncomeItem(
+              label: 'Outstanding Income',
+              value: '\$180.00',
+              color: Colors.green,
+              icon: Icons.attach_money_outlined,
             ),
-            AccountItem(
-              label: 'chase(Q)',
-              value: '\$144.00',
-              icon: Icons.account_balance_wallet,
+            IncomeItem(
+              label: 'Outstanding Income',
+              value: '\$25.00',
+              color: Colors.green,
+              icon: Icons.attach_money_outlined,
             ),
           ],
         ),
@@ -247,12 +253,13 @@ class AccountsSection extends StatelessWidget {
   }
 }
 
-class AccountItem extends StatelessWidget {
+class IncomeItem extends StatelessWidget {
   final String label;
   final String value;
+  final Color color;
   final IconData icon;
 
-  AccountItem({required this.label, required this.value, required this.icon});
+  IncomeItem({required this.label, required this.value, required this.color, required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -260,13 +267,14 @@ class AccountItem extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
         children: [
-          Icon(icon, color: Colors.blue),
+          Icon(icon, color: color),
           SizedBox(width: 8),
           Text(label),
           Spacer(),
           Text(
             value,
             style: TextStyle(
+              color: color,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -276,66 +284,3 @@ class AccountItem extends StatelessWidget {
   }
 }
 
-class CropSection extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.all(16.0),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Text(
-                  'Crop Section',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Spacer(),
-                Icon(Icons.more_vert),
-              ],
-            ),
-            SizedBox(height: 8),
-            CropItem(label: 'Planting Date', value: 'March 15, 2024'),
-            CropItem(label: 'Crop Name', value: 'Corn'),
-            CropItem(label: 'Seed Quantity', value: '50 kg'),
-            CropItem(label: 'Estimated Harvest', value: 'July 30, 2024'),
-            CropItem(label: 'Seed Type', value: 'Hybrid'),
-            CropItem(label: 'Seed Lot Number', value: 'H12345'),
-            CropItem(label: 'Field Name', value: 'North Field'),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class CropItem extends StatelessWidget {
-  final String label;
-  final String value;
-
-  CropItem({required this.label, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        children: [
-          Text(label),
-          Spacer(),
-          Text(
-            value,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}

@@ -34,8 +34,12 @@ class _TransactionListScreenState extends State<TransactionListScreen> with Sing
           },
         ),
         title: Text('Transaction'),
-        bottom: TabBar(
+        bottom:  TabBar(
           controller: _tabController,
+          indicatorColor: Colors.green, // Change the indicator color here
+          indicatorWeight: 4.0, // Change the indicator thickness if needed
+          labelColor: Colors.green, // Active tab text color
+          unselectedLabelColor: Colors.grey, // Inactive tab text color
           tabs: [
             Tab(text: 'Expenses'),
             Tab(text: 'Income'),
@@ -81,7 +85,7 @@ class _TransactionListScreenState extends State<TransactionListScreen> with Sing
                     TransactionCard(title: 'Farm lease', date: 'April 1st, 2024', amount: 'MWK100,000'),
                     TransactionCard(title: 'Fertilizer (100 Kg)', date: 'April 1st, 2024', amount: 'MWK140,000'),
                     TransactionCard(title: 'Pesticides', date: 'April 1st, 2024', amount: 'MWK70,000'),
-                    TransactionCard(title: 'Farming Tools rent', date: 'April 1st, 2014', amount: 'MWK30,000'),
+                    TransactionCard(title: 'Equipment rent', date: 'April 1st, 2014', amount: 'MWK30,000'),
                   ],
                 ),
                 ListView(
