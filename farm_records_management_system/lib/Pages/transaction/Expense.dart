@@ -1,5 +1,3 @@
-import 'package:farm_records_management_system/Pages/transaction/transactions.dart';
-import 'package:farm_records_management_system/Pages/transaction/transactions.dart';
 import 'package:farm_records_management_system/database/databaseHelper.dart';
 // import 'package:farm_records_management_system/Services/database_helper.dart';
 import 'package:flutter/material.dart';

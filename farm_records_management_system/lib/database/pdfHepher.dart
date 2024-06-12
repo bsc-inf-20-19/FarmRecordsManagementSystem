@@ -12,7 +12,7 @@ class PDFGenerator {
       pw.Page(
         build: (context) => pw.Column(
           children: [
-            pw.Text(title, style: pw.TextStyle(fontSize: 24)),
+            pw.Text(title, style: const pw.TextStyle(fontSize: 24)),
             pw.SizedBox(height: 20),
             ...data.map((item) => pw.Text(item.toString())).toList(),
           ],
@@ -33,7 +33,7 @@ class PDFGenerator {
       pw.Page(
         build: (context) => pw.Column(
           children: [
-            pw.Text('Fields', style: pw.TextStyle(fontSize: 24)),
+            pw.Text('Fields', style: const pw.TextStyle(fontSize: 24)),
             pw.SizedBox(height: 20),
             ...fields.map((field) => pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -65,7 +65,7 @@ class PDFGenerator {
       pw.Page(
         build: (context) => pw.Column(
           children: [
-            pw.Text('Tasks', style: pw.TextStyle(fontSize: 24)),
+            pw.Text('Tasks', style: const pw.TextStyle(fontSize: 24)),
             pw.SizedBox(height: 20),
             ...tasks.map((task) => pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -96,7 +96,7 @@ class PDFGenerator {
       pw.Page(
         build: (context) => pw.Column(
           children: [
-            pw.Text('Treatments', style: pw.TextStyle(fontSize: 24)),
+            pw.Text('Treatments', style: const pw.TextStyle(fontSize: 24)),
             pw.SizedBox(height: 20),
             ...treatments.map((treatment) => pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.start,

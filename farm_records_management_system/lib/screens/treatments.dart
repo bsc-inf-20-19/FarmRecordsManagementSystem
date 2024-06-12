@@ -133,7 +133,7 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
             ? TextField(
                 controller: searchController,
                 onChanged: (value) => _applySearchFilter(value),
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Search by name, type, or date',
                   border: InputBorder.none,
                 ),
@@ -167,8 +167,9 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
           String status = treatment['status'];
           Color statusColor = status == 'Done' ? Colors.green : Colors.yellow;
 
-          return Card(
-            margin: EdgeInsets.all(16.0),
+          return 
+          Card(
+            margin: const EdgeInsets.all(16.0),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -178,12 +179,12 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
                     children: [
                       Text(
                         treatment["treatment_type"],
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Align(
                         alignment: Alignment.topRight,
                         child: PopupMenuButton<String>(
@@ -220,10 +221,10 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
                       ),
                     ],
                   ),
-                  Divider(thickness: 0.5, color: Colors.black54),
-                  SizedBox(height: 8),
+                  const Divider(thickness: 0.5, color: Colors.black54),
+                  const SizedBox(height: 8),
                   TreatmentItem(label: 'Treatment date', value: formattedDate),
-                  TreatmentItem(label: 'Status', value: '$status - $formattedDate', color: statusColor),
+                  TreatmentItem(label: 'Status', value: '$status', color: statusColor),
                   TreatmentItem(label: 'Treatment type', value: treatment["treatment_type"]),
                   TreatmentItem(label: 'Field name', value: treatment["field"]),
                   TreatmentItem(label: 'Product used', value: treatment["product_used"]),
@@ -232,6 +233,7 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
               ),
             ),
           );
+        
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -260,7 +262,7 @@ class TreatmentItem extends StatelessWidget {
       child: Row(
         children: [
           Text(label),
-          Spacer(),
+          const Spacer(),
           Text(
             value,
             style: TextStyle(

@@ -21,9 +21,9 @@ class CropsSection extends StatelessWidget {
                   child: InkWell(
                     onTap: () {
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => ActivityPage()));
+                          MaterialPageRoute(builder: (context) => const ActivityPage()));
                     },
-                    child: CropListCard(),
+                    child: const CropListCard(),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -31,9 +31,9 @@ class CropsSection extends StatelessWidget {
                   child: InkWell(
                     onTap: () {
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => ActivityPage()));
+                          MaterialPageRoute(builder: (context) => const ActivityPage()));
                     },
-                    child: ActivityCard(),
+                    child: const ActivityCard(),
                   ),
                 ),
               ],

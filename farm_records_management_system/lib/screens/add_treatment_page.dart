@@ -60,7 +60,19 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
     if (picked != null) {
       setState(() {
         _selectedDate = picked;
+        _updateStatusBasedOnDate(); // Automatically set status based on date
       });
+    }
+  }
+
+  void _updateStatusBasedOnDate() {
+    if (_selectedDate != null) {
+      final now = DateTime.now();
+      if (_selectedDate!.isBefore(now)) {
+        _selectedStatus = 'Done';
+      } else {
+        _selectedStatus = 'Planned';
+      }
     }
   }
 
@@ -86,17 +98,17 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
               GestureDetector(
                 onTap: () => _selectDate(context),
                 child: InputDecorator(
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                ),
-                child: Text(
-                  _selectedDate != null
-                      ? _formatDate(_selectedDate)
-                      : 'Select Date',
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  ),
+                  child: Text(
+                    _selectedDate != null
+                        ? _formatDate(_selectedDate)
+                        : 'Select Date',
+                  ),
                 ),
               ),
-            ),
               const SizedBox(height: 20),
               DropdownButtonFormField<String>(
                 value: _selectedStatus,
@@ -254,6 +266,7 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
                       if (_selectedDate == null) {
                         throw Exception('Date is required');
                       }
+                      _updateStatusBasedOnDate(); // Ensure status is set correctly
                       Map<String, dynamic> newTreatment = {
                         'date': DateFormat("yyyy-MM-dd").format(_selectedDate!),
                         'status': _selectedStatus,

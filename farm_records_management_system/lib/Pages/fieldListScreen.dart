@@ -47,10 +47,10 @@ class _FieldListScreenState extends State<FieldListScreen> {
         isSearching = true;
         fields = fields.where((field) {
           return field['fieldName'].toLowerCase().contains(searchTerm) ||
-                 field['fieldType'].toLowerCase().contains(searchTerm) ||
-                 field['lightProfile'].toLowerCase().contains(searchTerm) ||
-                 field['fieldStatus'].toLowerCase().contains(searchTerm) ||
-                 field['notes'].toLowerCase().contains(searchTerm);
+              field['fieldType'].toLowerCase().contains(searchTerm) ||
+              field['lightProfile'].toLowerCase().contains(searchTerm) ||
+              field['fieldStatus'].toLowerCase().contains(searchTerm) ||
+              field['notes'].toLowerCase().contains(searchTerm);
         }).toList();
       }
     });
@@ -61,16 +61,18 @@ class _FieldListScreenState extends State<FieldListScreen> {
       children: [
         Text(
           label,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: color),
+          style: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 18, color: color),
         ),
         Expanded(
           child: Align(
             alignment: Alignment.centerRight,
             child: Padding(
-              padding: EdgeInsets.only(right: 50, bottom: 10),
+              padding: const EdgeInsets.only(right: 50, bottom: 10),
               child: Text(
                 value,
-                style: TextStyle(fontStyle: FontStyle.italic, fontSize: 18, color: color),
+                style: TextStyle(
+                    fontStyle: FontStyle.italic, fontSize: 18, color: color),
               ),
             ),
           ),
@@ -87,12 +89,12 @@ class _FieldListScreenState extends State<FieldListScreen> {
             ? TextField(
                 controller: searchController,
                 onChanged: (value) => _applySearchFilter(value.toLowerCase()),
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Search by name, type, or status',
                   border: InputBorder.none,
                 ),
               )
-            : Text('Field List'),
+            : const Text('Field List'),
         actions: [
           IconButton(
             icon: Icon(isSearching ? Icons.close : Icons.search),
@@ -113,68 +115,64 @@ class _FieldListScreenState extends State<FieldListScreen> {
           var field = fields[index];
           return Card(
             elevation: 2,
-            margin: EdgeInsets.all(10),
+            margin: const EdgeInsets.all(16.0),
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Center(
-                    child: Column(
-                      children: [
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: PopupMenuButton<String>(
-                            onSelected: (value) async {
-                              if (value == 'edit') {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => NewFieldPage(
-                                      onAdd: (newField) {
-                                        setState(() {
-                                          fields[index] = newField;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                ).then((result) {
-                                  if (result == true) {
-                                    _loadFields();
-                                  }
-                                });
-                              } else if (value == 'delete') {
-                                await DatabaseHelper.deleteField(field['id']);
+                  Row(
+                    children: [
+                      Text(
+                        '${field['fieldName']}',
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                      const Spacer(),
+                      PopupMenuButton<String>(
+                        onSelected: (value) async {
+                          if (value == 'edit') {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => NewFieldPage(
+                                  onAdd: (newField) {
+                                    setState(() {
+                                      fields[index] = newField;
+                                    });
+                                  },
+                                ),
+                              ),
+                            ).then((result) {
+                              if (result == true) {
                                 _loadFields();
                               }
-                            },
-                            itemBuilder: (context) => [
-                              const PopupMenuItem(
-                                value: 'edit',
-                                child: Text('Edit'),
-                              ),
-                              const PopupMenuItem(
-                                value: 'delete',
-                                child: Text('Delete'),
-                              ),
-                            ],
-                            icon: const Icon(Icons.more_vert),
+                            });
+                          } else if (value == 'delete') {
+                            await DatabaseHelper.deleteField(field['id']);
+                            _loadFields();
+                          }
+                        },
+                        itemBuilder: (context) => [
+                          const PopupMenuItem(
+                            value: 'edit',
+                            child: Text('Edit'),
                           ),
-                        ),
-                        Text(
-                          field['fieldName'] ?? 'No Name',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        Divider(thickness: .5, color: Colors.black54),
-                      ],
-                    ),
+                          const PopupMenuItem(
+                            value: 'delete',
+                            child: Text('Delete'),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 10),
-                  _buildRow('Field Type:', field['fieldType'] ?? 'N/A'),
-                  _buildRow('Light Profile:', field['lightProfile'] ?? 'N/A'),
-                  _buildRow('Field Status:', field['fieldStatus'] ?? 'N/A'),
-                  _buildRow('Field Size:', field['fieldSize']?.toString() ?? 'N/A'),
-                  _buildRow('Notes:', field['notes'] ?? 'N/A'),
+                  const Divider(),
+                  const SizedBox(height: 8),
+                  FieldsListItem(label: 'Field Type', value: field['fieldType']),
+                  FieldsListItem(label: 'Light Profile', value: field['lightProfile']),
+                  FieldsListItem(label: 'Field Status', value: field['fieldStatus']),
+                  FieldsListItem(label: 'Field Size', value: field['fieldSize']?.toString() ?? 'N/A'),
+                  FieldsListItem(label: 'Notes', value: field['notes']),
                 ],
               ),
             ),
@@ -182,24 +180,58 @@ class _FieldListScreenState extends State<FieldListScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final result = await Navigator.push(
+        onPressed: () {
+          Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => NewFieldPage(onAdd: _handleAddField),
+              builder: (context) => NewFieldPage(
+                onAdd: (newField) {
+                  setState(() {
+                    fields.insert(0, newField);
+                  });
+                },
+              ),
             ),
-          );
-          if (result == true) {
-            _loadFields();
-          }
+          ).then((result) {
+            if (result == true) {
+              _loadFields();
+            }
+          });
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
+}
 
-  void _handleAddField(Map<String, dynamic> newField) async {
-    await DatabaseHelper.insertField(newField);
-    _loadFields();
+class FieldsListItem extends StatelessWidget {
+  final String label;
+  final String value;
+  final Color? color;
+
+  const FieldsListItem({
+    required this.label,
+    required this.value,
+    this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        children: [
+          Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
+          const Spacer(),
+          Text(
+            value,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: color,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

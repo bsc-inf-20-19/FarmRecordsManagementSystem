@@ -126,7 +126,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
             ? TextField(
                 controller: searchController,
                 onChanged: (value) => _applySearchFilter(value),
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Search by task name, status, or date',
                   border: InputBorder.none,
                 ),
@@ -158,7 +158,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
 
           return Card(
             elevation: 2.0,
-            margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+            margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -168,12 +168,12 @@ class _TaskListScreenState extends State<TaskListScreen> {
                     children: [
                       Text(
                         taskName,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Align(
                         alignment: Alignment.topRight,
                         child: PopupMenuButton<String>(
@@ -199,8 +199,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
                       ),
                     ],
                   ),
-                  Divider(thickness: 0.5, color: Colors.black54),
-                  SizedBox(height: 8),
+                  const Divider(thickness: 0.5, color: Colors.black54),
+                  const SizedBox(height: 8),
                   TaskItem(label: 'Status', value: status, color: Colors.green),
                   TaskItem(label: 'Date', value: _formatDate(date), color: Colors.blue),
                   TaskItem(label: 'Field', value: field, color: Colors.orange),
@@ -237,7 +237,7 @@ class TaskItem extends StatelessWidget {
       child: Row(
         children: [
           Text(label),
-          Spacer(),
+          const Spacer(),
           Text(
             value,
             style: TextStyle(

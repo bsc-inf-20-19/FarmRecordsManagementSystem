@@ -40,9 +40,9 @@ class MyHomePage extends StatelessWidget {
                     ),
                    Expanded(
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
                         child: TextFormField(
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: "Search farm...",
                             border: InputBorder.none,
                           ),

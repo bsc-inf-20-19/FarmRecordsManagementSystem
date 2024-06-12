@@ -1,6 +1,5 @@
-// fieldFormScreen.dart
-import 'package:farm_records_management_system/widgets/customInputField.dart';
 import 'package:flutter/material.dart';
+import 'package:farm_records_management_system/widgets/customInputField.dart';
 import 'package:farm_records_management_system/database/databaseHelper.dart';
 
 class NewFieldPage extends StatefulWidget {
@@ -17,10 +16,12 @@ class _NewFieldPageState extends State<NewFieldPage> {
   final TextEditingController _fieldNameController = TextEditingController();
   final TextEditingController _notesController = TextEditingController();
   final TextEditingController _fieldSizeController = TextEditingController();
-  
+
   String? _selectedFieldType;
   String? _selectedLightProfile;
   String? _selectedFieldStatus;
+
+  bool _isSaving = false;
 
   @override
   void dispose() {
@@ -31,7 +32,13 @@ class _NewFieldPageState extends State<NewFieldPage> {
   }
 
   Future<void> _addField() async {
+    if (_isSaving) return;
+
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isSaving = true;
+      });
+
       Map<String, dynamic> newField = {
         'fieldName': _fieldNameController.text,
         'fieldType': _selectedFieldType,
@@ -40,6 +47,7 @@ class _NewFieldPageState extends State<NewFieldPage> {
         'fieldSize': _fieldSizeController.text,
         'notes': _notesController.text,
       };
+
       await DatabaseHelper.insertField(newField);
       widget.onAdd(newField);
       Navigator.pop(context, true);
@@ -150,7 +158,7 @@ class _NewFieldPageState extends State<NewFieldPage> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _addField,
-                child: const Text('Add Field'),
+                child: _isSaving ? const CircularProgressIndicator() : const Text('Add Field'),
               ),
             ],
           ),
