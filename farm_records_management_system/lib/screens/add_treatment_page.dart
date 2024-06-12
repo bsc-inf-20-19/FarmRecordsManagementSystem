@@ -255,7 +255,7 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
           'product_used': _productUsedController.text, // Ensure it's not empty
           'quantity': double.tryParse(_quantityController.text) ?? 0.0, // Avoid null
         };
-         DatabaseHelper.insertTreatment(newTreatment);
+         DatabaseHelper.instance.insertTreatments(newTreatment);
         // Navigate back to the previous screen
         Navigator.pop(context, true);
 
