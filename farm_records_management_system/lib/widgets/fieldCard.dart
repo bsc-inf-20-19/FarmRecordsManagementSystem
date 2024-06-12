@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 
-class FieldsCard extends StatelessWidget {
-  const FieldsCard({super.key});
+class FieldCard extends StatelessWidget {
+  const FieldCard({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200, // Ensure the container has a finite height
-      width: MediaQuery.of(context).size.width / 2 - 32, // minus 32 due to the margin
+      height: 200,
+      width: double.infinity,
       margin: const EdgeInsets.all(14.0),
       padding: const EdgeInsets.all(14.0),
       decoration: const BoxDecoration(
-        color: Colors.white, // background color of the cards
+        color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(20.0)),
         boxShadow: [
-          // this is the shadow of the card
           BoxShadow(
             color: Colors.black,
             spreadRadius: 0.5,
@@ -24,11 +23,10 @@ class FieldsCard extends StatelessWidget {
         ],
       ),
       child: const Column(
-        mainAxisAlignment: MainAxisAlignment.end, // position everything to the bottom
+        mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // place here your image
-          Text("Fields",
+          Text("Add Fields",
               style: TextStyle(
                   fontSize: 20.0,
                   color: Colors.black,

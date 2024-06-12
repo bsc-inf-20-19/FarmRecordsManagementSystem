@@ -8,33 +8,39 @@ class CropsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.all(8.0),
         color: Colors.white,
-        child: ListView(children: [
-          Container(
-              height: 200,
-              child: Row(children: [
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ActivityPage()));
-                  },
-                  child: CropListCard(),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => const ActivityPage()));
+                    },
+                    child: const CropListCard(),
+                  ),
                 ),
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ActivityPage()));
-                  },
-                  child: ActivityCard(),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => const ActivityPage()));
+                    },
+                    child: const ActivityCard(),
+                  ),
                 ),
-              ])),
-        ]));
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
