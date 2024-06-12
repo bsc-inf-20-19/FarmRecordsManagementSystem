@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-
-
-
 class TransactionListScreen extends StatefulWidget {
   @override
   _TransactionListScreenState createState() => _TransactionListScreenState();
@@ -34,7 +31,7 @@ class _TransactionListScreenState extends State<TransactionListScreen> with Sing
           },
         ),
         title: Text('Transaction'),
-        bottom:  TabBar(
+        bottom: TabBar(
           controller: _tabController,
           indicatorColor: Colors.green, // Change the indicator color here
           indicatorWeight: 4.0, // Change the indicator thickness if needed
@@ -75,23 +72,52 @@ class _TransactionListScreenState extends State<TransactionListScreen> with Sing
               ],
             ),
           ),
-          
           Expanded(
             child: TabBarView(
               controller: _tabController,
               children: [
                 ListView(
                   children: [
-                    TransactionCard(title: 'Farm lease', date: 'April 1st, 2024', amount: 'MWK100,000'),
-                    TransactionCard(title: 'Fertilizer (100 Kg)', date: 'April 1st, 2024', amount: 'MWK140,000'),
-                    TransactionCard(title: 'Pesticides', date: 'April 1st, 2024', amount: 'MWK70,000'),
-                    TransactionCard(title: 'Equipment rent', date: 'April 1st, 2014', amount: 'MWK30,000'),
+                    TransactionCard(
+                      title: 'Farm lease', 
+                      description: 'Leasing the farm for this season.', 
+                      date: 'April 1st, 2024', 
+                      amount: 'MWK100,000'
+                    ),
+                    TransactionCard(
+                      title: 'Fertilizer (100 Kg)', 
+                      description: 'Purchased 100 Kg of fertilizer.', 
+                      date: 'April 1st, 2024', 
+                      amount: 'MWK140,000'
+                    ),
+                    TransactionCard(
+                      title: 'Pesticides', 
+                      description: 'Bought pesticides for crop protection.', 
+                      date: 'April 1st, 2024', 
+                      amount: 'MWK70,000'
+                    ),
+                    TransactionCard(
+                      title: 'Equipment rent', 
+                      description: 'Rent equipment for farm.', 
+                      date: 'April 1st, 2014', 
+                      amount: 'MWK30,000'
+                    ),
                   ],
                 ),
                 ListView(
                   children: [
-                    TransactionCard(title: 'Harvest sales', date: 'April 1st, 2024', amount: 'MWK5,000,000'),
-                    TransactionCard(title: 'Products sales', date: 'April 1st, 2024', amount: 'MWK6,500,000'),
+                    TransactionCard(
+                      title: 'Harvest sales', 
+                      description: 'Revenue from the sale of the harvest.', 
+                      date: 'April 1st, 2024', 
+                      amount: 'MWK5,000,000'
+                    ),
+                    TransactionCard(
+                      title: 'Products sales', 
+                      description: 'Income from selling products.', 
+                      date: 'April 1st, 2024', 
+                      amount: 'MWK6,500,000'
+                    ),
                   ],
                 ),
               ],
@@ -100,25 +126,31 @@ class _TransactionListScreenState extends State<TransactionListScreen> with Sing
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            // Handle add new transaction
-          },
-          icon: Icon(Icons.add, color: Colors.white),
-          label: Text('Add Transaction', style: TextStyle(color: Colors.white)),
-          backgroundColor: Colors.green,
-          foregroundColor: Colors.white,
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        onPressed: () {
+          // Handle add new transaction
+        },
+        icon: Icon(Icons.add, color: Colors.white),
+        label: Text('Add Transaction', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.green,
+        foregroundColor: Colors.white,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
 
 class TransactionCard extends StatelessWidget {
   final String title;
+  final String description;
   final String date;
   final String amount;
 
-  TransactionCard({required this.title, required this.date, required this.amount});
+  TransactionCard({
+    required this.title,
+    required this.description,
+    required this.date,
+    required this.amount,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -127,21 +159,38 @@ class TransactionCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
-      child: ListTile(
-        title: Text(
-          title,
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        subtitle: Text(date),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              amount,
-              style: TextStyle(fontWeight: FontWeight.bold),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  SizedBox(height: 4),
+                  Text(description),
+                ],
+              ),
             ),
-            SizedBox(width: 10),
-            Icon(Icons.more_vert),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  date,
+                  style: TextStyle(color: Colors.grey, fontSize: 12),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  amount,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+              ],
+            ),
           ],
         ),
       ),

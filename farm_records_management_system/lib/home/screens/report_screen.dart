@@ -1,286 +1,139 @@
 import 'package:flutter/material.dart';
 
-class ReportView extends StatelessWidget {
-
+class ReportScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Crop List'),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Center(child: Text('MAY 2019')),
+       backgroundColor: Colors.green.shade500,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.white), // Change icon color to white
+        titleTextStyle: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold), // Change title text color to white
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          tooltip: 'Back',
+          icon: Icon(Icons.arrow_back),
+        ),
+        title: Text('AppBar'),
+        centerTitle: true,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            tooltip: 'Search',
+            onPressed: () {
+            },
+          ),
+        ]
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: GridView.count(
+              crossAxisCount: 2,
+              childAspectRatio: 2,
+              padding: const EdgeInsets.all(8.0),
+              mainAxisSpacing: 8.0,
+              crossAxisSpacing: 8.0,
+              children: [
+                _buildGridItem(
+                  Icons.bar_chart,
+                  'Reports',
+                  '',
+                  [Colors.amber.shade400, Colors.amber.shade600],
+                ),
+                _buildGridItem(
+                  Icons.attach_money,
+                  'Transactions',
+                  '',
+                  [Colors.red.shade400, Colors.red.shade600],
+                ),
+                _buildGridItem(
+                  Icons.add_box,
+                  'Plantings',
+                  '',
+                  [Colors.green.shade400, Colors.green.shade600],
+                ),
+                _buildGridItem(
+                  Icons.outbox,
+                  'Harvests',
+                  '',
+                  [Colors.amber.shade400, Colors.amber.shade600],
+                ),
+                _buildGridItem(
+                  Icons.inventory,
+                  'Treatments',
+                  '',
+                  [Colors.yellow.shade400, Colors.yellow.shade600],
+                ),
+                _buildGridItem(
+                  Icons.settings,
+                  'Tasks',
+                  '',
+                  [Colors.purple.shade400, Colors.purple.shade600],
+                ),
+                _buildGridItem(
+                  Icons.description,
+                  'Farm Notes',
+                  '',
+                  [Colors.blue.shade400, Colors.blue.shade600],
+                ),
+              ],
+            ),
           ),
         ],
       ),
-      body: SingleChildScrollView(
+    );
+  }
+
+  Widget _buildGridItem(IconData icon, String title, String subtitle, List<Color> gradientColors) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: gradientColors,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              color: Colors.blue,
-              width: double.infinity,
-              padding: EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Text(
-                    '\$23.00',
-                    style: TextStyle(
-                      fontSize: 40,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    'Current Balance',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
+            Icon(icon, size: 40, color: Colors.white),
+            SizedBox(height: 8),
+            Text(
+              title,
+              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+            if (subtitle.isNotEmpty) ...[
+              SizedBox(height: 4),
+              Text(
+                subtitle,
+                style: TextStyle(color: Colors.white),
               ),
-            ),
-            SummarySection(),
-            IncomeSection(),
-            ExpensesSection(),
+            ]
           ],
         ),
       ),
     );
   }
-}
 
-class SummarySection extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.all(16.0),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Text(
-                  'Summary',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Spacer(),
-                Icon(Icons.more_vert),
-              ],
-            ),
-            Divider(thickness: .5, color: Colors.black54),
-            SizedBox(height: 8),
-            SummaryItem(
-              label: 'Total Income',
-              value: '\$180.00',
-              color: Colors.green,
-              icon: Icons.attach_money,
-            ),
-            SummaryItem(
-              label: 'Total Expenses',
-              value: '\$25.00',
-              color: Colors.red,
-              icon: Icons.money_off,
-            ),
-            SummaryItem(
-              label: 'Total Credit Limit',
-              value: '\$25.00',
-              color: Colors.red,
-              icon: Icons.credit_card,
-            ),
-          ],
+  Widget _buildBottomItem(IconData icon, String title) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        IconButton(
+          icon: Icon(icon, color: Colors.teal),
+          onPressed: () {},
         ),
-      ),
-    );
-  }
-}
-
-class SummaryItem extends StatelessWidget {
-  final String label;
-  final String value;
-  final Color color;
-  final IconData icon;
-
-  SummaryItem({required this.label, required this.value, required this.color, required this.icon});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        children: [
-          Icon(icon, color: color),
-          SizedBox(width: 8),
-          Text(label),
-          Spacer(),
-          Text(
-            value,
-            style: TextStyle(
-              color: color,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ExpensesSection extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.all(16.0),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Text(
-                  'Expenses',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Spacer(),
-                Icon(Icons.more_vert),
-              ],
-            ),
-            Divider(thickness: .5, color: Colors.black54),
-            SizedBox(height: 8),
-            ExpensesItem(
-              label: 'Outstanding Expenses',
-              value: '\$180.00',
-              color: Colors.red,
-              icon: Icons.money_off,
-            ),
-            ExpensesItem(
-              label: 'Outstanding Expenses',
-              value: '\$25.00',
-              color: Colors.red,
-              icon: Icons.money_off,
-            ),
-          ],
+        Text(
+          title,
+          style: TextStyle(color: Colors.teal),
         ),
-      ),
+      ],
     );
   }
 }
-
-class ExpensesItem extends StatelessWidget {
-  final String label;
-  final String value;
-  final Color color;
-  final IconData icon;
-
-  ExpensesItem({required this.label, required this.value, required this.color, required this.icon});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        children: [
-          Icon(icon, color: color),
-          SizedBox(width: 8),
-          Text(label),
-          Spacer(),
-          Text(
-            value,
-            style: TextStyle(
-              color: color,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-
-
-class IncomeSection extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.all(16.0),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Text(
-                  'Income',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Spacer(),
-                Icon(Icons.more_vert),
-              ],
-            ),
-            Divider(thickness: .5, color: Colors.black54),
-            SizedBox(height: 8),
-            IncomeItem(
-              label: 'Outstanding Income',
-              value: '\$180.00',
-              color: Colors.green,
-              icon: Icons.attach_money_outlined,
-            ),
-            IncomeItem(
-              label: 'Outstanding Income',
-              value: '\$25.00',
-              color: Colors.green,
-              icon: Icons.attach_money_outlined,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class IncomeItem extends StatelessWidget {
-  final String label;
-  final String value;
-  final Color color;
-  final IconData icon;
-
-  IncomeItem({required this.label, required this.value, required this.color, required this.icon});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        children: [
-          Icon(icon, color: color),
-          SizedBox(width: 8),
-          Text(label),
-          Spacer(),
-          Text(
-            value,
-            style: TextStyle(
-              color: color,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-

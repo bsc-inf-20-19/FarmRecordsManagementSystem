@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AppBarWidget extends StatelessWidget {
@@ -44,7 +43,7 @@ class AppBarWidget extends StatelessWidget {
                       offset: Offset(0, 3),
                     )
                   ]),
-              child: Icon(Icons.notifications),
+              child: Icon(Icons.search_outlined),
             ),
           )
         ],

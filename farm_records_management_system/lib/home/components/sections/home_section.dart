@@ -57,7 +57,7 @@ class HomeSection extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ReportView()
+                      builder: (context) => ReportScreen()
                     )
                   );
                 },
