@@ -1,3 +1,5 @@
+// fieldFormScreen.dart
+import 'package:farm_records_management_system/widgets/customInputField.dart';
 import 'package:flutter/material.dart';
 import 'package:farm_records_management_system/database/databaseHelper.dart';
 
@@ -48,7 +50,7 @@ class _NewFieldPageState extends State<NewFieldPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add New Field'),
+        title: const Text('Add New Field'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -56,9 +58,9 @@ class _NewFieldPageState extends State<NewFieldPage> {
           key: _formKey,
           child: ListView(
             children: [
-              TextFormField(
+              CustomInputField(
+                label: 'Field Name',
                 controller: _fieldNameController,
-                decoration: InputDecoration(labelText: 'Field Name'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a field name';
@@ -68,7 +70,7 @@ class _NewFieldPageState extends State<NewFieldPage> {
               ),
               DropdownButtonFormField<String>(
                 value: _selectedFieldType,
-                decoration: InputDecoration(labelText: 'Select Field Type'),
+                decoration: const InputDecoration(labelText: 'Select Field Type'),
                 items: ['Field/outdoor', 'Greenhouse', 'Speeding', 'Grow tent']
                     .map((type) => DropdownMenuItem(
                           value: type,
@@ -89,7 +91,7 @@ class _NewFieldPageState extends State<NewFieldPage> {
               ),
               DropdownButtonFormField<String>(
                 value: _selectedLightProfile,
-                decoration: InputDecoration(labelText: 'Select Light Profile'),
+                decoration: const InputDecoration(labelText: 'Select Light Profile'),
                 items: [
                   'Full sun',
                   'Full To Partial Sun',
@@ -114,7 +116,7 @@ class _NewFieldPageState extends State<NewFieldPage> {
               ),
               DropdownButtonFormField<String>(
                 value: _selectedFieldStatus,
-                decoration: InputDecoration(labelText: 'Select Field Status'),
+                decoration: const InputDecoration(labelText: 'Select Field Status'),
                 items: [
                   'Available',
                   'Partially Cultivated',
@@ -135,20 +137,20 @@ class _NewFieldPageState extends State<NewFieldPage> {
                   return null;
                 },
               ),
-              TextFormField(
+              CustomInputField(
+                label: 'Field Size (Optional)',
                 controller: _fieldSizeController,
-                decoration: InputDecoration(labelText: 'Field Size (Optional)'),
                 keyboardType: TextInputType.number,
               ),
-              TextFormField(
+              CustomInputField(
+                label: 'Write Notes',
                 controller: _notesController,
-                decoration: InputDecoration(labelText: 'Write Notes'),
                 maxLines: 3,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _addField,
-                child: Text('Add Field'),
+                child: const Text('Add Field'),
               ),
             ],
           ),

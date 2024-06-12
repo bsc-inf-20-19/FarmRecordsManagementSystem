@@ -1,7 +1,7 @@
+import 'package:farm_records_management_system/widgets/customInputField.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:farm_records_management_system/database/databaseHelper.dart';
-
 class TaskFormScreen extends StatefulWidget {
   final int? taskId;
 
@@ -93,9 +93,9 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
           key: _formKey,
           child: ListView(
             children: [
-              TextFormField(
+              CustomInputField(
+                label: 'Task Name',
                 controller: _taskNameController,
-                decoration: InputDecoration(labelText: 'Task Name'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a task name';
@@ -103,10 +103,10 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
                   return null;
                 },
               ),
-              TextFormField(
+              CustomInputField(
+                label: 'Date',
                 controller: _dateController,
-                decoration: InputDecoration(labelText: 'Date'),
-                readOnly: true, // Set text field as read-only
+                readOnly: true,
                 onTap: () async {
                   DateTime? pickedDate = await showDatePicker(
                     context: context,
@@ -128,7 +128,7 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
                 },
               ),
               SwitchListTile(
-                title: Text('Specific to a Planting?'),
+                title: const Text('Specific to a Planting?'),
                 value: _isSpecificToPlanting,
                 onChanged: (value) {
                   setState(() {
@@ -140,7 +140,7 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
                 future: _getFields(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else {
@@ -151,7 +151,7 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
                             ))
                         .toList();
                     return DropdownButtonFormField<String>(
-                      decoration: InputDecoration(labelText: 'Field'),
+                      decoration: const InputDecoration(labelText: 'Field'),
                       value: _selectedField,
                       items: items,
                       onChanged: (value) {
@@ -170,16 +170,16 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Notes'),
+                decoration: const InputDecoration(labelText: 'Notes'),
                 maxLines: 3,
                 onSaved: (value) {
                   _notes = value;
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _saveTask,
-                child: Text('Save Task'),
+                child: const Text('Save Task'),
               ),
             ],
           ),
