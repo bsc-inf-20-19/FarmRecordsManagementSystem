@@ -31,7 +31,7 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
 
   Future<void> _loadData() async {
     try {
-      List<Map<String, dynamic>> result = await DatabaseHelper.getTreatments();
+      List<Map<String, dynamic>> result = await DatabaseHelper.instance.getTreatments();
       setState(() {
         treatments =
             result.reversed.toList(); // Ensure data is stored in the state
@@ -146,7 +146,7 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
                 ),
                 IconButton(
                   onPressed: () async {
-                    await DatabaseHelper.deleteTreatment(treatment['id']);
+                    await DatabaseHelper.instance.deleteTreatment(treatment['id']);
                     _loadData(); // Refresh after deletion
                   },
                   icon: const Icon(Icons.delete, color: Colors.red),
@@ -182,7 +182,7 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
   void _addTreatment(Map<String, dynamic> newTreatment) async {
     // Automatically fill status based on the selected date
     newTreatment['status'] = DateFormat("yyyy-MM-dd").parse(newTreatment['date']).isAfter(DateTime.now()) ? 'Planned' : 'Done';  
-    await DatabaseHelper.insertTreatment(
+    await DatabaseHelper.instance.insertTreatments(
         newTreatment); // Add new treatment and refresh state
     _loadData();
   }

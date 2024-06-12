@@ -1,7 +1,7 @@
-import 'package:farm_records_management_system/project_trial/farmer_DAO.dart';
+import 'package:farm_records_management_system/farmer/farmer.dart';
+import 'package:farm_records_management_system/farmer/farmer_DAO.dart';
+import 'package:farm_records_management_system/screens/databaseHelper.dart';
 import 'package:flutter/material.dart';
-import 'package:farm_records_management_system/project_trial/database_helper.dart';
-import 'package:farm_records_management_system/project_trial/farmer.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'summary_screen.dart';
 
@@ -24,12 +24,18 @@ class _FinancialReportManagementState extends State<FinancialReportManagement> {
   }
 
   Future<Map<String, dynamic>> generateFarmerReport(int farmerID) async {
+    print('Fetching farmer with ID: $farmerID');
     Farmer? farmer = await FarmerDAO.instance.getFarmer(farmerID);
     if (farmer == null) {
+      print('Farmer not found');
       throw Exception('Farmer not found');
     }
 
+    print('Farmer found: ${farmer.firstName} ${farmer.lastName}');
+
     Map<String, dynamic> financialReport = await DatabaseHelper.instance.getFinancialReport(farmerID);
+
+    print('Financial report retrieved');
 
     return {
       'farmer': farmer, 
@@ -57,7 +63,7 @@ class _FinancialReportManagementState extends State<FinancialReportManagement> {
             Farmer farmer = report['farmer'];
             Map<String, dynamic> financialReport = report['financialReport'];
 
-          return SingleChildScrollView(
+            return SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(

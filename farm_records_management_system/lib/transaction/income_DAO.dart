@@ -1,4 +1,4 @@
-import 'package:farm_records_management_system/project_trial/database_helper.dart';
+import 'package:farm_records_management_system/screens/databaseHelper.dart';
 import 'package:sqflite/sqflite.dart';
 
 class IncomeDAO {

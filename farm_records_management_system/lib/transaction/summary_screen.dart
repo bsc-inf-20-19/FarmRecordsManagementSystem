@@ -1,7 +1,6 @@
-import 'package:farm_records_management_system/project_trial/transaction/expense_DAO.dart';
-import 'package:farm_records_management_system/project_trial/transaction/income_DAO.dart';
+import 'package:farm_records_management_system/transaction/expense_DAO.dart';
+import 'package:farm_records_management_system/transaction/income_DAO.dart';
 import 'package:flutter/material.dart';
-import 'package:farm_records_management_system/project_trial/database_helper.dart';
 
 class SummaryScreen extends StatefulWidget {
   final int farmerID;

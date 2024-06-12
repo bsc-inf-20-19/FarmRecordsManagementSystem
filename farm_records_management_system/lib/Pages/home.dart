@@ -166,12 +166,12 @@ class HomePage extends StatelessWidget {
                       child: CardItem(
                         title: 'Transactions',
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => TransactionPage(),
-                            ),
-                          );
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     // builder: (context) => TransactionPage(),
+                          //   ),
+                          // );
                         },
                       ),
                     ),

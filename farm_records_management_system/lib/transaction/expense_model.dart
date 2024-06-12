@@ -1,17 +1,35 @@
-import 'package:farm_records_management_system/project_trial/database_helper.dart';
-import 'package:sqflite/sqflite.dart';
+class Expense {
+  final int? expenseID;
+  final double amount;
+  final DateTime date;
+  final String description;
+  final int farmersID;
 
-class ExpenseDAO {
-  static final ExpenseDAO instance = ExpenseDAO._instance();
-  ExpenseDAO._instance();
+  Expense({
+    this.expenseID,
+    required this.amount,
+    required this.date,
+    required this.description,
+    required this.farmersID,
+  });
 
-  Future<int> insertExpense(Map<String, dynamic> row) async {
-    Database db = await DatabaseHelper.instance.db;
-    return await db.insert(DatabaseHelper.instance.expenseTable, row);
+  Map<String, dynamic> toMap() {
+    return {
+      'expenseID': expenseID,
+      'amount': amount,
+      'date': date.toIso8601String(),
+      'description': description,
+      'farmersID': farmersID,
+    };
   }
 
-  Future<List<Map<String, dynamic>>> queryAllExpenses(int farmerID) async {
-    Database db = await DatabaseHelper.instance.db;
-    return await db.query(DatabaseHelper.instance.expenseTable);
+  static Expense fromMap(Map<String, dynamic> map) {
+    return Expense(
+      expenseID: map['expenseID'],
+      amount: map['amount'],
+      date: DateTime.parse(map['date']),
+      description: map['description'],
+      farmersID: map['farmersID'],
+    );
   }
 }
