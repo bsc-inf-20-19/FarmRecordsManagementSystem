@@ -248,6 +248,7 @@ class _DetailsState extends State<Details> {
                   decoration: InputDecoration(
                     labelText: 'Filter by Crop Name',
                     border: OutlineInputBorder(),
+                    prefixIcon: const Icon(Icons.search),
                   ),
                   onChanged: (value) {
                     setState(() {
@@ -302,13 +303,13 @@ class _DetailsState extends State<Details> {
                                 ],
                               ),
                               const SizedBox(height: 10),
-                              _buildDetailRow('Field', planting['field']),
-                              _buildDetailRow('Seed Quantity', planting['description']),
-                              _buildDetailRow('Seed Company', planting['cropCompany']),
-                              _buildDetailRow('Seed Type', planting['cropType']),
-                              _buildDetailRow('Seed Plot Number', planting['cropPlotNumber']),
-                              _buildDetailRow('Estimated Harvest', planting['cropHarvest']),
-                              _buildDetailRow('Date', planting['date']),
+                              _buildDetailRow('Field', planting['field'], Icons.landscape),
+                              _buildDetailRow('Seed Quantity', planting['description'], Icons.production_quantity_limits),
+                              _buildDetailRow('Seed Company', planting['cropCompany'], Icons.business),
+                              _buildDetailRow('Seed Type', planting['cropType'], Icons.grass),
+                              _buildDetailRow('Seed Plot Number', planting['cropPlotNumber'], Icons.confirmation_number),
+                              _buildDetailRow('Estimated Harvest', planting['cropHarvest'], Icons.eco),
+                              _buildDetailRow('Date', planting['date'], Icons.date_range),
                             ],
                           ),
                         ),
@@ -332,12 +333,13 @@ class _DetailsState extends State<Details> {
     );
   }
 
-  Widget _buildDetailRow(String label, String? value) {
+  Widget _buildDetailRow(String label, String? value, IconData icon) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          Icon(icon, color: Colors.grey[700]),
+          const SizedBox(width: 8),
           Text(
             '$label:',
             style: const TextStyle(
@@ -345,6 +347,7 @@ class _DetailsState extends State<Details> {
               fontWeight: FontWeight.w600,
             ),
           ),
+          const Spacer(),
           Text(
             value ?? 'N/A',
             style: const TextStyle(
@@ -434,6 +437,7 @@ class _EditPlantingPageState extends State<EditPlantingPage> {
               decoration: const InputDecoration(
                 labelText: 'Date',
                 border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.date_range),
               ),
             ),
             const SizedBox(height: 10),
@@ -442,6 +446,7 @@ class _EditPlantingPageState extends State<EditPlantingPage> {
               decoration: const InputDecoration(
                 labelText: 'Crop',
                 border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.grass),
               ),
             ),
             const SizedBox(height: 10),
@@ -450,6 +455,7 @@ class _EditPlantingPageState extends State<EditPlantingPage> {
               decoration: const InputDecoration(
                 labelText: 'Field',
                 border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.landscape),
               ),
             ),
             const SizedBox(height: 10),
@@ -458,6 +464,7 @@ class _EditPlantingPageState extends State<EditPlantingPage> {
               decoration: const InputDecoration(
                 labelText: 'Seed Quantity',
                 border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.production_quantity_limits),
               ),
             ),
             const SizedBox(height: 10),
@@ -466,6 +473,7 @@ class _EditPlantingPageState extends State<EditPlantingPage> {
               decoration: const InputDecoration(
                 labelText: 'Seed Company',
                 border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.business),
               ),
             ),
             const SizedBox(height: 10),
@@ -474,6 +482,7 @@ class _EditPlantingPageState extends State<EditPlantingPage> {
               decoration: const InputDecoration(
                 labelText: 'Seed Type',
                 border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.category),
               ),
             ),
             const SizedBox(height: 10),
@@ -482,6 +491,7 @@ class _EditPlantingPageState extends State<EditPlantingPage> {
               decoration: const InputDecoration(
                 labelText: 'Seed Plot Number',
                 border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.confirmation_number),
               ),
             ),
             const SizedBox(height: 10),
@@ -490,6 +500,7 @@ class _EditPlantingPageState extends State<EditPlantingPage> {
               decoration: const InputDecoration(
                 labelText: 'Estimated Harvest',
                 border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.eco),
               ),
             ),
             const SizedBox(height: 20),
