@@ -1,10 +1,10 @@
-import 'package:farm_records_management_system/home/components/sections/field_section.dart';
-import 'package:farm_records_management_system/home/widgets/fieldbar_widget.dart';
-import 'package:flutter/cupertino.dart';
+
+import 'package:farm_records_management_system/home/components/sections/tools_section.dart';
+import 'package:farm_records_management_system/home/widgets/drawer_widget.dart';
 import 'package:flutter/material.dart';
 
-class FieldScreen extends StatelessWidget {
-  const FieldScreen({super.key});
+class FarmToolsPage extends StatelessWidget {
+  const FarmToolsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,16 +21,19 @@ class FieldScreen extends StatelessWidget {
           tooltip: 'Back',
           icon: Icon(Icons.arrow_back),
         ),
-        title: Text('Fields'),
+        title: Text('Farm Tools'),
         centerTitle: true,
       ),
-      
       body: ListView(
         children: [
-          //Field Section Widget
-          FieldSection(),
+          SizedBox(height: 20,),
+          
+          SizedBox(height: 20,),
+          //Home Cards
+          ToolsSection()
         ],
       ),
+      drawer: DrawerWidget(),
     );
   }
 }

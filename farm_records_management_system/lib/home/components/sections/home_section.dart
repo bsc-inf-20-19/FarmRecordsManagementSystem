@@ -1,9 +1,10 @@
+import 'package:farm_records_management_system/home/screens/farm_tools_screen.dart';
 import 'package:farm_records_management_system/home/screens/fields_screen.dart';
 import 'package:farm_records_management_system/home/screens/report_screen.dart';
 import 'package:farm_records_management_system/home/screens/trans_screen.dart';
 import 'package:farm_records_management_system/home/widgets/field_card.dart';
 import 'package:farm_records_management_system/home/widgets/report_card.dart';
-import 'package:farm_records_management_system/home/widgets/setup_card.dart';
+import 'package:farm_records_management_system/home/widgets/tools_card.dart';
 import 'package:farm_records_management_system/home/widgets/trans_card.dart';
 import 'package:flutter/material.dart';
 
@@ -68,11 +69,11 @@ class HomeSection extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SetupCard(),
+                      builder: (context) => FarmToolsPage(),
                     )
                   );
                 },
-               child: SetupCard(),
+               child: ToolsCard(),
               ),
               ]
             )

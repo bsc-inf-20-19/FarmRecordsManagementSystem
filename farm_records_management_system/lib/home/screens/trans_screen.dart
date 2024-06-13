@@ -24,25 +24,21 @@ class _TransactionListScreenState extends State<TransactionListScreen> with Sing
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.green.shade500,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.white), // Change icon color to white
+        titleTextStyle: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold), // Change title text color to white
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            // Handle back button press
+           onPressed: () {
+            Navigator.pop(context);
           },
+          tooltip: 'Back',
+          icon: Icon(Icons.arrow_back_ios_new),
         ),
-        title: Text('Transaction'),
-        bottom: TabBar(
-          controller: _tabController,
-          indicatorColor: Colors.green, // Change the indicator color here
-          indicatorWeight: 4.0, // Change the indicator thickness if needed
-          labelColor: Colors.green, // Active tab text color
-          unselectedLabelColor: Colors.grey, // Inactive tab text color
-          tabs: [
-            Tab(text: 'Expenses'),
-            Tab(text: 'Income'),
-          ],
-        ),
+        title: Text('Transactions'),
+        centerTitle: true,
       ),
+            
       body: Column(
         children: [
           Padding(

@@ -1,5 +1,4 @@
 import 'package:farm_records_management_system/home/screens/home_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ActivityBarWidget extends StatelessWidget {

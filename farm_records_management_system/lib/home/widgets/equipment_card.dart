@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class SetupCard extends StatelessWidget {
-  const SetupCard({super.key});
+class EquipmentCard extends StatelessWidget {
+  const EquipmentCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class SetupCard extends StatelessWidget {
               height: 100.0, // Set the height of the image
               fit: BoxFit.cover, 
             ),
-            Text("Farm Tools",
+            Text("Equipment",
                 style: TextStyle(
                     fontSize: 20.0,
                     color: Colors.black,

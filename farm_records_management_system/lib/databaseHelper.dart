@@ -29,6 +29,19 @@ class DatabaseHelper {
       quantity TEXT
       );
     ''');
+
+    //Creating a livestock stack table
+    await db.execute('''
+    CREATE TABLE livestock (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT,
+      icon INTEGER
+    );
+    ''');
+
+    
+
+
   
   }
 

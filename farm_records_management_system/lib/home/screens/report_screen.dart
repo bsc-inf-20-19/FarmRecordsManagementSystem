@@ -14,18 +14,10 @@ class ReportScreen extends StatelessWidget {
             Navigator.pop(context);
           },
           tooltip: 'Back',
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back_ios_new),
         ),
-        title: Text('AppBar'),
+        title: Text('Report'),
         centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.search),
-            tooltip: 'Search',
-            onPressed: () {
-            },
-          ),
-        ]
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

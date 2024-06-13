@@ -1,11 +1,11 @@
-import 'package:farm_records_management_system/home/screens/crop_screen.dart';
-import 'package:farm_records_management_system/home/screens/livestock_screen.dart';
-import 'package:farm_records_management_system/home/widgets/crop_card.dart';
-import 'package:farm_records_management_system/home/widgets/livestock_card.dart';
+import 'package:farm_records_management_system/home/screens/home_screen.dart';
+import 'package:farm_records_management_system/home/screens/report_screen.dart';
+import 'package:farm_records_management_system/home/widgets/equipment_card.dart';
+import 'package:farm_records_management_system/home/widgets/inventory_card.dart';
 import 'package:flutter/material.dart';
 
-class FieldSection extends StatelessWidget {
-  const FieldSection({super.key});
+class ToolsSection extends StatelessWidget {
+  const ToolsSection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,26 +25,26 @@ class FieldSection extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>  CropsFieldPage()
+                      builder: (context) => ReportScreen()
                     )
                   );
                 },
-               child: CropCard(),
+               child: InventoryCard(),
               ),
                 InkWell(
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => LiveStockScreen(),
+                      builder: (context) => MyHomePage(),
                     )
                   );
                 },
-               child: LivestockCard(),
+               child: EquipmentCard(),
               ),
               ]
             )
-          ),
+          )
         ]
       )
       );
