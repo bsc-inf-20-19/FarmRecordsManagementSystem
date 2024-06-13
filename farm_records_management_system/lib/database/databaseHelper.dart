@@ -178,6 +178,101 @@ class DatabaseHelper {
     );
   }
 
+   Future<int> deleteTransaction(int id) async {
+    Database db = await _initDb(); // Ensure proper initialization
+    return await db.delete('expenses', where: 'id = ?', whereArgs: [id]);
+  }
+
+   Future<Map<String, dynamic>?> getTransaction(int id) async {
+    Database db = await _initDb(); // Ensure proper initialization
+    List<Map<String, dynamic>> result = await db.query(
+      'expenses',
+      where: 'id = ?',
+      whereArgs: [id],
+      limit: 1,
+    );
+    return result.isNotEmpty ? result.first : null;
+  }
+
+   Future<List<Map<String, dynamic>>> getTransactions() async {
+    Database db = await _initDb(); // Ensure proper initialization
+    return await db.query('expenses');
+  }
+
+  // CRUD operations for fields
+   Future<int> insertField(Map<String, dynamic> data) async {
+    Database db = await _initDb(); // Ensure proper initialization
+    return await db.insert('fields', data);
+  }
+
+   Future<List<Map<String, dynamic>>> getFields() async {
+    Database db = await _initDb(); // Ensure proper initialization
+    return await db.query('fields');
+  }
+
+   Future<Map<String, dynamic>?> getField(int id) async {
+    Database db = await _initDb(); // Ensure proper initialization
+    List<Map<String, dynamic>> result = await db.query(
+      'fields',
+      where: 'id = ?',
+      whereArgs: [id],
+      limit: 1,
+    );
+    return result.isNotEmpty ? result.first : null;
+  }
+
+   Future<int> deleteField(int id) async {
+    Database db = await _initDb(); // Ensure proper initialization
+    return await db.delete('fields', where: 'id = ?', whereArgs: [id]);
+  }
+
+   Future<int> updateField(int id, Map<String, dynamic> data) async {
+    Database db = await _initDb(); // Ensure proper initialization
+    return await db.update(
+      'fields',
+      data,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  // CRUD operations for tasks
+   Future<int> insertTask(Map<String, dynamic> task) async {
+    Database db = await _initDb();
+    return await db.insert('tasks', task);
+  }
+
+   Future<List<Map<String, dynamic>>> getTasks() async {
+    Database db = await _initDb();
+    return await db.query('tasks');
+  }
+
+   Future<Map<String, dynamic>?> getTaskById(int id) async {
+    Database db = await _initDb();
+    List<Map<String, dynamic>> result = await db.query(
+      'tasks',
+      where: 'id = ?',
+      whereArgs: [id],
+      limit: 1,
+    );
+    return result.isNotEmpty ? result.first : null;
+  }
+
+   Future<int> deleteTask(int id) async {
+    Database db = await _initDb();
+    return await db.delete('tasks', where: 'id = ?', whereArgs: [id]);
+  }
+
+   Future<int> updateTask(int id, Map<String, dynamic> data) async {
+    Database db = await _initDb();
+    return await db.update(
+      'tasks',
+      data,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
   // Method to handle database upgrades
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
@@ -237,98 +332,5 @@ class DatabaseHelper {
       'netIncome': (incomeResult.first['totalIncome'] ?? 0) -
           (expenseResult.first['totalExpense'] ?? 0)
     };
-  static Future<int> deleteTransaction(int id) async {
-    Database db = await _openDatabase(); // Ensure proper initialization
-    return await db.delete('expenses', where: 'id = ?', whereArgs: [id]);
-  }
-
-  static Future<Map<String, dynamic>?> getTransaction(int id) async {
-    Database db = await _openDatabase(); // Ensure proper initialization
-    List<Map<String, dynamic>> result = await db.query(
-      'expenses',
-      where: 'id = ?',
-      whereArgs: [id],
-      limit: 1,
-    );
-    return result.isNotEmpty ? result.first : null;
-  }
-
-  static Future<List<Map<String, dynamic>>> getTransactions() async {
-    Database db = await _openDatabase(); // Ensure proper initialization
-    return await db.query('expenses');
-  }
-
-  // CRUD operations for fields
-  static Future<int> insertField(Map<String, dynamic> data) async {
-    Database db = await _openDatabase(); // Ensure proper initialization
-    return await db.insert('fields', data);
-  }
-
-  static Future<List<Map<String, dynamic>>> getFields() async {
-    Database db = await _openDatabase(); // Ensure proper initialization
-    return await db.query('fields');
-  }
-
-  static Future<Map<String, dynamic>?> getField(int id) async {
-    Database db = await _openDatabase(); // Ensure proper initialization
-    List<Map<String, dynamic>> result = await db.query(
-      'fields',
-      where: 'id = ?',
-      whereArgs: [id],
-      limit: 1,
-    );
-    return result.isNotEmpty ? result.first : null;
-  }
-
-  static Future<int> deleteField(int id) async {
-    Database db = await _openDatabase(); // Ensure proper initialization
-    return await db.delete('fields', where: 'id = ?', whereArgs: [id]);
-  }
-
-  static Future<int> updateField(int id, Map<String, dynamic> data) async {
-    Database db = await _openDatabase(); // Ensure proper initialization
-    return await db.update(
-      'fields',
-      data,
-      where: 'id = ?',
-      whereArgs: [id],
-    );
-  }
-
-  // CRUD operations for tasks
-  static Future<int> insertTask(Map<String, dynamic> task) async {
-    Database db = await _openDatabase();
-    return await db.insert('tasks', task);
-  }
-
-  static Future<List<Map<String, dynamic>>> getTasks() async {
-    Database db = await _openDatabase();
-    return await db.query('tasks');
-  }
-
-  static Future<Map<String, dynamic>?> getTaskById(int id) async {
-    Database db = await _openDatabase();
-    List<Map<String, dynamic>> result = await db.query(
-      'tasks',
-      where: 'id = ?',
-      whereArgs: [id],
-      limit: 1,
-    );
-    return result.isNotEmpty ? result.first : null;
-  }
-
-  static Future<int> deleteTask(int id) async {
-    Database db = await _openDatabase();
-    return await db.delete('tasks', where: 'id = ?', whereArgs: [id]);
-  }
-
-  static Future<int> updateTask(int id, Map<String, dynamic> data) async {
-    Database db = await _openDatabase();
-    return await db.update(
-      'tasks',
-      data,
-      where: 'id = ?',
-      whereArgs: [id],
-    );
   }
 }

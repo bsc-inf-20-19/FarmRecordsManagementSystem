@@ -32,7 +32,8 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
 
   Future<void> _loadData() async {
     try {
-      List<Map<String, dynamic>> result = await DatabaseHelper.instance.getTreatments();
+      List<Map<String, dynamic>> result =
+          await DatabaseHelper.instance.getTreatments();
       setState(() {
         treatments = result.reversed.toList();
       });
@@ -49,8 +50,10 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
       } else {
         isSearching = true;
         treatments = treatments.where((treatment) {
-          return treatment.values.any((value) =>
-              value.toString().toLowerCase().contains(searchTerm.toLowerCase()));
+          return treatment.values.any((value) => value
+              .toString()
+              .toLowerCase()
+              .contains(searchTerm.toLowerCase()));
         }).toList();
       }
     });
@@ -69,14 +72,16 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
     }
   }
 
-  Future<void> _showDeleteConfirmationDialog(BuildContext context, int treatmentId) async {
+  Future<void> _showDeleteConfirmationDialog(
+      BuildContext context, int treatmentId) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Confirm Deletion'),
-          content: const Text('Are you sure you want to delete this treatment?'),
+          content:
+              const Text('Are you sure you want to delete this treatment?'),
           actions: <Widget>[
             TextButton(
               child: const Text('Cancel'),
@@ -87,7 +92,7 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
             TextButton(
               child: const Text('Confirm'),
               onPressed: () async {
-                await DatabaseHelper.deleteTreatment(treatmentId);
+                await DatabaseHelper.instance.deleteTreatment(treatmentId);
                 _loadData();
                 Navigator.of(context).pop();
               },
@@ -121,7 +126,7 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
             .isBefore(DateTime.now())
         ? 'Done'
         : 'Planned';
-    await DatabaseHelper.insertTreatment(newTreatment);
+    await DatabaseHelper.instance.insertTreatments(newTreatment);
     _loadData();
   }
 
@@ -154,7 +159,8 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
           IconButton(
             icon: const Icon(Icons.picture_as_pdf),
             onPressed: () async {
-              await PDFGenerator.generateAndShareTreatmentPdf(context, treatments);
+              await PDFGenerator.generateAndShareTreatmentPdf(
+                  context, treatments);
             },
           ),
         ],
@@ -167,8 +173,7 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
           String status = treatment['status'];
           Color statusColor = status == 'Done' ? Colors.green : Colors.yellow;
 
-          return 
-          Card(
+          return Card(
             margin: const EdgeInsets.all(16.0),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -203,7 +208,8 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
                                 }
                               });
                             } else if (value == 'delete') {
-                              _showDeleteConfirmationDialog(context, treatment['id']);
+                              _showDeleteConfirmationDialog(
+                                  context, treatment['id']);
                             }
                           },
                           itemBuilder: (context) => [
@@ -224,16 +230,21 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
                   const Divider(thickness: 0.5, color: Colors.black54),
                   const SizedBox(height: 8),
                   TreatmentItem(label: 'Treatment date', value: formattedDate),
-                  TreatmentItem(label: 'Status', value: '$status', color: statusColor),
-                  TreatmentItem(label: 'Treatment type', value: treatment["treatment_type"]),
+                  TreatmentItem(
+                      label: 'Status', value: '$status', color: statusColor),
+                  TreatmentItem(
+                      label: 'Treatment type',
+                      value: treatment["treatment_type"]),
                   TreatmentItem(label: 'Field name', value: treatment["field"]),
-                  TreatmentItem(label: 'Product used', value: treatment["product_used"]),
-                  TreatmentItem(label: 'Quantity', value: treatment["quantity"].toString()),
+                  TreatmentItem(
+                      label: 'Product used', value: treatment["product_used"]),
+                  TreatmentItem(
+                      label: 'Quantity',
+                      value: treatment["quantity"].toString()),
                 ],
               ),
             ),
           );
-        
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -273,12 +284,5 @@ class TreatmentItem extends StatelessWidget {
         ],
       ),
     );
-
-  void _addTreatment(Map<String, dynamic> newTreatment) async {
-    // Automatically fill status based on the selected date
-    newTreatment['status'] = DateFormat("yyyy-MM-dd").parse(newTreatment['date']).isAfter(DateTime.now()) ? 'Planned' : 'Done';  
-    await DatabaseHelper.instance.insertTreatments(
-        newTreatment); // Add new treatment and refresh state
-    _loadData();
   }
 }

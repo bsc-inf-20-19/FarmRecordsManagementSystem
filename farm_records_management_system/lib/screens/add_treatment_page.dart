@@ -35,7 +35,7 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
   }
 
   Future<void> _loadFields() async {
-    final fields = await DatabaseHelper.getFields();
+    final fields = await DatabaseHelper.instance.getFields();
     setState(() {
       _existingFields = fields.map((field) => field['fieldName'].toString()).toList();
     });

@@ -1,4 +1,3 @@
-import 'package:farm_records_management_system/Pages/transaction/transactions.dart';
 import 'package:farm_records_management_system/screens/fields_screen.dart';
 import 'package:farm_records_management_system/screens/home_screen.dart';
 import 'package:farm_records_management_system/transaction/financial_report.dart';

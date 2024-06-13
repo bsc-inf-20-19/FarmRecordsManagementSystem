@@ -29,7 +29,7 @@ class _FieldListScreenState extends State<FieldListScreen> {
 
   Future<void> _loadFields() async {
     try {
-      List<Map<String, dynamic>> result = await DatabaseHelper.getFields();
+      List<Map<String, dynamic>> result = await DatabaseHelper.instance.getFields();
       setState(() {
         fields = result.reversed.toList();
       });
@@ -149,7 +149,7 @@ class _FieldListScreenState extends State<FieldListScreen> {
                               }
                             });
                           } else if (value == 'delete') {
-                            await DatabaseHelper.deleteField(field['id']);
+                            await DatabaseHelper.instance.deleteField(field['id']);
                             _loadFields();
                           }
                         },

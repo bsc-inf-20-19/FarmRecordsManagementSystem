@@ -28,7 +28,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
 
   Future<void> _loadTasks() async {
     try {
-      List<Map<String, dynamic>> result = await DatabaseHelper.getTasks();
+      List<Map<String, dynamic>> result = await DatabaseHelper.instance.getTasks();
       setState(() {
         tasks = result.reversed.toList();
       });
@@ -83,7 +83,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
             TextButton(
               child: const Text('Confirm'),
               onPressed: () async {
-                await DatabaseHelper.deleteTask(taskId);
+                await DatabaseHelper.instance.deleteTask(taskId);
                 _loadTasks();
                 Navigator.of(context).pop();
               },

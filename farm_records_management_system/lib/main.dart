@@ -6,10 +6,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'dart:io' show Platform;
 
-void main() async {
-  // Ensure database is created
-  await DatabaseHelper;
-
 void main() {
   sqfliteFfiInit();
   // Set the database factory
