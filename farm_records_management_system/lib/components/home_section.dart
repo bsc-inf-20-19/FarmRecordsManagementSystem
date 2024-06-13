@@ -1,6 +1,8 @@
 import 'package:farm_records_management_system/Pages/transaction/transactions.dart';
 import 'package:farm_records_management_system/screens/fields_screen.dart';
 import 'package:farm_records_management_system/screens/home_screen.dart';
+import 'package:farm_records_management_system/transaction/financial_report.dart';
+import 'package:farm_records_management_system/transaction/manage_transaction.dart';
 import 'package:farm_records_management_system/widgets/field_card.dart';
 import 'package:farm_records_management_system/widgets/report_card.dart';
 import 'package:farm_records_management_system/widgets/setup_card.dart';
@@ -38,7 +40,7 @@ class HomeSection extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const TransactionPage()),
+                        MaterialPageRoute(builder: (context) =>  ManageTransactionsScreen(farmerID: 1,)),
                       );
                     },
                     child:const TransCard(),
@@ -54,7 +56,7 @@ class HomeSection extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const MyHomePage()), // Navigate to Report Screen
+                        MaterialPageRoute(builder: (context) =>  FinancialReportManagement(farmerID: 1,)),
                       );
                     },
                     child:const ReportCard(),

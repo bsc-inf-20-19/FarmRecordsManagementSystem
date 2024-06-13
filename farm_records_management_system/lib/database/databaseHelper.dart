@@ -1,41 +1,56 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class DatabaseHelper {
-  static Future<Database> _openDatabase() async {
-    final databasePath = await getDatabasesPath();
-    final path = join(databasePath, 'my_database.db');
-    print('Database path: $databasePath');
+  static final DatabaseHelper instance = DatabaseHelper._instance();
+  static Database? _db;
 
-    // Check if the database file is read-only
-    if (await File(path).exists()) {
-      final fileStat = await File(path).stat();
-      final hasWritePermission = (fileStat.mode & 0200) != 0; // Check write permissions
+  DatabaseHelper._instance();
 
-      if (!hasWritePermission) {
-        // If the file is read-only, delete and recreate it
-        await File(path).delete();
-        await File(path)
-            .writeAsBytes(await File(path).readAsBytes(), mode: FileMode.write);
-      }
+  factory DatabaseHelper() => instance;
+
+  // Table names
+  String farmersTable = 'farmersTable';
+  String farmTable = 'farmTable';
+  String cropsTable = 'cropsTable';
+  String incomeTable = 'incomeTable'; // Newly added
+  String expenseTable = 'expenseTable'; // Newly added
+  String inventoryTable = 'inventoryTable';
+  String treatmentsTable = 'treatmentsTable';
+  // other table names...
+
+  // Farmer columns
+  String farmersID = 'farmersID';
+  // Income columns
+  String incomeID = 'incomeID';
+  String amount = 'amount';
+  String date = 'date';
+  String description = 'description';
+  // Expense columns
+  String expenseID = 'expenseID';
+
+  Future<Database> get db async {
+    if (_db == null) {
+      _db = await _initDb();
     }
+    return _db!;
+  }
 
-    // Open the database
-    return openDatabase(
-      path,
-      version: 1, // Increment this to trigger schema upgrades
-      onCreate: _createDatabase,
-      onUpgrade: _onUpgrade,
-    );
+  Future<Database> _initDb() async {
+    final dbDir = await getDatabasesPath();
+    final dbPath = join(dbDir, 'farm_management.db');
+    final db = await openDatabase(dbPath, version: 1, onCreate: _createDb);
+    return db;
   }
 
   // Method to create the database tables
-  static Future<void> _createDatabase(Database db, int version) async {
+  void _createDb(Database db, int version) async {
     // Create a table for Treatments
     await db.execute(
       '''
-      CREATE TABLE IF NOT EXISTS treatments (
+      CREATE TABLE IF NOT EXISTS $treatmentsTable (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         date TEXT,
         status TEXT,
@@ -48,6 +63,74 @@ class DatabaseHelper {
       ''',
     );
 
+    await db.execute('''
+    CREATE TABLE $farmersTable (
+      $farmersID INTEGER PRIMARY KEY AUTOINCREMENT,
+      firstName TEXT,
+      lastName TEXT,
+      email TEXT,
+      phone TEXT,
+      password TEXT
+    )
+  ''');
+
+    await db.execute('''
+    CREATE TABLE $farmTable (
+      farmID INTEGER PRIMARY KEY AUTOINCREMENT,
+      $farmersID INTEGER,
+      farmName TEXT,
+      size TEXT,
+      type TEXT,
+      FOREIGN KEY ($farmersID) REFERENCES $farmersTable($farmersID)
+    )
+  ''');
+
+    await db.execute('''
+      CREATE TABLE $cropsTable (
+        cropID INTEGER PRIMARY KEY AUTOINCREMENT,
+        farmersID INTEGER,
+        cropName TEXT,
+        cropType TEXT,
+        plantingDate TEXT,
+        harvestDate TEXT,
+        cropYield INTEGER,
+        FOREIGN KEY (farmersID) REFERENCES $farmersTable(farmersID)
+      )
+    ''');
+
+    await db.execute('''
+    CREATE TABLE $incomeTable (
+      $incomeID INTEGER PRIMARY KEY AUTOINCREMENT,
+      $amount REAL NOT NULL,
+      $date TEXT NOT NULL,
+      $description TEXT,
+      $farmersID INTEGER,
+      FOREIGN KEY (farmersID) REFERENCES $farmersTable(farmersID)
+    )
+  ''');
+
+    await db.execute('''
+    CREATE TABLE $expenseTable (
+      $expenseID INTEGER PRIMARY KEY AUTOINCREMENT,
+      $amount REAL NOT NULL,
+      $date TEXT NOT NULL,
+      $description TEXT,
+      $farmersID INTEGER,
+      FOREIGN KEY (farmersID) REFERENCES $farmersTable(farmersID)
+    )
+  ''');
+
+    await db.execute('''
+  CREATE TABLE $inventoryTable (
+    ItemID INTEGER PRIMARY KEY AUTOINCREMENT,
+    ItemName TEXT NOT NULL,
+    Quantity INTEGER NOT NULL,
+    PurchaseDate TEXT,
+    Threshold INTEGER NOT NULL,
+    $farmersID INTEGER,
+    FOREIGN KEY (farmersID) REFERENCES $farmersTable (farmersID)
+  ) 
+  ''');
     // Create a table for Expenses
     await db.execute(
       '''
@@ -96,27 +179,21 @@ class DatabaseHelper {
   }
 
   // Method to handle database upgrades
-  static Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
       // Perform necessary upgrades here
     }
   }
 
-  // CRUD operations for treatments
-  static Future<int> insertTreatment(Map<String, dynamic> data) async {
-    Database db = await _openDatabase(); // Ensure proper initialization
-    return await db.insert('treatments', data);
+  Future<List<Map<String, dynamic>>> getTreatments() async {
+    Database db = await _initDb(); // Ensure proper initialization
+    return await db.query('treatmentsTable');
   }
 
-  static Future<List<Map<String, dynamic>>> getTreatments() async {
-    Database db = await _openDatabase(); // Ensure proper initialization
-    return await db.query('treatments');
-  }
-
-  static Future<Map<String, dynamic>?> getTreatment(int id) async {
-    Database db = await _openDatabase(); // Ensure proper initialization
+  Future<Map<String, dynamic>?> getTreatment(int id) async {
+    Database db = await _initDb(); // Ensure proper initialization
     List<Map<String, dynamic>> result = await db.query(
-      'treatments',
+      'treatmentsTable',
       where: 'id = ?',
       whereArgs: [id],
       limit: 1,
@@ -124,27 +201,42 @@ class DatabaseHelper {
     return result.isNotEmpty ? result.first : null;
   }
 
-  static Future<int> deleteTreatment(int id) async {
-    Database db = await _openDatabase(); // Ensure proper initialization
-    return await db.delete('treatments', where: 'id = ?', whereArgs: [id]);
+  Future<int> deleteTreatment(int id) async {
+    Database db = await _initDb(); // Ensure proper initialization
+    return await db.delete('treatmentsTable', where: 'id = ?', whereArgs: [id]);
   }
 
-  static Future<int> updateTreatment(int id, Map<String, dynamic> data) async {
-    Database db = await _openDatabase(); // Ensure proper initialization
+  Future<int> updateTreatment(int id, Map<String, dynamic> data) async {
+    Database db = await _initDb(); // Ensure proper initialization
     return await db.update(
-      'treatments',
+      'treatmentsTable',
       data,
       where: 'id = ?',
       whereArgs: [id],
     );
   }
 
-  // CRUD operations for expenses
-  static Future<int> insertTransaction(Map<String, dynamic> tdata) async {
-    Database db = await _openDatabase();
-    return await db.insert('expenses', tdata);
+  Future<int> insertTreatments(Map<String, dynamic> row) async {
+    Database db = await DatabaseHelper.instance.db;
+    return await db.insert(DatabaseHelper.instance.treatmentsTable, row);
   }
 
+  Future<Map<String, dynamic>> getFinancialReport(int farmerID) async {
+    Database db = await this.db;
+    List<Map<String, dynamic>> incomeResult = await db.rawQuery('''
+      SELECT SUM($amount) as totalIncome
+      FROM $incomeTable
+    ''');
+    List<Map<String, dynamic>> expenseResult = await db.rawQuery('''
+      SELECT SUM($amount) as totalExpense
+      FROM $expenseTable
+    ''');
+    return {
+      'totalIncome': incomeResult.first['totalIncome'] ?? 0,
+      'totalExpense': expenseResult.first['totalExpense'] ?? 0,
+      'netIncome': (incomeResult.first['totalIncome'] ?? 0) -
+          (expenseResult.first['totalExpense'] ?? 0)
+    };
   static Future<int> deleteTransaction(int id) async {
     Database db = await _openDatabase(); // Ensure proper initialization
     return await db.delete('expenses', where: 'id = ?', whereArgs: [id]);

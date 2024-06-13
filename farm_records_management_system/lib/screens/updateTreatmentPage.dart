@@ -22,7 +22,7 @@ class _UpdateTreatmentPageState extends State<UpdateTreatmentPage> {
 
   void fetchTreatment() async {
     Map<String, dynamic>? treatmentData =
-        await DatabaseHelper.getTreatment(widget.treatmentId);
+        await DatabaseHelper.instance.getTreatment(widget.treatmentId);
 
     if (treatmentData != null) {
       setState(() {
@@ -68,7 +68,7 @@ class _UpdateTreatmentPageState extends State<UpdateTreatmentPage> {
         'quantity': double.tryParse(_quantityController.text),
       };
 
-      await DatabaseHelper.updateTreatment(
+      await DatabaseHelper.instance.updateTreatment(
           widget.treatmentId, updatedTreatment);
       Navigator.pop(context, true);
     }
