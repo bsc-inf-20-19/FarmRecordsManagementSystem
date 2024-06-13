@@ -32,7 +32,7 @@ class CropListCard extends StatelessWidget {
           children: [
             //Insert image here
             Image(
-              image: AssetImage('images/report.png'), // URL of the image
+              image: AssetImage('images/crop_lists.png'), // URL of the image
               width: 100.0, // Set the width of the image
               height: 100.0, // Set the height of the image
               fit: BoxFit.cover, 

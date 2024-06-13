@@ -19,7 +19,7 @@ class FieldScreen extends StatelessWidget {
             Navigator.pop(context);
           },
           tooltip: 'Back',
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back_ios_new),
         ),
         title: Text('Fields'),
         centerTitle: true,
