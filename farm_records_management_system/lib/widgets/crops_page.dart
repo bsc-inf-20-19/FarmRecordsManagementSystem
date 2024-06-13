@@ -3,7 +3,7 @@ import 'package:farm_records_management_system/components/home_section.dart';
 import 'package:flutter/material.dart';
 
 class MyActivityPage extends StatelessWidget {
-  const MyActivityPage({Key? key}) : super(key: key);
+  const MyActivityPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class MyActivityPage extends StatelessWidget {
             )
           ],
         ),
-        body: Padding(
+        body: const Padding(
           padding: EdgeInsets.only(top: 16),
           child: HomeSection(),
         ));

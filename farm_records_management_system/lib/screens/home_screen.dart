@@ -5,14 +5,14 @@ import 'package:farm_records_management_system/widgets/appbar_widget.dart';
 import 'package:farm_records_management_system/widgets/drawer_widget.dart';
 
 class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
-          AppBarWidget(),
+          const AppBarWidget(),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
             child: Container(
@@ -36,7 +36,7 @@ class MyHomePage extends StatelessWidget {
                   children: [
                     const Icon(
                       CupertinoIcons.search,
-                      color: Color(0xFF3388E3C),
+                      color: Color(0xff3388e3c),
                     ),
                    Expanded(
                       child: Padding(
@@ -58,7 +58,7 @@ class MyHomePage extends StatelessWidget {
           const Expanded(child: HomeSection()),
         ],
       ),
-      drawer: DrawerWidget(),
+      drawer: const DrawerWidget(),
     );
   }
 }

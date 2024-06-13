@@ -176,6 +176,24 @@ class DatabaseHelper {
       )
       ''',
     );
+    
+    // Create a table for Plantings
+    await db.execute(
+      '''
+      CREATE TABLE IF NOT EXISTS plantings (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        date TEXT,
+        crop TEXT,
+        field TEXT,
+        description TEXT,
+        cropCompany TEXT,
+        cropType TEXT,
+        cropPlotNumber TEXT,
+        cropHarvest TEXT
+      )
+      ''',
+    );
+
   }
 
    Future<int> deleteTransaction(int id) async {
@@ -332,5 +350,54 @@ class DatabaseHelper {
       'netIncome': (incomeResult.first['totalIncome'] ?? 0) -
           (expenseResult.first['totalExpense'] ?? 0)
     };
+  }
+  // // CRUD operations for plantings
+  Future<int> insertPlanting(Map<String, dynamic> data) async {
+    Database db = await _initDb();
+    return await db.insert('plantings', data);
+  }
+
+  Future<List<Map<String, dynamic>>> getPlantings(DateTime selectedDate, {required endDate, required startDate}) async {
+    Database db = await _initDb();
+    return await db.query('plantings');
+  }
+
+  Future<Map<String, dynamic>?> getPlanting(int id) async {
+    Database db = await _initDb();
+    List<Map<String, dynamic>> result = await db.query(
+      'plantings',
+      where: 'id = ?',
+      whereArgs: [id],
+      limit: 1,
+    );
+    return result.isNotEmpty ? result.first : null;
+  }
+
+  Future<int> deletePlanting(int id) async {
+    Database db = await _initDb();
+    return await db.delete('plantings', where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<int> updatePlanting(int id, Map<String, dynamic> data) async {
+    Database db = await _initDb();
+    return await db.update(
+      'plantings',
+      data,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  getPlantingsByDate(DateTime selectedDate) {}
+
+  // Method to fetch unique crop names for autocomplete suggestions
+  Future<List<String>> getCropSuggestions() async {
+    Database db = await _initDb();
+    final List<Map<String, dynamic>> crops = await db.query(
+      'plantings',
+      columns: ['crop'],
+      distinct: true,
+    );
+    return crops.map((e) => e['crop'] as String).toList();
   }
 }

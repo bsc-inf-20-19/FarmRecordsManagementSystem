@@ -9,7 +9,7 @@ class CropsFieldPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
-        children: [
+        children: const [
           CropBarWidget(),
           // My Crop Section
           CropsSection(),

@@ -1,8 +1,9 @@
 import 'package:farm_records_management_system/screens/home_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class FieldBarWidget extends StatelessWidget {
+  const FieldBarWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
