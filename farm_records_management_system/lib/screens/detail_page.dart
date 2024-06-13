@@ -1,5 +1,4 @@
-import 'package:farm_records_management_system/screens/activity_screen.dart';
-import 'package:farm_records_management_system/screens/databaseHelper.dart';
+import 'package:farm_records_management_system/database/databaseHelper.dart';
 import 'package:farm_records_management_system/screens/new_planting.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -42,7 +41,7 @@ class _DetailsState extends State<Details> {
     DateTime selectedDate = DateTime.now();
     DateTime endDate = DateTime.now().add(const Duration(days: 30));
 
-    List<Map<String, dynamic>> plantings = await DatabaseHelper.getPlantings(selectedDate, endDate: null, startDate: null);
+    List<Map<String, dynamic>> plantings = await DatabaseHelper.instance.getPlantings(selectedDate, endDate: null, startDate: null);
 
     if (_cropFilter.isNotEmpty) {
       plantings = plantings.where((planting) => (planting['crop'] ?? '').toLowerCase().contains(_cropFilter.toLowerCase())).toList();
@@ -55,7 +54,7 @@ class _DetailsState extends State<Details> {
 
   Future<void> _fetchCropSuggestions() async {
     // Fetch crop names from the database
-    List<String> cropSuggestions = await DatabaseHelper.getCropSuggestions();
+    List<String> cropSuggestions = await DatabaseHelper.instance.getCropSuggestions();
     setState(() {
       _cropSuggestions = cropSuggestions;
     });
@@ -87,7 +86,7 @@ class _DetailsState extends State<Details> {
     );
 
     if (confirmDelete == true) {
-      await DatabaseHelper.deletePlanting(id);
+      await DatabaseHelper.instance.deletePlanting(id);
       _fetchPlantings();
     }
   }
@@ -418,7 +417,7 @@ class _EditPlantingPageState extends State<EditPlantingPage> {
       'cropHarvest': _cropHarvestController.text,
     };
 
-    await DatabaseHelper.updatePlanting(widget.planting['id'], updatedPlanting);
+    await DatabaseHelper.instance.updatePlanting(widget.planting['id'], updatedPlanting);
     Navigator.pop(context);
   }
 

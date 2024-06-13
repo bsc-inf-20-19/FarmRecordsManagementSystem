@@ -11,7 +11,7 @@ class ActivityPage extends StatelessWidget {
       body: ListView(
         children: const [
           ActivityBarWidget(),
-          //Activities
+          // Activities
           ActivitySection(),
         ],
       ),

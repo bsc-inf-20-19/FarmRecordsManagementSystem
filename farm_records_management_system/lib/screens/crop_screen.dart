@@ -1,6 +1,5 @@
 import 'package:farm_records_management_system/components/crops_section.dart';
 import 'package:flutter/material.dart';
-
 import '../widgets/crops/activity/cropbar_widget.dart';
 
 class CropsFieldPage extends StatelessWidget {
@@ -12,7 +11,7 @@ class CropsFieldPage extends StatelessWidget {
       body: ListView(
         children: const [
           CropBarWidget(),
-          //My Crop Section
+          // My Crop Section
           CropsSection(),
         ],
       ),

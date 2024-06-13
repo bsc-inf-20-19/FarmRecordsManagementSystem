@@ -37,11 +37,7 @@ class CropsSection extends StatelessWidget {
                   },
                   child: const ActivityCard(),
                 ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+              ])),
+        ]));
   }
 }

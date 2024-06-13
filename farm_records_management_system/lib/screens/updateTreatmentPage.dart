@@ -1,4 +1,4 @@
-import 'package:farm_records_management_system/screens/databaseHelper.dart';
+import 'package:farm_records_management_system/database/databaseHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -22,7 +22,7 @@ class _UpdateTreatmentPageState extends State<UpdateTreatmentPage> {
 
   void fetchTreatment() async {
     Map<String, dynamic>? treatmentData =
-        await DatabaseHelper.getTreatment(widget.treatmentId);
+        await DatabaseHelper.instance.getTreatment(widget.treatmentId);
 
     if (treatmentData != null) {
       setState(() {
@@ -68,7 +68,7 @@ class _UpdateTreatmentPageState extends State<UpdateTreatmentPage> {
         'quantity': double.tryParse(_quantityController.text),
       };
 
-      await DatabaseHelper.updateTreatment(
+      await DatabaseHelper.instance.updateTreatment(
           widget.treatmentId, updatedTreatment);
       Navigator.pop(context, true);
     }
@@ -90,114 +90,121 @@ class _UpdateTreatmentPageState extends State<UpdateTreatmentPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              GestureDetector(
-                onTap: () => _selectDate(context),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(5),
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                GestureDetector(
+                  onTap: () => _selectDate(context),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Text(
+                      _selectedDate != null
+                          ? DateFormat('yyyy-MM-dd').format(_selectedDate!)
+                          : 'Select Date',
+                    ),
                   ),
-                  child: Text(
-                    _selectedDate != null
-                        ? DateFormat('yyyy-MM-dd').format(_selectedDate!)
-                        : 'Select Date',
+                ),
+                const SizedBox(height: 20),
+                DropdownButtonFormField<String>(
+                  value: _selectedStatus,
+                  items: ['Planned', 'Done'].map((status) {
+                    return DropdownMenuItem(
+                      value: status,
+                      child: Text(status),
+                    );
+                  }).toList(),
+                  decoration: const InputDecoration(
+                    labelText: 'Status',
+                    border: OutlineInputBorder(),
                   ),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedStatus = value;
+                    });
+                  },
+                  validator: (value) {
+                    if (value == null) {
+                      return 'Please select a status';
+                    }
+                    return null;
+                  },
                 ),
-              ),
-              const SizedBox(height: 20),
-              DropdownButtonFormField<String>(
-                value: _selectedStatus,
-                items: ['Planned', 'Done'].map((status) {
-                  return DropdownMenuItem(
-                    value: status,
-                    child: Text(status),
-                  );
-                }).toList(),
-                decoration: const InputDecoration(
-                  labelText: 'Status',
-                  border: OutlineInputBorder(),
+                const SizedBox(height: 20),
+                DropdownButtonFormField<String>(
+                  value: _selectedTreatmentType,
+                  items: [
+                    'Fertilizer',
+                    'Fungicide',
+                    'Herbicide',
+                    'Insecticide',
+                    'Nutrients',
+                    'Other',
+                  ].map((type) {
+                    return DropdownMenuItem(
+                      value: type,
+                      child: Text(type),
+                    );
+                  }).toList(),
+                  decoration: const InputDecoration(
+                    labelText: 'Treatment Type',
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedTreatmentType = value;
+                    });
+                  },
+                  validator: (value) {
+                    if (value == null) {
+                      return 'Please select a treatment type';
+                    }
+                    return null;
+                  },
                 ),
-                onChanged: (value) {
-                  _selectedStatus = value;
-                },
-                validator: (value) {
-                  if (value == null) {
-                    return 'Please select a status';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
-              DropdownButtonFormField<String>(
-                value: _selectedTreatmentType,
-                items: [
-                  'Fertilizer',
-                  'Fungicide',
-                  'Herbicide',
-                  'Insecticide',
-                  'Nutrients',
-                  'Other',
-                ].map((type) {
-                  return DropdownMenuItem(
-                    value: type,
-                    child: Text(type),
-                  );
-                }).toList(),
-                decoration: const InputDecoration(
-                  labelText: 'Treatment Type',
-                  border: OutlineInputBorder(),
+                const SizedBox(height: 20),
+                TextFormField(
+                  controller: _productUsedController,
+                  decoration: const InputDecoration(
+                    labelText: 'Product Used',
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the product used';
+                    }
+                    return null;
+                  },
                 ),
-                onChanged: (value) {
-                  _selectedTreatmentType = value;
-                },
-                validator: (value) {
-                  if (value == null) {
-                    return 'Please select a treatment type';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _productUsedController,
-                decoration: const InputDecoration(
-                  labelText: 'Product Used',
-                  border: OutlineInputBorder(),
+                const SizedBox(height: 20),
+                TextFormField(
+                  controller: _quantityController,
+                  decoration: const InputDecoration(
+                    labelText: 'Quantity of Product',
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the quantity';
+                    }
+                    return null;
+                  },
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the product used';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _quantityController,
-                decoration: const InputDecoration(
-                  labelText: 'Quantity of Product',
-                  border: OutlineInputBorder(),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    _updateTreatment(context);
+                  },
+                  child: const Text('Update Treatment'),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the quantity';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  _updateTreatment(context);
-                },
-                child: const Text('Update Treatment'),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

@@ -12,51 +12,63 @@ class ActivitySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.all(8.0),
         color: Colors.white,
-        child: ListView(children: [
-          SizedBox(
-              height: 200,
-              child: Row(children: [
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const NewPlantPage()));
-                  },
-                  child: const PlantingCard(),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) =>const NewPlantPage()));
+                    },
+                    child: const PlantingCard(),
+                  ),
                 ),
-                InkWell(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => const MyHomePage()));
-                  },
-                  child: const HarvestCard(),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => const MyHomePage()));
+                    },
+                    child:const HarvestCard(),
+                  ),
                 ),
-              ])),
-          SizedBox(
-              height: 200,
-              child: Row(children: [
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const TreatmentsPage()));
-                  },
-                  child: const TreatmentCard(),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => const TreatmentsPage()));
+                    },
+                    child: const TreatmentCard(),
+                  ),
                 ),
-                InkWell(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => const MyHomePage()));
-                  },
-                  child: const TasksCard(),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) =>const MyHomePage()));
+                    },
+                    child:const TasksCard(),
+                  ),
                 ),
-              ]))
-        ]));
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

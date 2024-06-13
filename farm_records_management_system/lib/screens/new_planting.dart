@@ -1,6 +1,5 @@
 import 'dart:convert';
-
-import 'package:farm_records_management_system/screens/databaseHelper.dart';
+import 'package:farm_records_management_system/database/databaseHelper.dart';
 import 'package:farm_records_management_system/screens/detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
@@ -45,6 +44,7 @@ class _NewPlantPageState extends State<NewPlantPage> {
   final _cropTypeController = TextEditingController();
   final _cropPlotController = TextEditingController();
   final _cropHarvestController = TextEditingController();
+  final _dateController = TextEditingController();
 
   final List<String> _cropTypeList = ["Maize", "Tobacco", "G. Nuts", "Beans"];
   final _cropDropdownController = TextEditingController();
@@ -56,7 +56,6 @@ class _NewPlantPageState extends State<NewPlantPage> {
     "B01 Field"
   ];
   final _fieldDropdownController = TextEditingController();
-
   @override
   void dispose() {
     _cropDecController.dispose();
@@ -80,7 +79,10 @@ class _NewPlantPageState extends State<NewPlantPage> {
 
       if (result.files.single.extension == 'csv') {
         final input = file.openRead();
-        final fields = await input.transform(utf8.decoder).transform(CsvToListConverter()).toList();
+        final fields = await input
+            .transform(utf8.decoder)
+            .transform(CsvToListConverter())
+            .toList();
 
         for (var row in fields) {
           Map<String, dynamic> plantingData = {
@@ -93,7 +95,7 @@ class _NewPlantPageState extends State<NewPlantPage> {
             'cropPlotNumber': row[6],
             'cropHarvest': row[7],
           };
-          await DatabaseHelper.insertPlanting(plantingData);
+          await DatabaseHelper.instance.insertPlanting(plantingData);
         }
       } else if (result.files.single.extension == 'xlsx') {
         var bytes = file.readAsBytesSync();
@@ -112,7 +114,7 @@ class _NewPlantPageState extends State<NewPlantPage> {
               'cropPlotNumber': row[6]?.value,
               'cropHarvest': row[7]?.value,
             };
-            await DatabaseHelper.insertPlanting(plantingData);
+            await DatabaseHelper.instance.insertPlanting(plantingData);
           }
         }
       }
@@ -154,11 +156,7 @@ class _NewPlantPageState extends State<NewPlantPage> {
                   borderSide: BorderSide(color: Colors.blue.shade300),
                 ),
               ),
-              controller: TextEditingController(
-                text: _selectedDate != null
-                    ? '${_selectedDate!.toLocal()}'.split(' ')[0]
-                    : '',
-              ),
+              controller: _dateController,
               readOnly: true,
             ),
             const SizedBox(height: 10.0),
@@ -207,20 +205,24 @@ class _NewPlantPageState extends State<NewPlantPage> {
               fieldName: "Seed quantity",
             ),
             const SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             MyTextField(
               myController: _cropCompanyController,
               fieldName: "Seed company",
             ),
+            const SizedBox(height: 10.0),
             const SizedBox(height: 10.0),
             MyTextField(
               myController: _cropTypeController,
               fieldName: "Seed type",
             ),
             const SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             MyTextField(
               myController: _cropPlotController,
               fieldName: "Seed plot number",
             ),
+            const SizedBox(height: 10.0),
             const SizedBox(height: 10.0),
             MyTextField(
               myController: _cropHarvestController,
@@ -240,7 +242,9 @@ class _NewPlantPageState extends State<NewPlantPage> {
       onPressed: () async {
         // Create a map to hold the data
         Map<String, dynamic> plantingData = {
-          'date': _selectedDate != null ? '${_selectedDate!.toLocal()}'.split(' ')[0] : '',
+          'date': _selectedDate != null
+              ? '${_selectedDate!.toLocal()}'.split(' ')[0]
+              : '',
           'crop': _cropDropdownController.text,
           'field': _fieldDropdownController.text,
           'description': _cropDecController.text,
@@ -251,7 +255,7 @@ class _NewPlantPageState extends State<NewPlantPage> {
         };
 
         // Insert data into the database
-        await DatabaseHelper.insertPlanting(plantingData);
+        await DatabaseHelper.instance.insertPlanting(plantingData);
 
         // Navigate to the Details page and pass the data
         Navigator.push(
@@ -273,12 +277,12 @@ class _NewPlantPageState extends State<NewPlantPage> {
 
 class MyTextField extends StatelessWidget {
   const MyTextField({
-    super.key,
+    Key? key,
     required this.myController,
     required this.fieldName,
     this.myIcon = Icons.verified_user_outlined,
     this.prefixIconColor = Colors.blueAccent,
-  });
+  }) : super(key: key);
 
   final TextEditingController myController;
   final String fieldName;
@@ -287,15 +291,15 @@ class MyTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: myController,
+    return TextField(
       decoration: InputDecoration(
         labelText: fieldName,
         border: const OutlineInputBorder(),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.green.shade300),
+          borderSide: BorderSide(color: Colors.blue.shade300),
         ),
       ),
+      controller: myController,
     );
   }
 }
