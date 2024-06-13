@@ -1,5 +1,4 @@
 import 'package:farm_records_management_system/farmer/farmer_DAO.dart';
-import 'package:farm_records_management_system/profileManagement/registration.dart';
 import 'package:farm_records_management_system/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -17,13 +16,12 @@ class _LoginScreenState extends State<LoginScreen> {
     String email = _emailController.text;
     String password = _passwordController.text;
 
-    var farmer = await FarmerDAO.instance
-        .getFarmerByEmailAndPassword(email, password);
+    var farmer = await FarmerDAO.instance.getFarmerByEmailAndPassword(email, password);
 
     if (farmer != null) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => MyHomePage()),
+        MaterialPageRoute(builder: (context) => const MyHomePage()),
       );
     } else {
       setState(() {
@@ -38,12 +36,12 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: Colors.blueGrey[50],
       body: Center(
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 32.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 32.0),
           decoration: BoxDecoration(
-            color: Color.fromARGB(255, 255, 255, 255),
+            color: const Color.fromARGB(255, 255, 255, 255),
             borderRadius: BorderRadius.circular(10.0),
             boxShadow: [
-              BoxShadow(
+              const BoxShadow(
                 color: Colors.black12,
                 blurRadius: 10.0,
               ),
@@ -56,62 +54,59 @@ class _LoginScreenState extends State<LoginScreen> {
               CircleAvatar(
                 radius: 40,
                 backgroundColor: Colors.blueGrey[100],
-                child: Icon(
+                child: const Icon(
                   Icons.person,
                   size: 50,
                   color: Color.fromARGB(255, 163, 159, 95),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextField(
                 controller: _emailController,
                 decoration: InputDecoration(
                   labelText: 'Email ID',
-                  prefixIcon: Icon(Icons.email),
+                  prefixIcon: const Icon(Icons.email),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextField(
                 controller: _passwordController,
                 decoration: InputDecoration(
                   labelText: 'Password',
-                  prefixIcon: Icon(Icons.lock),
+                  prefixIcon: const Icon(Icons.lock),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
                 obscureText: true,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _login,
-                child: Text('Login'),
+                child: const Text('Login'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blueGrey,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => RegistrationScreen()));
+                  Navigator.pushNamed(context, '/register');
                 },
-                child: Text('Register'),
+                child: const Text('Register'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blueGrey[300],
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                 ),
               ),
               if (_errorMessage.isNotEmpty)
@@ -119,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: const EdgeInsets.only(top: 10.0),
                   child: Text(
                     _errorMessage,
-                    style: TextStyle(color: Colors.red),
+                    style: const TextStyle(color: Colors.red),
                   ),
                 ),
             ],

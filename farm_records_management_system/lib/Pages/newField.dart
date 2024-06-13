@@ -48,7 +48,7 @@ class _NewFieldPageState extends State<NewFieldPage> {
         'notes': _notesController.text,
       };
 
-      await DatabaseHelper.insertField(newField);
+      await DatabaseHelper.instance.insertField(newField);
       widget.onAdd(newField);
       Navigator.pop(context, true);
     }

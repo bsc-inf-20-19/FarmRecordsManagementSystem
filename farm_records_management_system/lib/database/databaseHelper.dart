@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._instance();
@@ -15,11 +16,10 @@ class DatabaseHelper {
   String farmersTable = 'farmersTable';
   String farmTable = 'farmTable';
   String cropsTable = 'cropsTable';
-  String incomeTable = 'incomeTable'; // Newly added
-  String expenseTable = 'expenseTable'; // Newly added
+  String incomeTable = 'incomeTable';
+  String expenseTable = 'expenseTable';
   String inventoryTable = 'inventoryTable';
   String treatmentsTable = 'treatmentsTable';
-  // other table names...
 
   // Farmer columns
   String farmersID = 'farmersID';
@@ -41,15 +41,23 @@ class DatabaseHelper {
   Future<Database> _initDb() async {
     final dbDir = await getDatabasesPath();
     final dbPath = join(dbDir, 'farm_management.db');
-    final db = await openDatabase(dbPath, version: 1, onCreate: _createDb);
-    return db;
+
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      sqfliteFfiInit();
+      var databaseFactory = databaseFactoryFfi;
+      final db = await databaseFactory.openDatabase(dbPath, options: OpenDatabaseOptions(
+        version: 1,
+        onCreate: _createDb,
+      ));
+      return db;
+    } else {
+      final db = await openDatabase(dbPath, version: 1, onCreate: _createDb);
+      return db;
+    }
   }
 
-  // Method to create the database tables
   void _createDb(Database db, int version) async {
-    // Create a table for Treatments
-    await db.execute(
-      '''
+    await db.execute('''
       CREATE TABLE IF NOT EXISTS $treatmentsTable (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         date TEXT,
@@ -60,30 +68,29 @@ class DatabaseHelper {
         quantity REAL,
         specific_to_planting TEXT
       )
-      ''',
-    );
+    ''');
 
     await db.execute('''
-    CREATE TABLE $farmersTable (
-      $farmersID INTEGER PRIMARY KEY AUTOINCREMENT,
-      firstName TEXT,
-      lastName TEXT,
-      email TEXT,
-      phone TEXT,
-      password TEXT
-    )
-  ''');
+      CREATE TABLE $farmersTable (
+        $farmersID INTEGER PRIMARY KEY AUTOINCREMENT,
+        firstName TEXT,
+        lastName TEXT,
+        email TEXT,
+        phone TEXT,
+        password TEXT
+      )
+    ''');
 
     await db.execute('''
-    CREATE TABLE $farmTable (
-      farmID INTEGER PRIMARY KEY AUTOINCREMENT,
-      $farmersID INTEGER,
-      farmName TEXT,
-      size TEXT,
-      type TEXT,
-      FOREIGN KEY ($farmersID) REFERENCES $farmersTable($farmersID)
-    )
-  ''');
+      CREATE TABLE $farmTable (
+        farmID INTEGER PRIMARY KEY AUTOINCREMENT,
+        $farmersID INTEGER,
+        farmName TEXT,
+        size TEXT,
+        type TEXT,
+        FOREIGN KEY ($farmersID) REFERENCES $farmersTable($farmersID)
+      )
+    ''');
 
     await db.execute('''
       CREATE TABLE $cropsTable (
@@ -99,57 +106,40 @@ class DatabaseHelper {
     ''');
 
     await db.execute('''
-    CREATE TABLE $incomeTable (
-      $incomeID INTEGER PRIMARY KEY AUTOINCREMENT,
-      $amount REAL NOT NULL,
-      $date TEXT NOT NULL,
-      $description TEXT,
-      $farmersID INTEGER,
-      FOREIGN KEY (farmersID) REFERENCES $farmersTable(farmersID)
-    )
-  ''');
-
-    await db.execute('''
-    CREATE TABLE $expenseTable (
-      $expenseID INTEGER PRIMARY KEY AUTOINCREMENT,
-      $amount REAL NOT NULL,
-      $date TEXT NOT NULL,
-      $description TEXT,
-      $farmersID INTEGER,
-      FOREIGN KEY (farmersID) REFERENCES $farmersTable(farmersID)
-    )
-  ''');
-
-    await db.execute('''
-  CREATE TABLE $inventoryTable (
-    ItemID INTEGER PRIMARY KEY AUTOINCREMENT,
-    ItemName TEXT NOT NULL,
-    Quantity INTEGER NOT NULL,
-    PurchaseDate TEXT,
-    Threshold INTEGER NOT NULL,
-    $farmersID INTEGER,
-    FOREIGN KEY (farmersID) REFERENCES $farmersTable (farmersID)
-  ) 
-  ''');
-    // Create a table for Expenses
-    await db.execute(
-      '''
-      CREATE TABLE IF NOT EXISTS expenses (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        date TEXT,
-        expense_type TEXT,
-        field TEXT,
-        amount REAL,
-        description TEXT,
-        specific_to_field TEXT,
-        customer_name TEXT
+      CREATE TABLE $incomeTable (
+        $incomeID INTEGER PRIMARY KEY AUTOINCREMENT,
+        $amount REAL NOT NULL,
+        $date TEXT NOT NULL,
+        $description TEXT,
+        $farmersID INTEGER,
+        FOREIGN KEY (farmersID) REFERENCES $farmersTable(farmersID)
       )
-      ''',
-    );
+    ''');
 
-    // Create a table for Fields
-    await db.execute(
-      '''
+    await db.execute('''
+      CREATE TABLE $expenseTable (
+        $expenseID INTEGER PRIMARY KEY AUTOINCREMENT,
+        $amount REAL NOT NULL,
+        $date TEXT NOT NULL,
+        $description TEXT,
+        $farmersID INTEGER,
+        FOREIGN KEY (farmersID) REFERENCES $farmersTable(farmersID)
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE $inventoryTable (
+        ItemID INTEGER PRIMARY KEY AUTOINCREMENT,
+        ItemName TEXT NOT NULL,
+        Quantity INTEGER NOT NULL,
+        PurchaseDate TEXT,
+        Threshold INTEGER NOT NULL,
+        $farmersID INTEGER,
+        FOREIGN KEY (farmersID) REFERENCES $farmersTable(farmersID)
+      )
+    ''');
+
+    await db.execute('''
       CREATE TABLE IF NOT EXISTS fields (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         fieldName TEXT,
@@ -159,12 +149,9 @@ class DatabaseHelper {
         fieldSize REAL,
         notes TEXT
       )
-      ''',
-    );
+    ''');
 
-    // Create a table for Tasks
-    await db.execute(
-      '''
+    await db.execute('''
       CREATE TABLE IF NOT EXISTS tasks (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         taskName TEXT,
@@ -174,26 +161,18 @@ class DatabaseHelper {
         field TEXT,
         notes TEXT
       )
-      ''',
-    );
-  }
-
-  // Method to handle database upgrades
-  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    if (oldVersion < 2) {
-      // Perform necessary upgrades here
-    }
+    ''');
   }
 
   Future<List<Map<String, dynamic>>> getTreatments() async {
-    Database db = await _initDb(); // Ensure proper initialization
-    return await db.query('treatmentsTable');
+    Database db = await _initDb();
+    return await db.query(treatmentsTable);
   }
 
   Future<Map<String, dynamic>?> getTreatment(int id) async {
-    Database db = await _initDb(); // Ensure proper initialization
+    Database db = await _initDb();
     List<Map<String, dynamic>> result = await db.query(
-      'treatmentsTable',
+      treatmentsTable,
       where: 'id = ?',
       whereArgs: [id],
       limit: 1,
@@ -202,14 +181,14 @@ class DatabaseHelper {
   }
 
   Future<int> deleteTreatment(int id) async {
-    Database db = await _initDb(); // Ensure proper initialization
-    return await db.delete('treatmentsTable', where: 'id = ?', whereArgs: [id]);
+    Database db = await _initDb();
+    return await db.delete(treatmentsTable, where: 'id = ?', whereArgs: [id]);
   }
 
   Future<int> updateTreatment(int id, Map<String, dynamic> data) async {
-    Database db = await _initDb(); // Ensure proper initialization
+    Database db = await _initDb();
     return await db.update(
-      'treatmentsTable',
+      treatmentsTable,
       data,
       where: 'id = ?',
       whereArgs: [id],
@@ -221,56 +200,40 @@ class DatabaseHelper {
     return await db.insert(DatabaseHelper.instance.treatmentsTable, row);
   }
 
-  Future<Map<String, dynamic>> getFinancialReport(int farmerID) async {
-    Database db = await this.db;
-    List<Map<String, dynamic>> incomeResult = await db.rawQuery('''
-      SELECT SUM($amount) as totalIncome
-      FROM $incomeTable
-    ''');
-    List<Map<String, dynamic>> expenseResult = await db.rawQuery('''
-      SELECT SUM($amount) as totalExpense
-      FROM $expenseTable
-    ''');
-    return {
-      'totalIncome': incomeResult.first['totalIncome'] ?? 0,
-      'totalExpense': expenseResult.first['totalExpense'] ?? 0,
-      'netIncome': (incomeResult.first['totalIncome'] ?? 0) -
-          (expenseResult.first['totalExpense'] ?? 0)
-    };
-  static Future<int> deleteTransaction(int id) async {
-    Database db = await _openDatabase(); // Ensure proper initialization
-    return await db.delete('expenses', where: 'id = ?', whereArgs: [id]);
+  Future<int> deleteTransaction(int id) async {
+    Database db = await _initDb();
+    return await db.delete(expenseTable, where: 'expenseID = ?', whereArgs: [id]);
   }
 
-  static Future<Map<String, dynamic>?> getTransaction(int id) async {
-    Database db = await _openDatabase(); // Ensure proper initialization
+  Future<Map<String, dynamic>?> getTransaction(int id) async {
+    Database db = await _initDb();
     List<Map<String, dynamic>> result = await db.query(
-      'expenses',
-      where: 'id = ?',
+      expenseTable,
+      where: 'expenseID = ?',
       whereArgs: [id],
       limit: 1,
     );
     return result.isNotEmpty ? result.first : null;
   }
 
-  static Future<List<Map<String, dynamic>>> getTransactions() async {
-    Database db = await _openDatabase(); // Ensure proper initialization
-    return await db.query('expenses');
+  Future<List<Map<String, dynamic>>> getTransactions() async {
+    Database db = await _initDb();
+    return await db.query(expenseTable);
   }
 
   // CRUD operations for fields
-  static Future<int> insertField(Map<String, dynamic> data) async {
-    Database db = await _openDatabase(); // Ensure proper initialization
+  Future<int> insertField(Map<String, dynamic> data) async {
+    Database db = await _initDb();
     return await db.insert('fields', data);
   }
 
-  static Future<List<Map<String, dynamic>>> getFields() async {
-    Database db = await _openDatabase(); // Ensure proper initialization
+  Future<List<Map<String, dynamic>>> getFields() async {
+    Database db = await _initDb();
     return await db.query('fields');
   }
 
-  static Future<Map<String, dynamic>?> getField(int id) async {
-    Database db = await _openDatabase(); // Ensure proper initialization
+  Future<Map<String, dynamic>?> getField(int id) async {
+    Database db = await _initDb();
     List<Map<String, dynamic>> result = await db.query(
       'fields',
       where: 'id = ?',
@@ -280,13 +243,13 @@ class DatabaseHelper {
     return result.isNotEmpty ? result.first : null;
   }
 
-  static Future<int> deleteField(int id) async {
-    Database db = await _openDatabase(); // Ensure proper initialization
+  Future<int> deleteField(int id) async {
+    Database db = await _initDb();
     return await db.delete('fields', where: 'id = ?', whereArgs: [id]);
   }
 
-  static Future<int> updateField(int id, Map<String, dynamic> data) async {
-    Database db = await _openDatabase(); // Ensure proper initialization
+  Future<int> updateField(int id, Map<String, dynamic> data) async {
+    Database db = await _initDb();
     return await db.update(
       'fields',
       data,
@@ -296,18 +259,18 @@ class DatabaseHelper {
   }
 
   // CRUD operations for tasks
-  static Future<int> insertTask(Map<String, dynamic> task) async {
-    Database db = await _openDatabase();
+  Future<int> insertTask(Map<String, dynamic> task) async {
+    Database db = await _initDb();
     return await db.insert('tasks', task);
   }
 
-  static Future<List<Map<String, dynamic>>> getTasks() async {
-    Database db = await _openDatabase();
+  Future<List<Map<String, dynamic>>> getTasks() async {
+    Database db = await _initDb();
     return await db.query('tasks');
   }
 
-  static Future<Map<String, dynamic>?> getTaskById(int id) async {
-    Database db = await _openDatabase();
+  Future<Map<String, dynamic>?> getTaskById(int id) async {
+    Database db = await _initDb();
     List<Map<String, dynamic>> result = await db.query(
       'tasks',
       where: 'id = ?',
@@ -317,18 +280,43 @@ class DatabaseHelper {
     return result.isNotEmpty ? result.first : null;
   }
 
-  static Future<int> deleteTask(int id) async {
-    Database db = await _openDatabase();
+  Future<int> deleteTask(int id) async {
+    Database db = await _initDb();
     return await db.delete('tasks', where: 'id = ?', whereArgs: [id]);
   }
 
-  static Future<int> updateTask(int id, Map<String, dynamic> data) async {
-    Database db = await _openDatabase();
+  Future<int> updateTask(int id, Map<String, dynamic> data) async {
+    Database db = await _initDb();
     return await db.update(
       'tasks',
       data,
       where: 'id = ?',
       whereArgs: [id],
     );
+  }
+
+  Future<Map<String, dynamic>> getFinancialReport(int farmerID) async {
+    Database db = await this.db;
+    List<Map<String, dynamic>> incomeResult = await db.rawQuery('''
+      SELECT SUM($amount) as totalIncome
+      FROM $incomeTable
+      WHERE $farmersID = ?
+    ''', [farmerID]);
+
+    List<Map<String, dynamic>> expenseResult = await db.rawQuery('''
+      SELECT SUM($amount) as totalExpense
+      FROM $expenseTable
+      WHERE $farmersID = ?
+    ''', [farmerID]);
+
+    double totalIncome = incomeResult[0]['totalIncome'] ?? 0.0;
+    double totalExpense = expenseResult[0]['totalExpense'] ?? 0.0;
+    double netIncome = totalIncome - totalExpense;
+
+    return {
+      'totalIncome': totalIncome,
+      'totalExpense': totalExpense,
+      'netIncome': netIncome,
+    };
   }
 }

@@ -36,7 +36,7 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
 
   Future<void> _loadTask(int taskId) async {
     try {
-      var task = await DatabaseHelper.getTaskById(taskId);
+      var task = await DatabaseHelper.instance.getTaskById(taskId);
       if (task != null) {
         setState(() {
           _taskNameController.text = task['taskName'] ?? '';
@@ -71,16 +71,16 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
       };
 
       if (widget.taskId == null) {
-        await DatabaseHelper.insertTask(newTask);
+        await DatabaseHelper.instance.insertTask(newTask);
       } else {
-        await DatabaseHelper.updateTask(widget.taskId!, newTask);
+        await DatabaseHelper.instance.updateTask(widget.taskId!, newTask);
       }
       Navigator.pop(context, true);
     }
   }
 
   Future<List<Map<String, dynamic>>> _getFields() async {
-    return await DatabaseHelper.getFields();
+    return await DatabaseHelper.instance.getFields();
   }
 
   @override

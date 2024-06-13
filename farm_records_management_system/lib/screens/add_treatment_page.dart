@@ -35,7 +35,7 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
   }
 
   Future<void> _loadFields() async {
-    final fields = await DatabaseHelper.getFields();
+    final fields = await DatabaseHelper.instance.getFields();
     setState(() {
       _existingFields = fields.map((field) => field['fieldName'].toString()).toList();
     });
@@ -60,7 +60,7 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
     if (picked != null) {
       setState(() {
         _selectedDate = picked;
-        _updateStatusBasedOnDate(); // Automatically set status based on date
+        _updateStatusBasedOnDate();
       });
     }
   }
@@ -68,11 +68,7 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
   void _updateStatusBasedOnDate() {
     if (_selectedDate != null) {
       final now = DateTime.now();
-      if (_selectedDate!.isBefore(now)) {
-        _selectedStatus = 'Done';
-      } else {
-        _selectedStatus = 'Planned';
-      }
+      _selectedStatus = _selectedDate!.isBefore(now) ? 'Done' : 'Planned';
     }
   }
 
@@ -260,35 +256,34 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-  onPressed: () {
-    if (_formKey.currentState!.validate()){
-      try {
-        // Check for null values and validate them
-        if (_selectedDate == null) {
-          throw Exception('Date is required'); // Custom error message
-        }
-        
-        // Build the new treatment map
-        Map<String, dynamic> newTreatment = {
-          'date': DateFormat("yyyy-MM-dd").format(_selectedDate!), // Ensure non-null date
-          'status': _selectedStatus, // Ensure it's not null
-          'treatment_type': _selectedTreatmentType, // Ensure it's not null
-          'field': _selectedField, // Ensure it's not null
-          'product_used': _productUsedController.text, // Ensure it's not empty
-          'quantity': double.tryParse(_quantityController.text) ?? 0.0, // Avoid null
-        };
-         DatabaseHelper.instance.insertTreatments(newTreatment);
-        // Navigate back to the previous screen
-        Navigator.pop(context, true);
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    try {
+                      if (_selectedDate == null) {
+                        throw Exception('Date is required');
+                      }
 
-      } catch (e) {
-        debugPrint('Error adding treatment: $e'); // Improved error handling
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error adding treatment: $e')), // Display error message
-        );
-      }
-    }
-  },
+                      Map<String, dynamic> newTreatment = {
+                        'date': DateFormat("yyyy-MM-dd").format(_selectedDate!),
+                        'status': _selectedStatus,
+                        'treatment_type': _selectedTreatmentType == 'Other'
+                            ? _customTreatmentTypeController.text
+                            : _selectedTreatmentType,
+                        'field': _selectedField,
+                        'product_used': _productUsedController.text,
+                        'quantity': double.tryParse(_quantityController.text) ?? 0.0,
+                      };
+
+                      DatabaseHelper.instance.insertTreatments(newTreatment);
+                      Navigator.pop(context, true);
+                    } catch (e) {
+                      debugPrint('Error adding treatment: $e');
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Error adding treatment: $e')),
+                      );
+                    }
+                  }
+                },
                 child: const Text('Add Treatment'),
               ),
             ],
