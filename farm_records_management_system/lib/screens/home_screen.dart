@@ -1,8 +1,8 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:farm_records_management_system/components/home_section.dart';
 import 'package:farm_records_management_system/widgets/appbar_widget.dart';
 import 'package:farm_records_management_system/widgets/drawer_widget.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -38,13 +38,11 @@ class MyHomePage extends StatelessWidget {
                       CupertinoIcons.search,
                       color: Color(0xFF3388E3C),
                     ),
-                    Container(
-                      height: 50,
-                      width: 300,
-                      child:  Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
+                   Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
                         child: TextFormField(
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: "Search farm...",
                             border: InputBorder.none,
                           ),

@@ -1,17 +1,47 @@
-import 'package:farm_records_management_system/screens/detail_page.dart';
 import 'package:flutter/material.dart';
+import 'package:farm_records_management_system/screens/detail_page.dart';
 
 class NewPlantPage extends StatefulWidget {
   const NewPlantPage({Key? key}) : super(key: key);
 
   @override
-  _HomeState createState() => _HomeState();
+  _NewPlantPageState createState() => _NewPlantPageState();
 }
 
-class _HomeState extends State<NewPlantPage> {
+class _NewPlantPageState extends State<NewPlantPage> {
   DateTime? _selectedDate;
 
-  // Function to show the date picker and set the selected date
+  final _dateController = TextEditingController();
+  final _cropDecController = TextEditingController();
+  final _cropCompanyController = TextEditingController();
+  final _cropTypeController = TextEditingController();
+  final _cropLotController = TextEditingController();
+  final _cropHarvestController = TextEditingController();
+
+  final List<String> _cropTypeList = ["Maize", "Tobacco", "G. Nuts", "Beans"];
+  final _cropDropdownController = TextEditingController();
+
+  final List<String> _fieldList = ["M01 Field", "T01 Field", "G01 Field", "B01 Field"];
+  final _fieldDropdownController = TextEditingController();
+
+  _NewPlantPageState() {
+    _cropDropdownController.text = _cropTypeList[0];
+    _fieldDropdownController.text = _fieldList[0];
+  }
+
+  @override
+  void dispose() {
+    _dateController.dispose();
+    _cropDecController.dispose();
+    _cropCompanyController.dispose();
+    _cropTypeController.dispose();
+    _cropLotController.dispose();
+    _cropHarvestController.dispose();
+    _cropDropdownController.dispose();
+    _fieldDropdownController.dispose();
+    super.dispose();
+  }
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -20,52 +50,12 @@ class _HomeState extends State<NewPlantPage> {
       lastDate: DateTime(2100),
     );
 
-    // If the user picked a date, set the selected date state
     if (picked != null && picked != _selectedDate) {
       setState(() {
         _selectedDate = picked;
+        _dateController.text = _selectedDate!.toLocal().toString().split(' ')[0];
       });
     }
-  }
-
-  _HomeState() {
-    _cropDropdownController.text = _cropTypeList[0];
-    _fieldDropdownController.text = _fieldList[0];
-  }
-
-  final _dateController = TextEditingController();
-  final _cropController = TextEditingController();
-  final _cropDecController = TextEditingController();
-  final _cropCompanyController = TextEditingController();
-  final _cropTypeController = TextEditingController();
-  final _cropLotController = TextEditingController();
-  final _cropHarvestController = TextEditingController();
-
-  List<String> _cropTypeList = ["Maize", "Tobacco", "G. Nuts", "Beans"];
-
-  final _cropDropdownController = TextEditingController();
-
-  List<String> _fieldList = [
-    "M01 Field",
-    "T01 Field",
-    "G01 Field",
-    "B01 Field"
-  ];
-
-  final _fieldDropdownController = TextEditingController();
-
-  @override
-  void dispose() {
-   _dateController.dispose();
-   _cropController.dispose();
-   _cropDecController.dispose();
-   _cropCompanyController.dispose();
-   _cropTypeController.dispose();
-   _cropLotController.dispose();
-   _cropHarvestController.dispose();
-   _cropDropdownController.dispose();
-   _fieldDropdownController.dispose();
-   super.dispose(); 
   }
 
   @override
@@ -76,14 +66,14 @@ class _HomeState extends State<NewPlantPage> {
         centerTitle: true,
       ),
       body: Container(
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         child: ListView(
           children: [
             TextField(
               decoration: InputDecoration(
                 labelText: 'Select a date',
                 suffixIcon: IconButton(
-                  icon: Icon(Icons.calendar_today),
+                  icon: const Icon(Icons.calendar_today),
                   onPressed: () => _selectDate(context),
                 ),
                 border: const OutlineInputBorder(),
@@ -91,137 +81,113 @@ class _HomeState extends State<NewPlantPage> {
                   borderSide: BorderSide(color: Colors.blue.shade300),
                 ),
               ),
-              controller: TextEditingController(
-                text: _selectedDate != null
-                    ? '${_selectedDate!.toLocal()}'.split(' ')[0]
-                    : '',
-              ),
+              controller: _dateController,
               readOnly: true,
             ),
-            //DropDown crop name  and field
-            DropdownButtonFormField(
-              value: _cropDropdownController.text,
-              items: _cropTypeList
-                  .map((e) => DropdownMenuItem(
-                        child: Text(e),
-                        value: e,
-                      ))
-                  .toList(),
-              onChanged: (val) {
-                setState(() {
-                  _cropDropdownController.text = val as String;
-                });
-              },
-              icon: const Icon(
-                Icons.arrow_drop_down_outlined,
-              ),
-              decoration: InputDecoration(
-                  labelText: "Select crop", border: UnderlineInputBorder()),
-            ),
-            SizedBox(height: 10.0),
-            DropdownButtonFormField(
-              value: _fieldDropdownController.text,
-              items: _fieldList
-                  .map((e) => DropdownMenuItem(
-                        child: Text(e),
-                        value: e,
-                      ))
-                  .toList(),
-              onChanged: (val) {
-                setState(() {
-                  _fieldDropdownController.text = val as String;
-                });
-              },
-              icon: const Icon(
-                Icons.arrow_drop_down_outlined,
-              ),
-              decoration: InputDecoration(
-                  labelText: "Select field", border: OutlineInputBorder()),
-            ),
-            SizedBox(height: 10.0),
-
-            //Textfields for seeds infomation
+            const SizedBox(height: 10.0),
+            _buildDropdownField("Select crop", _cropTypeList, _cropDropdownController),
+            const SizedBox(height: 10.0),
+            _buildDropdownField("Select field", _fieldList, _fieldDropdownController),
+            const SizedBox(height: 10.0),
             MyTextField(
               myController: _cropDecController,
               fieldName: "Seed quantity",
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             MyTextField(
               myController: _cropCompanyController,
               fieldName: "Seed company",
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             MyTextField(
               myController: _cropTypeController,
               fieldName: "Seed type",
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             MyTextField(
               myController: _cropLotController,
               fieldName: "Seed lot number",
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             MyTextField(
               myController: _cropHarvestController,
-              fieldName: "Estimated hrarvest",
+              fieldName: "Estimated harvest",
             ),
-            SizedBox(height: 10.0),
-            myBtn(context)
+            const SizedBox(height: 20.0),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Details(
+                      cropList: _cropDropdownController.text,
+                      fieldList: _fieldDropdownController.text,
+                      cropDescription: _cropDecController.text,
+                      cropCompany: _cropCompanyController.text,
+                      cropType: _cropTypeController.text,
+                      cropLotNumber: _cropLotController.text,
+                      cropHarvest: _cropHarvestController.text,
+                    ),
+                  ),
+                );
+              },
+              child: const Text('Submit'),
+            ),
           ],
         ),
       ),
     );
   }
 
-  OutlinedButton myBtn(BuildContext context) {
-    return OutlinedButton(
-      style: OutlinedButton.styleFrom(minimumSize: Size(200, 50)),
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) {
-            return Details(
-              cropList: _cropDropdownController.text,
-              fieldList: _fieldDropdownController.text,
-              cropDescription: _cropDecController.text,
-              cropCompany: _cropCompanyController.text,
-              cropType: _cropTypeController.text,
-              cropLotNumber: _cropLotController.text,
-              cropHarvest: _cropHarvestController.text,
+  Widget _buildDropdownField(String labelText, List<String> items, TextEditingController controller) {
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: labelText,
+        border: const OutlineInputBorder(),
+        suffixIcon: DropdownButton<String>(
+          items: items.map((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
             );
-          }),
-        );
-      },
-      child: Text("Add"),
+          }).toList(),
+          onChanged: (newValue) {
+            setState(() {
+              controller.text = newValue!;
+            });
+          },
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.blue.shade300),
+        ),
+      ),
+      readOnly: true,
     );
   }
 }
 
 class MyTextField extends StatelessWidget {
-  MyTextField({
+  const MyTextField({
     Key? key,
     required this.myController,
     required this.fieldName,
-    this.myIcon = Icons.verified_user_outlined,
-    this.prefixIconColor = Colors.blueAccent,
-  });
+  }) : super(key: key);
 
   final TextEditingController myController;
-  String fieldName;
-  final IconData myIcon;
-  Color prefixIconColor;
+  final String fieldName;
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: myController,
+    return TextField(
       decoration: InputDecoration(
         labelText: fieldName,
         border: const OutlineInputBorder(),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.green.shade300),
+          borderSide: BorderSide(color: Colors.blue.shade300),
         ),
       ),
+      controller: myController,
     );
   }
 }

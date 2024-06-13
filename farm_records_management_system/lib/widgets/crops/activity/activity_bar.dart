@@ -7,7 +7,7 @@ class ActivityBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -16,23 +16,23 @@ class ActivityBarWidget extends StatelessWidget {
               Navigator.pop(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MyHomePage(),
+                    builder: (context) => const MyHomePage(),
                   ));
             },
             child: Container(
-              padding: EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: Colors.green,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Icon(
+              child: const Icon(
                 Icons.arrow_back_ios_new,
                 size: 18,
                 color: Colors.white,
               ),
             ),
           ),
-          Text(
+          const Text(
             "Activity",
             style: TextStyle(
               fontSize: 20,
@@ -42,8 +42,8 @@ class ActivityBarWidget extends StatelessWidget {
           InkWell(
             onTap: () {},
             child: Container(
-              padding: EdgeInsets.all(8),
-              child: Icon(Icons.notifications),
+              padding: const EdgeInsets.all(8),
+              child: const Icon(Icons.notifications),
             ),
           )
         ],

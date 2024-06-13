@@ -1,16 +1,15 @@
-import 'package:farm_records_management_system/screens/databaseHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:farm_records_management_system/database/databaseHelper.dart';
+import 'package:farm_records_management_system/Pages/newField.dart';
 
 class AddTreatmentPage extends StatefulWidget {
-  final Function(Map<String, dynamic>) onAdd; // Callback for adding treatments
-  final List<String> existingFields; // List of existing fields for dropdown
-  final VoidCallback onNewFieldRequested; // Callback to add new fields
+  final Function(Map<String, dynamic>) onAdd;
+  final VoidCallback onNewFieldRequested;
 
   const AddTreatmentPage({
     super.key,
     required this.onAdd,
-    required this.existingFields,
     required this.onNewFieldRequested,
   });
 
@@ -27,13 +26,27 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
   String? _selectedTreatmentType;
   String? _selectedField;
   DateTime? _selectedDate;
+  List<String> _existingFields = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFields();
+  }
+
+  Future<void> _loadFields() async {
+    final fields = await DatabaseHelper.getFields();
+    setState(() {
+      _existingFields = fields.map((field) => field['fieldName'].toString()).toList();
+    });
+  }
 
   @override
   void dispose() {
     _productUsedController.dispose();
     _quantityController.dispose();
     _customTreatmentTypeController.dispose();
-    super.dispose(); // Proper resource cleanup
+    super.dispose();
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -47,11 +60,20 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
     if (picked != null) {
       setState(() {
         _selectedDate = picked;
+        _updateStatusBasedOnDate(); // Automatically set status based on date
       });
     }
   }
-   String _getStatusFromDate(DateTime date) {
-    return date.isAfter(DateTime.now()) ? 'Planned' : 'Done';
+
+  void _updateStatusBasedOnDate() {
+    if (_selectedDate != null) {
+      final now = DateTime.now();
+      if (_selectedDate!.isBefore(now)) {
+        _selectedStatus = 'Done';
+      } else {
+        _selectedStatus = 'Planned';
+      }
+    }
   }
 
   String _formatDate(DateTime? date) {
@@ -75,22 +97,19 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
             children: [
               GestureDetector(
                 onTap: () => _selectDate(context),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(5),
+                child: InputDecorator(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   ),
                   child: Text(
                     _selectedDate != null
-                        ? _formatDate(_selectedDate) // Format the date
-                        : 'Select Date', // Prompt to select a date
+                        ? _formatDate(_selectedDate)
+                        : 'Select Date',
                   ),
                 ),
               ),
               const SizedBox(height: 20),
-
-              // Dropdown for Status
               DropdownButtonFormField<String>(
                 value: _selectedStatus,
                 items: ['Planned', 'Done'].map((status) {
@@ -116,8 +135,6 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
                 },
               ),
               const SizedBox(height: 20),
-
-              // Dropdown for Treatment Type
               DropdownButtonFormField<String>(
                 value: _selectedTreatmentType,
                 items: [
@@ -150,7 +167,6 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
                 },
               ),
               const SizedBox(height: 20),
-
               if (_selectedTreatmentType == 'Other') ...[
                 TextFormField(
                   controller: _customTreatmentTypeController,
@@ -166,13 +182,13 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
                   },
                 ),
               ],
-              // Dropdown for Field
+              const SizedBox(height: 20),
               Row(
                 children: [
                   Expanded(
                     child: DropdownButtonFormField<String>(
                       value: _selectedField,
-                      items: widget.existingFields.map((field) {
+                      items: _existingFields.map((field) {
                         return DropdownMenuItem(
                           value: field,
                           child: Text(field),
@@ -196,15 +212,25 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
                     ),
                   ),
                   IconButton(
-                    onPressed: widget.onNewFieldRequested,
+                    onPressed: () async {
+                      final result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => NewFieldPage(onAdd: (newField) {
+                          setState(() {
+                            _existingFields.add(newField['fieldName']);
+                          });
+                        })),
+                      );
+                      if (result == true) {
+                        await _loadFields();
+                      }
+                    },
                     icon: const Icon(Icons.add),
                     tooltip: 'Add New Field',
                   ),
                 ],
               ),
               const SizedBox(height: 20),
-
-              // Product Used TextField
               TextFormField(
                 controller: _productUsedController,
                 decoration: const InputDecoration(
@@ -219,8 +245,6 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
                 },
               ),
               const SizedBox(height: 20),
-
-              // Quantity TextField
               TextFormField(
                 controller: _quantityController,
                 decoration: const InputDecoration(
@@ -235,8 +259,6 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
                 },
               ),
               const SizedBox(height: 20),
-
-              // Add Treatment Button
               ElevatedButton(
   onPressed: () {
     if (_formKey.currentState!.validate()){
@@ -270,7 +292,7 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
                 child: const Text('Add Treatment'),
               ),
             ],
-          )
+          ),
         ),
       ),
     );
