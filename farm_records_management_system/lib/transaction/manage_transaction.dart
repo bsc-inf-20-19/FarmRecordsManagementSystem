@@ -276,10 +276,6 @@ class _ManageTransactionsScreenState extends State<ManageTransactionsScreen> {
               },
             ),
           ),
-          // ElevatedButton(
-          //   onPressed: _showAddTransactionDialog,
-          //   child: Text('Add $type Transaction'),
-          // ),
         ],
       ),
     );

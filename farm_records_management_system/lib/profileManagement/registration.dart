@@ -12,15 +12,42 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   String _errorMessage = '';
 
   void _register() async {
-    String firstName = _firstNameController.text;
-    String lastName = _lastNameController.text;
-    String email = _emailController.text;
-    String password = _passwordController.text;
-    String confirmPassword = _confirmPasswordController.text;
+    String firstName = _firstNameController.text.trim();
+    String lastName = _lastNameController.text.trim();
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+    String confirmPassword = _confirmPasswordController.text.trim();
+    
 
+    // Validate fields
+    if (firstName.isEmpty || lastName.isEmpty || email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+      setState(() {
+        _errorMessage = 'All fields are required';
+      });
+      return;
+    }
+
+    // Validate email format
+    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email)) {
+      setState(() {
+        _errorMessage = 'Invalid email format';
+      });
+      return;
+    }
+
+    // Validate password length
+    if (password.length <= 5) {
+      setState(() {
+        _errorMessage = 'Password must be more than 5 characters';
+      });
+      return;
+    }
+
+    // Validate password match
     if (password != confirmPassword) {
       setState(() {
         _errorMessage = 'Passwords do not match';
@@ -28,6 +55,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       return;
     }
 
+    // Register farmer
     int result = await FarmerDAO.instance.registerFarmer(firstName, lastName, email, password);
 
     if (result == -1) {
@@ -38,19 +66,21 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       // Navigate to the login screen or home screen
       Navigator.pushReplacementNamed(context, '/login');
     }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Registration successful!')),
+      );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/background.png'), // Replace with your background image asset
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Center(
+      appBar: AppBar(
+        title: Text('Register'),
+      ),
+      body: Center(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(16.0),
           child: Container(
             padding: EdgeInsets.all(16.0),
             margin: EdgeInsets.symmetric(horizontal: 24.0),
@@ -83,32 +113,24 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ),
                 ),
                 SizedBox(height: 20.0),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _firstNameController,
-                        decoration: InputDecoration(
-                          labelText: 'First Name',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                        ),
-                      ),
+                TextField(
+                  controller: _firstNameController,
+                  decoration: InputDecoration(
+                    labelText: 'First Name',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
-                    SizedBox(width: 10.0),
-                    Expanded(
-                      child: TextField(
-                        controller: _lastNameController,
-                        decoration: InputDecoration(
-                          labelText: 'Last Name',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                        ),
-                      ),
+                  ),
+                ),
+                SizedBox(height: 10.0),
+                TextField(
+                  controller: _lastNameController,
+                  decoration: InputDecoration(
+                    labelText: 'Last Name',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
-                  ],
+                  ),
                 ),
                 SizedBox(height: 10.0),
                 TextField(

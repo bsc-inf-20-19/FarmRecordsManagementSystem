@@ -132,20 +132,6 @@ class DatabaseHelper {
   ) 
   ''');
     // Create a table for Expenses
-    await db.execute(
-      '''
-      CREATE TABLE IF NOT EXISTS expenses (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        date TEXT,
-        expense_type TEXT,
-        field TEXT,
-        amount REAL,
-        description TEXT,
-        specific_to_field TEXT,
-        customer_name TEXT
-      )
-      ''',
-    );
 
     // Create a table for Fields
     await db.execute(
@@ -176,27 +162,6 @@ class DatabaseHelper {
       )
       ''',
     );
-  }
-
-   Future<int> deleteTransaction(int id) async {
-    Database db = await _initDb(); // Ensure proper initialization
-    return await db.delete('expenses', where: 'id = ?', whereArgs: [id]);
-  }
-
-   Future<Map<String, dynamic>?> getTransaction(int id) async {
-    Database db = await _initDb(); // Ensure proper initialization
-    List<Map<String, dynamic>> result = await db.query(
-      'expenses',
-      where: 'id = ?',
-      whereArgs: [id],
-      limit: 1,
-    );
-    return result.isNotEmpty ? result.first : null;
-  }
-
-   Future<List<Map<String, dynamic>>> getTransactions() async {
-    Database db = await _initDb(); // Ensure proper initialization
-    return await db.query('expenses');
   }
 
   // CRUD operations for fields

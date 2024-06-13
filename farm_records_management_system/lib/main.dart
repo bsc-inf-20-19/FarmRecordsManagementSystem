@@ -2,14 +2,15 @@ import 'package:farm_records_management_system/profileManagement/login.dart';
 import 'package:farm_records_management_system/profileManagement/registration.dart';
 import 'package:farm_records_management_system/screens/home_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'dart:io' show Platform;
 
 void main() {
-  sqfliteFfiInit();
-  // Set the database factory
-  databaseFactory = databaseFactoryFfi;
+  
+  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+  }
   runApp(MyApp());
 
 }
@@ -24,9 +25,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primaryColor: const Color(0xFF33691E)),
       // home: MyHomePage(),
-        initialRoute: '/',
+        initialRoute: '/login',
       routes: {
-         '/': (context) => LoginScreen(),
+         '/login': (context) => LoginScreen(),
          '/register': (context) => RegistrationScreen(),
       },
     );
