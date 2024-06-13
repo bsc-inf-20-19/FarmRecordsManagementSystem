@@ -1,3 +1,4 @@
+import 'package:farm_records_management_system/Pages/transaction/transactions.dart';
 import 'package:farm_records_management_system/screens/fields_screen.dart';
 import 'package:farm_records_management_system/screens/home_screen.dart';
 import 'package:farm_records_management_system/transaction/financial_report.dart';
@@ -13,15 +14,14 @@ class HomeSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      color: Colors.white,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            height: 200,
-            child: Row(
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.all(8.0),
+        color: Colors.white,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
               children: [
                 Expanded(
                   child: InkWell(
@@ -31,7 +31,7 @@ class HomeSection extends StatelessWidget {
                         MaterialPageRoute(builder: (context) => const FieldScreen()),
                       );
                     },
-                    child: FieldsCard(),
+                    child:const FieldsCard(),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -43,16 +43,13 @@ class HomeSection extends StatelessWidget {
                         MaterialPageRoute(builder: (context) =>  ManageTransactionsScreen(farmerID: 1,)),
                       );
                     },
-                    child: TransCard(),
+                    child:const TransCard(),
                   ),
                 ),
               ],
             ),
-          ),
-          const SizedBox(height: 8),
-          Container(
-            height: 200,
-            child: Row(
+            const SizedBox(height: 8),
+            Row(
               children: [
                 Expanded(
                   child: InkWell(
@@ -62,7 +59,7 @@ class HomeSection extends StatelessWidget {
                         MaterialPageRoute(builder: (context) =>  FinancialReportManagement(farmerID: 1,)),
                       );
                     },
-                    child: ReportCard(),
+                    child:const ReportCard(),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -71,16 +68,16 @@ class HomeSection extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const MyHomePage()),
+                        MaterialPageRoute(builder: (context) => const MyHomePage()), // Navigate to Setup Screen
                       );
                     },
-                    child: SetupCard(),
+                    child:const SetupCard(),
                   ),
                 ),
               ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

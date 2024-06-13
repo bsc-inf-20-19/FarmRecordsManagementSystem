@@ -1,22 +1,29 @@
+import 'package:farm_records_management_system/Pages/taskListPage.dart';
 import 'package:flutter/material.dart';
 
 class TasksCard extends StatelessWidget {
-  const TasksCard({super.key});
+  const TasksCard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TaskListScreen(),
+          ),
+        );
+      },
       child: Container(
         height: 200,
-        width: MediaQuery.of(context).size.width / 2 -
-            32, // minus 32 due to the margin
+        width: MediaQuery.of(context).size.width / 2 - 32,
         margin: const EdgeInsets.all(14.0),
         padding: const EdgeInsets.all(14.0),
         decoration: const BoxDecoration(
-          color: Colors.white, // background color of the cards
+          color: Colors.white,
           borderRadius: BorderRadius.all(Radius.circular(20.0)),
           boxShadow: [
-            // this is the shadow of the card
             BoxShadow(
               color: Colors.black,
               spreadRadius: 0.5,
@@ -26,16 +33,17 @@ class TasksCard extends StatelessWidget {
           ],
         ),
         child: const Column(
-          mainAxisAlignment: MainAxisAlignment
-              .end, // posion the everything to the bottom
+          mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // place here your image
-            Text("Tasks",
-                style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold)),
+            Text(
+              "Tasks",
+              style: TextStyle(
+                fontSize: 20.0,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ],
         ),
       ),
