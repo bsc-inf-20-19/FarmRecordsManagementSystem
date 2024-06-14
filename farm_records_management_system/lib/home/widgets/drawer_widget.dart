@@ -1,3 +1,4 @@
+import 'package:farm_records_management_system/home/components/sections/task_section.dart';
 import 'package:farm_records_management_system/home/screens/home_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -75,11 +76,11 @@ class DrawerWidget extends StatelessWidget {
                   ));
             },
             leading: Icon(
-              CupertinoIcons.cart,
+              Icons.description,
               color: Color(0xFF3388E3C),
             ),
             title: Text(
-              "My Farm",
+              "My Farm Notes",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ),
@@ -88,7 +89,7 @@ class DrawerWidget extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MyHomePage(),
+                    builder: (context) => FarmTaskPage(),
                   ));
             },
             leading: Icon(

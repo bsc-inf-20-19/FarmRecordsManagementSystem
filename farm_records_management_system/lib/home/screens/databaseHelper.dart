@@ -3,6 +3,9 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class DatabaseHelper {
+  DatabaseHelper._privateConstructor();
+  static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
+
   static Future<Database> _openDatabase() async {
     final databasePath = await getDatabasesPath();
     final path = join(databasePath, 'my_database.db');
@@ -66,10 +69,9 @@ class DatabaseHelper {
 );
 
  // Create a table for harvests
-    await db.execute(
-      '''
-      CREATE TABLE IF NOT EXISTS harvests (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+    await db.execute('''
+      CREATE TABLE harvests (
+        harvestID INTEGER PRIMARY KEY AUTOINCREMENT,
         date TEXT,
         cropList TEXT,
         batchNo TEXT,
@@ -77,10 +79,9 @@ class DatabaseHelper {
         harvestQuality TEXT,
         unitCost TEXT,
         harvestIncome TEXT,
-        harvestNotes TEXT,
+        harvestNotes TEXT
       )
-      ''',
-    );
+    ''');
 
   //Create the 'livestock' table
     await db.execute('''
@@ -165,65 +166,64 @@ class DatabaseHelper {
     return await db.query('expenses');
   }
 
+
     // CRUD operations for harvests
-  static Future<int> insertHarvest(Map<String, dynamic> data) async {
+  Future<int> insertHarvest(Map<String, dynamic> harvest) async {
     Database db = await _openDatabase();
-    return await db.insert('harvests', data);
+    return await db.insert('harvests', harvest);
   }
 
-  static Future<List<Map<String, dynamic>>> getHarvests() async {
+  Future<List<Map<String, dynamic>>> getHarvests() async {
     Database db = await _openDatabase();
     return await db.query('harvests');
   }
 
-  static Future<Map<String, dynamic>?> getHarvest(int id) async {
+  Future<Map<String, dynamic>?> getHarvest(int id) async {
     Database db = await _openDatabase();
     List<Map<String, dynamic>> result = await db.query(
       'harvests',
-      where: 'id = ?',
+      where: 'harvestID = ?',
       whereArgs: [id],
       limit: 1,
     );
     return result.isNotEmpty ? result.first : null;
   }
 
-  
-  static Future<int> deleteHarvest(int id) async {
-    Database db = await _openDatabase(); // Ensure proper initialization
-    return await db.delete('harvests', where: 'id = ?', whereArgs: [id]);
-  }
-
-  static Future<int> updateHarvest(int id, Map<String, dynamic> data) async {
-    Database db = await _openDatabase(); // Ensure proper initialization
+  Future<int> updateHarvest(int id, Map<String, dynamic> data) async {
+    Database db = await _openDatabase();
     return await db.update(
       'harvests',
       data,
-      where: 'id = ?',
+      where: 'harvestID = ?',
       whereArgs: [id],
     );
   }
 
-
-  // Inserts a row into the 'livestock' table
-  Future<int> insertLivestock(Map<String, dynamic> row) async {
-    Database db = await _openDatabase();  // Get the database instance
-    // Insert the row into the table and return the id of the inserted row
-    return await db.insert('livestock', row);
+  Future<int> deleteHarvest(int id) async {
+    Database db = await _openDatabase();
+    return await db.delete('harvests', where: 'harvestID = ?', whereArgs: [id]);
   }
-
-  // Queries all rows from the 'livestock' table
-  Future<List<Map<String, dynamic>>> queryAllLivestock() async {
-    Database db = await _openDatabase();  // Get the database instance
-    // Query all rows from the table and return them as a list of maps
-    return await db.query('livestock');
-  }
-
-  // Deletes a row from the 'livestock' table by id
-  Future<int> deleteLivestock(int id) async {
-    Database db = await _openDatabase();  // Get the database instance
-    // Delete the row with the specified id and return the number of affected rows
-    return await db.delete('livestock', where: 'id = ?', whereArgs: [id]);
-  }
-
-
 }
+
+
+  // // Inserts a row into the 'livestock' table
+  // Future<int> insertLivestock(Map<String, dynamic> row) async {
+  //   Database db = await _openDatabase();  // Get the database instance
+  //   // Insert the row into the table and return the id of the inserted row
+  //   return await db.insert('livestock', row);
+  // }
+
+  // // Queries all rows from the 'livestock' table
+  // Future<List<Map<String, dynamic>>> queryAllLivestock() async {
+  //   Database db = await _openDatabase();  // Get the database instance
+  //   // Query all rows from the table and return them as a list of maps
+  //   return await db.query('livestock');
+  // }
+
+  // // Deletes a row from the 'livestock' table by id
+  // Future<int> deleteLivestock(int id) async {
+  //   Database db = await _openDatabase();  // Get the database instance
+  //   // Delete the row with the specified id and return the number of affected rows
+  //   return await db.delete('livestock', where: 'id = ?', whereArgs: [id]);
+  // }
+//}

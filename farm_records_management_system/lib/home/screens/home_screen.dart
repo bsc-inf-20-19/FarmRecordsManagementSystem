@@ -10,11 +10,23 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+       backgroundColor: Colors.green.shade500,
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.white), // Change icon color to white
+        titleTextStyle: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold), // Change title text color to white
+        leading: IconButton(
+          onPressed: () {
+            //handle menu
+          },
+          tooltip: 'Back',
+          icon: Icon(Icons.menu),
+        ),
+        title: Text('Farm Manager'),
+        centerTitle: true,
+      ),
       body: ListView(
-        children: [
-          AppBarWidget(),
-          SizedBox(height: 20,),
-          
+        children: [          
           SizedBox(height: 20,),
           //Home Cards
           HomeSection()

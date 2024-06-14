@@ -38,7 +38,7 @@ class ReportScreen extends StatelessWidget {
                     Icons.attach_money,
                     'Transactions',
                     '',
-                    [Colors.yellow.shade400, Colors.yellow.shade600],
+                    [Colors.red.shade400, Colors.red.shade600],
                   ),
                 ),
                 InkWell(
@@ -60,7 +60,7 @@ class ReportScreen extends StatelessWidget {
                     Icons.outbox,
                     'Harvests',
                     '',
-                    [Colors.amber.shade400, Colors.amber.shade600],
+                    [Colors.blue.shade400, Colors.blue.shade600],
                   ),
                 ),
                 InkWell(
@@ -83,17 +83,6 @@ class ReportScreen extends StatelessWidget {
                     'Tasks',
                     '',
                     [Colors.purple.shade400, Colors.purple.shade600],
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    // Add your onTap functionality here
-                  },
-                  child: _buildGridItem(
-                    Icons.description,
-                    'Farm Notes',
-                    '',
-                    [Colors.blue.shade400, Colors.blue.shade600],
                   ),
                 ),
               ],

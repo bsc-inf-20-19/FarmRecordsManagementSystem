@@ -1,5 +1,6 @@
 import 'package:farm_records_management_system/home/screens/crop_screen.dart';
 import 'package:farm_records_management_system/home/screens/livestock_screen.dart';
+import 'package:farm_records_management_system/home/screens/trans_screen.dart';
 import 'package:farm_records_management_system/home/widgets/crop_card.dart';
 import 'package:farm_records_management_system/home/widgets/livestock_card.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +37,7 @@ class FieldSection extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => LiveStockScreen(),
+                      builder: (context) => LivestockScreen(),
                     )
                   );
                 },

@@ -26,8 +26,8 @@ class _TransactionListScreenState extends State<TransactionListScreen> with Sing
       appBar: AppBar(
         backgroundColor: Colors.green.shade500,
         elevation: 0,
-        iconTheme: IconThemeData(color: Colors.white), // Change icon color to white
-        titleTextStyle: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold), // Change title text color to white
+        iconTheme: IconThemeData(color: Colors.white),
+        titleTextStyle: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
         leading: IconButton(
            onPressed: () {
             Navigator.pop(context);
@@ -37,8 +37,18 @@ class _TransactionListScreenState extends State<TransactionListScreen> with Sing
         ),
         title: Text('Transactions'),
         centerTitle: true,
+        bottom: TabBar(
+          controller: _tabController,
+          indicatorColor: Colors.green, // Change the indicator color here
+          indicatorWeight: 4.0, // Change the indicator thickness if needed
+          labelColor: Colors.white, // Active tab text color
+          unselectedLabelColor: Colors.white, // Inactive tab text color
+          tabs: [
+            Tab(text: 'Expenses'),
+            Tab(text: 'Income'),
+          ],
+        ),
       ),
-            
       body: Column(
         children: [
           Padding(

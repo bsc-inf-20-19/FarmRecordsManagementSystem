@@ -1,7 +1,6 @@
 import 'package:farm_records_management_system/home/components/forms/addCrop.dart';
-import 'package:farm_records_management_system/home/screens/add_harvest_page.dart';
 import 'package:farm_records_management_system/home/components/sections/task_section.dart';
-import 'package:farm_records_management_system/home/screens/harvests_view.dart';
+import 'package:farm_records_management_system/home/screens/viewDetailPage/harvestsViewPage.dart';
 import 'package:farm_records_management_system/home/widgets/crops/activity/harvest_card.dart';
 import 'package:farm_records_management_system/home/widgets/crops/activity/planting_card.dart';
 import 'package:farm_records_management_system/home/widgets/crops/activity/tasks_card.dart';
@@ -40,7 +39,7 @@ class ActivitySection extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => HarvestsViewPage()
+                      builder: (context) =>FarmTaskPage()
                     )
                   );
                 },
