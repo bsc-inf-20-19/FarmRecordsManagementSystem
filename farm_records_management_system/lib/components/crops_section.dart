@@ -1,4 +1,6 @@
 import 'package:farm_records_management_system/screens/activity_screen.dart';
+import 'package:farm_records_management_system/screens/crop_list_page.dart';
+import 'package:farm_records_management_system/screens/new_crop_page.dart';
 import 'package:farm_records_management_system/widgets/crops/activity/activity_card.dart';
 import 'package:farm_records_management_system/widgets/crops/activity/crop_list_card.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +25,7 @@ class CropsSection extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Details(cropCompany: '',cropHarvest: '', cropPlotNumber: '', cropType: '',)),
+                      MaterialPageRoute(builder: (context) => CropListPage()),
                     );
                   },
                   child: const CropListCard(),

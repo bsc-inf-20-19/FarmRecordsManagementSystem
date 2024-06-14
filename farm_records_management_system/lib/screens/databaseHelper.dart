@@ -25,7 +25,7 @@ class DatabaseHelper {
     // Open the database
     return openDatabase(
       path,
-      version: 1, // Increment this to trigger schema upgrades
+      version: 2, // Increment this to trigger schema upgrades
       onCreate: _createDatabase,
       onUpgrade: _onUpgrade,
     );
@@ -77,7 +77,20 @@ class DatabaseHelper {
         cropCompany TEXT,
         cropType TEXT,
         cropPlotNumber TEXT,
+        seedType TEXT,
         cropHarvest TEXT
+      )
+      ''',
+    );
+
+    // Create a table for Crops
+    await db.execute(
+      '''
+      CREATE TABLE IF NOT EXISTS crops (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        harvestUnits TEXT,
+        notes TEXT
       )
       ''',
     );
@@ -87,7 +100,16 @@ class DatabaseHelper {
   static Future<void> _onUpgrade(
       Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
-      // Perform necessary upgrades here
+      await db.execute(
+        '''
+        CREATE TABLE IF NOT EXISTS crops (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT,
+          harvestUnits TEXT,
+          notes TEXT
+        )
+        ''',
+      );
     }
   }
 
@@ -205,6 +227,41 @@ class DatabaseHelper {
     );
     return crops.map((e) => e['crop'] as String).toList();
   }
+
+  // CRUD operations for crops
+  static Future<int> insertCrop(Map<String, dynamic> data) async {
+    Database db = await _openDatabase();
+    return await db.insert('crops', data);
+  }
+
+  static Future<List<Map<String, dynamic>>> getCrops() async {
+    Database db = await _openDatabase();
+    return await db.query('crops');
+  }
+
+  static Future<Map<String, dynamic>?> getCrop(int id) async {
+    Database db = await _openDatabase();
+    List<Map<String, dynamic>> result = await db.query(
+      'crops',
+      where: 'id = ?',
+      whereArgs: [id],
+      limit: 1,
+    );
+    return result.isNotEmpty ? result.first : null;
+  }
+
+  static Future<int> deleteCrop(int id) async {
+    Database db = await _openDatabase();
+    return await db.delete('crops', where: 'id = ?', whereArgs: [id]);
+  }
+
+  static Future<int> updateCrop(int id, Map<String, dynamic> data) async {
+    Database db = await _openDatabase();
+    return await db.update(
+      'crops',
+      data,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
 }
-
-

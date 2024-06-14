@@ -14,7 +14,7 @@ class Details extends StatefulWidget {
     required this.cropCompany,
     required this.cropType,
     required this.cropPlotNumber,
-    required this.cropHarvest,
+    required this.cropHarvest, required String seedType,
   }) : super(key: key);
 
   final String cropCompany;
@@ -183,6 +183,7 @@ class _DetailsState extends State<Details> {
         planting['cropPlotNumber'] ?? 'N/A',
         planting['cropHarvest'] ?? 'N/A',
         planting['date'] ?? 'N/A',
+        planting['seedType'] ?? 'N/A',
       ]);
     }
 
@@ -306,7 +307,7 @@ class _DetailsState extends State<Details> {
                               _buildDetailRow('Field', planting['field'], Icons.landscape),
                               _buildDetailRow('Seed Quantity', planting['description'], Icons.production_quantity_limits),
                               _buildDetailRow('Seed Company', planting['cropCompany'], Icons.business),
-                              _buildDetailRow('Seed Type', planting['cropType'], Icons.grass),
+                              _buildDetailRow('Seed Type', planting['seedType'], Icons.grass),
                               _buildDetailRow('Seed Plot Number', planting['cropPlotNumber'], Icons.confirmation_number),
                               _buildDetailRow('Estimated Harvest', planting['cropHarvest'], Icons.eco),
                               _buildDetailRow('Date', planting['date'], Icons.date_range),
