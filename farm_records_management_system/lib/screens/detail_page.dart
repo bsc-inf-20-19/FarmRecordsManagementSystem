@@ -6,6 +6,9 @@ import 'package:open_file/open_file.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:farm_records_management_system/screens/databaseHelper.dart';
 import 'package:farm_records_management_system/screens/new_planting.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:permission_handler/permission_handler.dart';
 
 class Details extends StatefulWidget {
   const Details({
@@ -125,12 +128,72 @@ class _DetailsState extends State<Details> {
     ).then((_) => _fetchPlantings());
   }
 
+  Future<void> _requestPermissions() async {
+    if (await Permission.storage.request().isGranted) {
+      // Permission granted, do nothing
+    } else {
+      // Permission denied, show error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Storage permission is required to save files')),
+      );
+    }
+  }
+
   Future<void> _exportToPdf() async {
-    // Implementation for PDF export remains unchanged
-    // You can refer to your existing _exportToPdf() function
+    await _requestPermissions();
+
+    final pdf = pw.Document();
+    pdf.addPage(
+      pw.Page(
+        build: (pw.Context context) {
+          return pw.ListView.builder(
+            itemCount: _plantings.length,
+            itemBuilder: (context, index) {
+              final planting = _plantings[index];
+              return pw.Container(
+                padding: pw.EdgeInsets.all(10),
+                child: pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Text('Crop: ${planting['crop'] ?? 'N/A'}'),
+                    pw.Text('Field: ${planting['field'] ?? 'N/A'}'),
+                    pw.Text('Seed Quantity: ${planting['description'] ?? 'N/A'}'),
+                    pw.Text('Seed Company: ${planting['cropCompany'] ?? 'N/A'}'),
+                    pw.Text('Seed Type: ${planting['cropType'] ?? 'N/A'}'),
+                    pw.Text('Seed Plot Number: ${planting['cropPlotNumber'] ?? 'N/A'}'),
+                    pw.Text('Estimated Harvest: ${planting['cropHarvest'] ?? 'N/A'}'),
+                    pw.Text('Date: ${planting['date'] ?? 'N/A'}'),
+                  ],
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+
+    final directory = await getExternalStorageDirectory();
+    if (directory == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error accessing external storage')),
+      );
+      return;
+    }
+
+    final path = directory.path;
+    final pdfFile = File('$path/plantings.pdf');
+    await pdfFile.writeAsBytes(await pdf.save());
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('PDF exported to ${pdfFile.path}')),
+    );
+
+    await OpenFile.open(pdfFile.path);
   }
 
   Future<void> _exportToCsv() async {
+    await _requestPermissions();
+
     List<List<dynamic>> csvData = [];
 
     // Header row
@@ -207,8 +270,8 @@ class _DetailsState extends State<Details> {
             tooltip: 'Export to PDF',
           ),
           IconButton(
-            icon: const Icon(Icons.file_download), // Use file_download icon for CSV export
-            onPressed: _exportToCsv, // Call _exportToCsv function for CSV export
+            icon: const Icon(Icons.file_download),
+            onPressed: _exportToCsv,
             tooltip: 'Export to CSV',
           ),
         ],
@@ -284,7 +347,7 @@ class _DetailsState extends State<Details> {
                 _updateCropList(planting['crop'] ?? 'N/A');
                 _editPlanting(planting);
               },
-              onLongPress: () => _deletePlanting(planting['id']), // Long press to delete
+              onLongPress: () => _deletePlanting(planting['id']),
             ),
           );
         },
