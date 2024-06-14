@@ -1,3 +1,4 @@
+import 'package:farm_records_management_system/home/screens/viewDetailPage/dataTable.dart';
 import 'package:flutter/material.dart';
 
 class ReportScreen extends StatelessWidget {
@@ -43,11 +44,16 @@ class ReportScreen extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-                    // Add your onTap functionality here
-                  },
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ReportTableScreen()
+                    )
+                  );
+                },
                   child: _buildGridItem(
                     Icons.add_box,
-                    'Plantings',
+                    'Report',
                     '',
                     [Colors.green.shade400, Colors.green.shade600],
                   ),
@@ -71,7 +77,7 @@ class ReportScreen extends StatelessWidget {
                     Icons.inventory,
                     'Treatments',
                     '',
-                    [Colors.yellow.shade400, Colors.yellow.shade600],
+                    [Colors.amber.shade400, Colors.amber.shade600],
                   ),
                 ),
                 InkWell(
