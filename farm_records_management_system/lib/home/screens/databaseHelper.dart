@@ -206,24 +206,3 @@ class DatabaseHelper {
 }
 
 
-  // // Inserts a row into the 'livestock' table
-  // Future<int> insertLivestock(Map<String, dynamic> row) async {
-  //   Database db = await _openDatabase();  // Get the database instance
-  //   // Insert the row into the table and return the id of the inserted row
-  //   return await db.insert('livestock', row);
-  // }
-
-  // // Queries all rows from the 'livestock' table
-  // Future<List<Map<String, dynamic>>> queryAllLivestock() async {
-  //   Database db = await _openDatabase();  // Get the database instance
-  //   // Query all rows from the table and return them as a list of maps
-  //   return await db.query('livestock');
-  // }
-
-  // // Deletes a row from the 'livestock' table by id
-  // Future<int> deleteLivestock(int id) async {
-  //   Database db = await _openDatabase();  // Get the database instance
-  //   // Delete the row with the specified id and return the number of affected rows
-  //   return await db.delete('livestock', where: 'id = ?', whereArgs: [id]);
-  // }
-//}

@@ -11,6 +11,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+      toolbarHeight: 70,
        backgroundColor: Colors.green.shade500,
         elevation: 0,
         iconTheme: IconThemeData(color: Colors.white), // Change icon color to white
