@@ -1,3 +1,4 @@
+import 'package:farm_records_management_system/screens/detail_page.dart';
 import 'package:farm_records_management_system/screens/new_crop_page.dart';
 import 'package:flutter/material.dart';
 import 'databaseHelper.dart';
@@ -36,17 +37,33 @@ class _CropListPageState extends State<CropListPage> {
     }
   }
 
+  void _navigateToCropDetails(Map<String, dynamic> crop) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Details(
+          cropName: crop['name'], cropCompany: '', cropType: '', cropPlotNumber: '', cropHarvest: '', seedType: '',
+        ),
+      ),
+    ).then((_) => _fetchCrops());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Crops'),
+        title: const Text(
+          'Crops',
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
+        backgroundColor: Colors.green.shade700,
       ),
       body: _buildCropList(),
       floatingActionButton: FloatingActionButton(
         onPressed: _navigateToAddCropPage,
-        child: const Icon(Icons.add),
+        backgroundColor: Colors.green.shade700,
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
@@ -54,17 +71,44 @@ class _CropListPageState extends State<CropListPage> {
   Widget _buildCropList() {
     if (_crops.isEmpty) {
       return const Center(
-        child: Text('No crops available'),
+        child: Text(
+          'No crops available',
+          style: TextStyle(fontSize: 18, color: Colors.grey),
+        ),
       );
     }
 
     return ListView.builder(
+      padding: const EdgeInsets.all(10.0),
       itemCount: _crops.length,
       itemBuilder: (context, index) {
         final crop = _crops[index];
-        return ListTile(
-          title: Text(crop['name']),
-          subtitle: Text('Harvest Units: ${crop['harvestUnits']}\nNotes: ${crop['notes']}'),
+        return Card(
+          margin: const EdgeInsets.symmetric(vertical: 10.0),
+          child: ListTile(
+            leading: Icon(Icons.eco, color: Colors.green.shade700, size: 30),
+            title: Text(
+              crop['name'],
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Harvest Units: ${crop['harvestUnits']}',
+                  style: const TextStyle(fontSize: 16),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  'Notes: ${crop['notes']}',
+                  style: const TextStyle(fontSize: 16),
+                ),
+              ],
+            ),
+            isThreeLine: true,
+            trailing: Icon(Icons.chevron_right, color: Colors.green.shade700),
+            onTap: () => _navigateToCropDetails(crop),
+          ),
         );
       },
     );

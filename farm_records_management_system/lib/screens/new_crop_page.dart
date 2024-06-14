@@ -47,67 +47,76 @@ class _NewCropPageState extends State<NewCropPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('New Crop'),
+        title: const Text('Add a New Crop'),
         centerTitle: true,
+        backgroundColor: Colors.green.shade700,
+        titleTextStyle: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
       ),
-      body: Container(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
-        child: ListView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            MyTextField(
-              myController: _cropNameController,
-              fieldName: "Crop Name",
-            ),
+            const SizedBox(height: 30.0),
+            _buildHeader("Crop Name"),
             const SizedBox(height: 10.0),
-            MyTextField(
-              myController: _harvestUnitsController,
-              fieldName: "Harvest Units",
-            ),
+            _buildTextField(_cropNameController, "Crop Name", Icons.eco),
+            const SizedBox(height: 30.0),
+            _buildHeader("Harvest Units"),
             const SizedBox(height: 10.0),
-            MyTextField(
-              myController: _notesController,
-              fieldName: "Notes",
-            ),
-            const SizedBox(height: 20.0),
-            myBtn(context),
+            _buildTextField(_harvestUnitsController, "Harvest Units", Icons.agriculture),
+            const SizedBox(height: 30.0),
+            _buildHeader("Notes"),
+            const SizedBox(height: 10.0),
+            _buildTextField(_notesController, "Notes", Icons.notes),
+            const SizedBox(height: 40.0),
+            Center(child: _buildAddCropButton(context)),
           ],
         ),
       ),
     );
   }
 
-  OutlinedButton myBtn(BuildContext context) {
-    return OutlinedButton(
-      style: OutlinedButton.styleFrom(minimumSize: const Size(200, 50)),
-      onPressed: _addNewCrop,
-      child: const Text("Add Crop"),
+  Widget _buildHeader(String text) {
+    return Text(
+      text,
+      style: const TextStyle(
+        fontSize: 20.0,
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+      ),
     );
   }
-}
 
-class MyTextField extends StatelessWidget {
-  const MyTextField({
-    Key? key,
-    required this.myController,
-    required this.fieldName,
-    this.myIcon = Icons.verified_user_outlined,
-    this.prefixIconColor = Colors.blueAccent,
-  }) : super(key: key);
-
-  final TextEditingController myController;
-  final String fieldName;
-  final IconData myIcon;
-  final Color prefixIconColor;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildTextField(TextEditingController controller, String labelText, IconData icon) {
     return TextFormField(
-      controller: myController,
+      controller: controller,
       decoration: InputDecoration(
-        labelText: fieldName,
-        border: const OutlineInputBorder(),
+        labelText: labelText,
+        labelStyle: const TextStyle(color: Colors.black),
+        prefixIcon: Icon(icon, color: Colors.green.shade700),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: BorderSide(color: Colors.green.shade700),
+        ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.green.shade300),
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: BorderSide(color: Colors.green.shade700),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAddCropButton(BuildContext context) {
+    return ElevatedButton.icon(
+      onPressed: _addNewCrop,
+      icon: const Icon(Icons.add, size: 24.0, color: Colors.white),
+      label: const Text("Add Crop", style: TextStyle(fontSize: 18.0, color: Colors.white)),
+      style: ElevatedButton.styleFrom(
+        foregroundColor: Colors.white, backgroundColor: Colors.green.shade700,
+        minimumSize: const Size(200, 50),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
         ),
       ),
     );

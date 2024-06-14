@@ -312,7 +312,7 @@ class _NewPlantPageState extends State<NewPlantPage> {
               cropType: _cropDropdownController.text,
               cropPlotNumber: _cropPlotController.text,
               cropHarvest: _cropHarvestController.text,
-              seedType: _seedTypeController.text,
+              seedType: _seedTypeController.text, cropName: '',
             );
           }),
         );

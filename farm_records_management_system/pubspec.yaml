@@ -35,6 +35,7 @@ dependencies:
   open_file: ^3.2.1
   file_picker: 8.0.4
   csv: ^5.0.0
+  font_awesome_flutter: ^10.1.0
 
 
   #pdf: ^3.3.0
