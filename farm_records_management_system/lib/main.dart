@@ -1,4 +1,4 @@
-import 'package:farm_records_management_system/home/screens/home_screen.dart';
+import 'package:farm_records_management_system/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 void main() {
   runApp(const MyApp());
