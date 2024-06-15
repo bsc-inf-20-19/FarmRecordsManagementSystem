@@ -1,4 +1,4 @@
-import 'package:farm_records_management_system/screens/viewDetailPage/dataTable.dart';
+import 'package:farm_records_management_system/screens/dataTable.dart';
 import 'package:flutter/material.dart';
 
 class ReportScreen extends StatelessWidget {
