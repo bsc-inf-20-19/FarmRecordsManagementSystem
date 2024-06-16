@@ -9,9 +9,10 @@ import 'income_DAO.dart';
 class ManageTransactionsScreen extends StatefulWidget {
   final int farmerID;
 
-  ManageTransactionsScreen({required this.farmerID});
+ const ManageTransactionsScreen({super.key, required this.farmerID});
 
   @override
+  // ignore: library_private_types_in_public_api
   _ManageTransactionsScreenState createState() =>
       _ManageTransactionsScreenState();
 }
@@ -22,7 +23,7 @@ class _ManageTransactionsScreenState extends State<ManageTransactionsScreen>
 
   List<Map<String, dynamic>> _incomeTransactions = [];
   List<Map<String, dynamic>> _expenseTransactions = [];
-  int _selectedTabIndex = 0;
+  final int _selectedTabIndex = 0;
 
   @override
   void initState() {
@@ -154,16 +155,6 @@ class _ManageTransactionsScreenState extends State<ManageTransactionsScreen>
               },
             ),
           ),
-          // ElevatedButton(
-          //   onPressed: () {
-          //     final isIncome = type == 'Income';
-          //     _navigateToAddTransactionScreen(isIncome);
-          //   },
-          //   child: Text('Add $type Transaction'),
-          //   style: ElevatedButton.styleFrom(
-          //     backgroundColor: Colors.orange, // Set button color to orange
-          //   ),
-          // ),
         ],
       ),
     );

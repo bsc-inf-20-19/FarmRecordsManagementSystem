@@ -3,7 +3,6 @@ import 'package:farm_records_management_system/screens/activity_screen.dart';
 import 'package:farm_records_management_system/widgets/crops/activity/activity_card.dart';
 import 'package:farm_records_management_system/widgets/crops/activity/crop_list_card.dart';
 import 'package:flutter/material.dart';
-import 'package:farm_records_management_system/screens/detail_page.dart';
 
 class CropsSection extends StatelessWidget {
   const CropsSection({Key? key});

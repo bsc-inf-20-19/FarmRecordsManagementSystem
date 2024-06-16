@@ -1,7 +1,6 @@
 import 'package:farm_records_management_system/plant/new_planting.dart';
 import 'package:farm_records_management_system/screens/harvest_add.dart';
 import 'package:farm_records_management_system/screens/home_screen.dart';
-import 'package:farm_records_management_system/screens/new_planting.dart';
 import 'package:farm_records_management_system/screens/treatments.dart';
 import 'package:farm_records_management_system/widgets/crops/activity/harvest_card.dart';
 import 'package:farm_records_management_system/widgets/crops/activity/planting_card.dart';
