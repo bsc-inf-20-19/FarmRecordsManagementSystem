@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:farm_records_management_system/screens/home_screen.dart';
 
 class FieldBarWidget extends StatelessWidget {
+  const FieldBarWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return AppBar(

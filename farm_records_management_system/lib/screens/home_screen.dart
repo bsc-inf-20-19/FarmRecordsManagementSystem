@@ -4,7 +4,7 @@ import 'package:farm_records_management_system/widgets/appbar_widget.dart';
 import 'package:farm_records_management_system/widgets/drawer_widget.dart';
 
 class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {

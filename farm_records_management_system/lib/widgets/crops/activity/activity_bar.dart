@@ -1,9 +1,10 @@
 
 import 'package:farm_records_management_system/screens/home_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ActivityBarWidget extends StatelessWidget {
+  const ActivityBarWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(

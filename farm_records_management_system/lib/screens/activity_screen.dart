@@ -9,7 +9,7 @@ class ActivityPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
-        children: [
+        children: const [
           ActivityBarWidget(),
           // Activities
           ActivitySection(),

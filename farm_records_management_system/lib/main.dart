@@ -1,6 +1,5 @@
 import 'package:farm_records_management_system/profileManagement/login.dart';
 import 'package:farm_records_management_system/profileManagement/registration.dart';
-import 'package:farm_records_management_system/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'dart:io' show Platform;
