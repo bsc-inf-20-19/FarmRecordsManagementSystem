@@ -24,12 +24,12 @@ class MyApp extends StatelessWidget {
       title: "Freshify App",
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primaryColor: const Color(0xFF33691E)),
-      // home: MyHomePage(),
-        initialRoute: '/login',
-      routes: {
-         '/login': (context) => LoginScreen(),
-         '/register': (context) => RegistrationScreen(),
-      },
+      home: MyHomePage(),
+        // initialRoute: '/login',
+      // routes: {
+      //    '/login': (context) => LoginScreen(),
+      //    '/register': (context) => RegistrationScreen(),
+      // },
     );
   }
 }

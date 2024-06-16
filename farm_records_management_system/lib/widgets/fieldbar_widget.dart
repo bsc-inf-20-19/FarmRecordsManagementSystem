@@ -1,52 +1,51 @@
-import 'package:farm_records_management_system/screens/home_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:farm_records_management_system/screens/home_screen.dart';
 
 class FieldBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          InkWell(
-            onTap: () {
-              Navigator.pop(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const MyHomePage(),
-                  ));
-            },
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.green,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Icon(
-                Icons.arrow_back_ios_new,
-                size: 18,
-                color: Colors.white,
-              ),
+    return AppBar(
+      backgroundColor: Color.fromARGB(255, 97, 204, 82), // Green background color
+      elevation: 0, // No shadow
+      leading: InkWell(
+        onTap: () {
+          Navigator.pop(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const MyHomePage(),
             ),
+          );
+        },
+        child: Container(
+          padding: EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.green,
+            borderRadius: BorderRadius.circular(10),
           ),
-          const Text(
-            "My Field",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+          child: Icon(
+            Icons.arrow_back_ios_new,
+            size: 18,
+            color: Colors.white,
           ),
-          InkWell(
-            onTap: () {},
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              child: const Icon(Icons.notifications),
-            ),
-          )
-        ],
+        ),
       ),
+      title: Text(
+        "My Field",
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      ),
+      actions: [
+        InkWell(
+          onTap: () {},
+          child: Container(
+            padding: EdgeInsets.all(8),
+            child: Icon(Icons.notifications),
+          ),
+        ),
+      ],
     );
   }
 }

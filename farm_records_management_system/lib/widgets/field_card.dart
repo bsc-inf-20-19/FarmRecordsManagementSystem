@@ -23,12 +23,22 @@ class FieldsCard extends StatelessWidget {
           ),
         ],
       ),
-      child: const Column(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.end, // position everything to the bottom
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // place here your image
-          Text("Fields",
+          // place here your icon
+          const Expanded(
+            child: Center(
+              child: Icon(
+                Icons.terrain, // Use a relevant icon
+                size: 80.0, // Adjust the size as needed
+                color: Colors.green, // Adjust the color as needed
+              ),
+            ),
+          ),
+          const SizedBox(height: 8.0), // Add some spacing between the icon and text
+          const Text("Fields",
               style: TextStyle(
                   fontSize: 20.0,
                   color: Colors.black,

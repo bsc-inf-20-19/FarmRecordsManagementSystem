@@ -10,9 +10,9 @@ class FieldSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Container(
+      child: Container( 
         padding: const EdgeInsets.all(8.0),
-        color: Colors.white,
+        color:Color(0xc7c7c7),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -44,10 +44,6 @@ class FieldSection extends StatelessWidget {
                       child: const FieldCard(),
                     )
                  )
-
-
-
-
                 ],
               ),
             ),

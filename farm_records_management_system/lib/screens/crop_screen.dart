@@ -1,4 +1,5 @@
 import 'package:farm_records_management_system/components/crops_section.dart';
+import 'package:farm_records_management_system/plant/crops_section.dart';
 import 'package:flutter/material.dart';
 import '../widgets/crops/activity/cropbar_widget.dart';
 

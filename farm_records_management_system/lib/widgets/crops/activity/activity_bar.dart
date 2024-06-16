@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 class ActivityBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
+       color: Color.fromARGB(255, 106, 211, 92),
       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -37,6 +38,7 @@ class ActivityBarWidget extends StatelessWidget {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
+              color: Color.fromARGB(255, 255, 255, 255)
             ),
           ),
           InkWell(

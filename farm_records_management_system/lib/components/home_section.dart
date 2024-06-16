@@ -1,7 +1,7 @@
 import 'package:farm_records_management_system/screens/fields_screen.dart';
 import 'package:farm_records_management_system/screens/home_screen.dart';
-import 'package:farm_records_management_system/transaction/financial_report.dart';
 import 'package:farm_records_management_system/transaction/manage_transaction.dart';
+import 'package:farm_records_management_system/transaction/report_screen.dart';
 import 'package:farm_records_management_system/widgets/field_card.dart';
 import 'package:farm_records_management_system/widgets/report_card.dart';
 import 'package:farm_records_management_system/widgets/setup_card.dart';
@@ -13,10 +13,11 @@ class HomeSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        padding: const EdgeInsets.all(8.0),
-        color: Colors.white,
+    return Scaffold(
+      backgroundColor: Color(0xc7c7c7),
+      body: Container(
+        padding: const EdgeInsets.all(8.0), // Light Blue color
+        color:  Color(0xc7c7c7),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -55,7 +56,7 @@ class HomeSection extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) =>  FinancialReportManagement(farmerID: 1,)),
+                        MaterialPageRoute(builder: (context) =>  ReportScreen()),
                       );
                     },
                     child:const ReportCard(),

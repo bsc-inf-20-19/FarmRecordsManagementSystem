@@ -132,6 +132,36 @@ class DatabaseHelper {
   ) 
   ''');
     // Create a table for Expenses
+    await db.execute(
+      '''
+      CREATE TABLE IF NOT EXISTS expenses (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        date TEXT,
+        expense_type TEXT,
+        field TEXT,
+        amount REAL,
+        description TEXT,
+        specific_to_field TEXT,
+        customer_name TEXT
+      )
+      ''',
+    );
+
+     // Create a table for harvests
+    await db.execute('''
+      CREATE TABLE harvests (
+        harvestID INTEGER PRIMARY KEY AUTOINCREMENT,
+        date TEXT,
+        cropList TEXT,
+        batchNo TEXT,
+        harvestQuantity TEXT,
+        harvestQuality TEXT,
+        unitCost TEXT,
+        harvestIncome TEXT,
+        harvestNotes TEXT
+      )
+    ''');
+
 
     // Create a table for Fields
     await db.execute(
@@ -162,6 +192,57 @@ class DatabaseHelper {
       )
       ''',
     );
+    
+    // Create a table for Plantings
+     // Create a table for Plantings
+    await db.execute(
+      '''
+      CREATE TABLE IF NOT EXISTS plantings (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        date TEXT,
+        crop TEXT,
+        field TEXT,
+        description TEXT,
+        cropCompany TEXT,
+        cropType TEXT,
+        cropPlotNumber TEXT,
+        seedType TEXT,
+        cropHarvest TEXT
+      )
+      ''',
+    );
+     await db.execute(
+      '''
+      CREATE TABLE IF NOT EXISTS crops (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        harvestUnits TEXT,
+        notes TEXT
+      )
+      ''',
+    );
+
+  }
+
+   Future<int> deleteTransaction(int id) async {
+    Database db = await _initDb(); // Ensure proper initialization
+    return await db.delete('expenses', where: 'id = ?', whereArgs: [id]);
+  }
+
+   Future<Map<String, dynamic>?> getTransaction(int id) async {
+    Database db = await _initDb(); // Ensure proper initialization
+    List<Map<String, dynamic>> result = await db.query(
+      'expenses',
+      where: 'id = ?',
+      whereArgs: [id],
+      limit: 1,
+    );
+    return result.isNotEmpty ? result.first : null;
+  }
+
+   Future<List<Map<String, dynamic>>> getTransactions() async {
+    Database db = await _initDb(); // Ensure proper initialization
+    return await db.query('expenses');
   }
 
   // CRUD operations for fields
@@ -297,5 +378,128 @@ class DatabaseHelper {
       'netIncome': (incomeResult.first['totalIncome'] ?? 0) -
           (expenseResult.first['totalExpense'] ?? 0)
     };
+  }
+  // CRUD operations for harvests
+  
+  Future<int> insertHarvest(Map<String, dynamic> harvest) async {
+    Database db = await _initDb();
+    return await db.insert('harvests', harvest);
+  }
+
+  Future<List<Map<String, dynamic>>> getHarvests() async {
+    Database db = await _initDb();
+    return await db.query('harvests');
+  }
+
+  Future<Map<String, dynamic>?> getHarvest(int id) async {
+    Database db = await _initDb();
+    List<Map<String, dynamic>> result = await db.query(
+      'harvests',
+      where: 'harvestID = ?',
+      whereArgs: [id],
+      limit: 1,
+    );
+    return result.isNotEmpty ? result.first : null;
+  }
+
+  Future<int> updateHarvest(int id, Map<String, dynamic> data) async {
+    Database db = await _initDb();
+    return await db.update(
+      'harvests',
+      data,
+      where: 'harvestID = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<int> deleteHarvest(int id) async {
+    Database db = await _initDb();
+    return await db.delete('harvests', where: 'harvestID = ?', whereArgs: [id]);
+  }
+
+  // // CRUD operations for plantings
+  Future<int> insertPlanting(Map<String, dynamic> data) async {
+    Database db = await _initDb();
+    return await db.insert('plantings', data);
+  }
+
+  Future<List<Map<String, dynamic>>> getPlantings() async {
+    Database db = await _initDb();
+    return await db.query('plantings');
+  }
+
+  Future<Map<String, dynamic>?> getPlanting(int id) async {
+    Database db = await _initDb();
+    List<Map<String, dynamic>> result = await db.query(
+      'plantings',
+      where: 'id = ?',
+      whereArgs: [id],
+      limit: 1,
+    );
+    return result.isNotEmpty ? result.first : null;
+  }
+
+  Future<int> deletePlanting(int id) async {
+    Database db = await _initDb();
+    return await db.delete('plantings', where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<int> updatePlanting(int id, Map<String, dynamic> data) async {
+    Database db = await _initDb();
+    return await db.update(
+      'plantings',
+      data,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  getPlantingsByDate(DateTime selectedDate) {}
+
+  // Method to fetch unique crop names for autocomplete suggestions
+  Future<List<String>> getCropSuggestions() async {
+    Database db = await _initDb();
+    final List<Map<String, dynamic>> crops = await db.query(
+      'plantings',
+      columns: ['crop'],
+      distinct: true,
+    );
+    return crops.map((e) => e['crop'] as String).toList();
+  }
+
+    Future<int> insertCrop(Map<String, dynamic> data) async {
+    Database db = await _initDb();
+    return await db.insert('crops', data);
+  }
+
+   Future<List<Map<String, dynamic>>> getCrops() async {
+    Database db = await _initDb();
+    return await db.query('crops');
+  }
+
+   Future<Map<String, dynamic>?> getCrop(int id) async {
+    Database db = await _initDb();
+    List<Map<String, dynamic>> result = await db.query(
+      'crops',
+      where: 'id = ?',
+      whereArgs: [id],
+      limit: 1,
+    );
+    return result.isNotEmpty ? result.first : null;
+  }
+
+   Future<int> deleteCrop(int id) async {
+    Database db = await _initDb();
+    return await db.delete('crops', where: 'id = ?', whereArgs: [id]);
+  }
+
+   Future<int> updateCrop(int id, Map<String, dynamic> data) async {
+    Database db = await _initDb();
+    return await db.update(
+      'crops',
+      data,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 }

@@ -98,7 +98,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Event Registration',
+                  'Farmer Registration',
                   style: TextStyle(
                     fontSize: 24.0,
                     fontWeight: FontWeight.bold,

@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 class CropBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
+      color: Color.fromARGB(255, 57, 185, 41),
       padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -25,17 +26,19 @@ class CropBarWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(
-                Icons.arrow_back_ios_new,
+                Icons.arrow_back,
                 size: 18,
                 color: Colors.white,
               ),
             ),
           ),
           Text(
-            "Crops",
+            "Crops & Activities",
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
+              color: Color.fromARGB(255, 255, 255, 250)
+
             ),
           ),
           InkWell(

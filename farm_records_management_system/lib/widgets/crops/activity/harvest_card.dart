@@ -30,6 +30,16 @@ class HarvestCard extends StatelessWidget {
               .end, // posion the everything to the bottom
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Expanded(
+            child: Center(
+              child: Icon(
+                Icons.agriculture, // Use a relevant icon
+                size: 80.0, // Adjust the size as needed
+                color: Colors.green, // Adjust the color as needed
+              ),
+            ),
+          ),
+          SizedBox(height: 10),
             // place here your image
             Text("Harvest",
                 style: TextStyle(

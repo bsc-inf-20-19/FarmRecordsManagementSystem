@@ -11,7 +11,7 @@ class Details extends StatelessWidget {
     required this.cropCompany,
     required this.cropType,
     required this.cropLotNumber,
-    required this.cropHarvest,
+    required this.cropHarvest, required cropName, required String cropPlotNumber, required String seedType,
   }) : super(key: key);
 
   @override
