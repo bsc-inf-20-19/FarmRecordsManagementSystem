@@ -19,8 +19,8 @@ class MyHomePage extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.center,
                 colors: [
-                  Color.fromARGB(255, 97, 204, 82), // Start color (green)
-                  Colors.white, // End color (white)
+                  Color.fromARGB(255, 226, 235, 224), // Start color (green)
+                  Color.fromARGB(255, 226, 235, 224), // End color (white)
                 ],
               ),
             ),
