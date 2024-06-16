@@ -1,46 +1,51 @@
 import 'package:farm_records_management_system/screens/home_screen.dart';
+import 'package:farm_records_management_system/profileManagement/login.dart';
+import 'package:farm_records_management_system/profileManagement/myAccountPage.dart';
+import 'package:farm_records_management_system/profileManagement/myFarmPage.dart';
+import 'package:farm_records_management_system/profileManagement/settingsPage.dart';
+import 'package:farm_records_management_system/profileManagement/aboutPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DrawerWidget extends StatelessWidget {
-  const DrawerWidget({super.key});
+  final Map<String, dynamic> farmer;
+
+  const DrawerWidget({super.key, required this.farmer});
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
         children: [
-          const DrawerHeader(
+          DrawerHeader(
             padding: EdgeInsets.zero,
             child: UserAccountsDrawerHeader(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.green,
               ),
               accountName: Text(
-                "Aeneas",
-                style: TextStyle(
+                "${farmer['firstName'] ?? 'FirstName'} ${farmer['lastName'] ?? 'LastName'}",
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               accountEmail: Text(
-                "aeneas@aeneid.com",
-                style: TextStyle(
+                farmer['email'] ?? 'email@example.com',
+                style: const TextStyle(
                   fontSize: 16,
                 ),
-              ),
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage("assets/images/aeneas.jpg"),
               ),
             ),
           ),
           ListTile(
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const MyHomePage(),
-                  ));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MyHomePage(farmer: farmer),
+                ),
+              );
             },
             leading: const Icon(
               CupertinoIcons.home,
@@ -54,10 +59,11 @@ class DrawerWidget extends StatelessWidget {
           ListTile(
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const MyHomePage(),
-                  ));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MyAccountPage(farmer: farmer),
+                ),
+              );
             },
             leading: const Icon(
               CupertinoIcons.person,
@@ -71,10 +77,11 @@ class DrawerWidget extends StatelessWidget {
           ListTile(
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const MyHomePage(),
-                  ));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MyFarmPage(farmer: farmer),
+                ),
+              );
             },
             leading: const Icon(
               CupertinoIcons.cart,
@@ -88,10 +95,11 @@ class DrawerWidget extends StatelessWidget {
           ListTile(
             onTap: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const MyHomePage(),
-                  ));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SettingsPage(),
+                ),
+              );
             },
             leading: const Icon(
               CupertinoIcons.settings,
@@ -103,7 +111,32 @@ class DrawerWidget extends StatelessWidget {
             ),
           ),
           ListTile(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AboutPage(),
+                ),
+              );
+            },
+            leading: const Icon(
+              Icons.info,
+              color: Color(0xff3388e3c),
+            ),
+            title: const Text(
+              "About",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ),
+          ListTile(
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LoginScreen(),
+                ),
+              );
+            },
             leading: const Icon(
               Icons.exit_to_app,
               color: Color(0xff3388e3c),

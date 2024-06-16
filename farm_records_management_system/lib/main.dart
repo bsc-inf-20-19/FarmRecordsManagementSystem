@@ -21,15 +21,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "Freshify App",
+      title: "My Farm",
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primaryColor: const Color(0xFF33691E)),
-      home: const MyHomePage(),
-        // initialRoute: '/login',
-      // routes: {
-      //    '/login': (context) => LoginScreen(),
-      //    '/register': (context) => RegistrationScreen(),
-      // },
+      home: const MyHomePage(farmer: {},),
+        initialRoute: '/login',
+      routes: {
+         '/login': (context) => LoginScreen(),
+         '/register': (context) => RegistrationScreen(),
+      },
     );
   }
 }

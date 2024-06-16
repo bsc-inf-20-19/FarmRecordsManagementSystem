@@ -4,7 +4,7 @@ import 'package:farm_records_management_system/widgets/appbar_widget.dart';
 import 'package:farm_records_management_system/widgets/drawer_widget.dart';
 
 class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
+  const MyHomePage({super.key, required Map farmer});
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +19,8 @@ class MyHomePage extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.center,
                 colors: [
-                  Color.fromARGB(255, 97, 204, 82), // Start color (green)
-                  Colors.white, // End color (white)
+                  Color.fromARGB(255, 241, 246, 241), // Start color (green)
+                  Color.fromARGB(255, 255, 255, 255), // End color (white)
                 ],
               ),
             ),
@@ -33,7 +33,7 @@ class MyHomePage extends StatelessWidget {
           ),
         ],
       ),
-      drawer: DrawerWidget(),
+      drawer: DrawerWidget(farmer: {},),
     );
   }
 }

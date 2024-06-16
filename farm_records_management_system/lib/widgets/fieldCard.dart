@@ -6,7 +6,7 @@ class FieldCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
+      height: 180,
       width: double.infinity,
       margin: const EdgeInsets.all(14.0),
       padding: const EdgeInsets.all(14.0),

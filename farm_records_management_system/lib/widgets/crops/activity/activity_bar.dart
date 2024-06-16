@@ -8,7 +8,7 @@ class ActivityBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-       color: Color.fromARGB(255, 106, 211, 92),
+      color: Colors.green,
       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -18,7 +18,7 @@ class ActivityBarWidget extends StatelessWidget {
               Navigator.pop(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const MyHomePage(),
+                    builder: (context) => const MyHomePage(farmer: {},),
                   ));
             },
             child: Container(

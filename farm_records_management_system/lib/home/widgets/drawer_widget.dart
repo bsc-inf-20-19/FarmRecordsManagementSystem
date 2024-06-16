@@ -1,4 +1,4 @@
-import 'package:farm_records_management_system/home/screens/home_screen.dart';
+import 'package:farm_records_management_system/screens/home_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -27,9 +27,6 @@ class DrawerWidget extends StatelessWidget {
                   fontSize: 16,
                 ),
               ),
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage("assets/images/aeneas.jpg"),
-              ),
             ),
           ),
           ListTile(
@@ -37,7 +34,7 @@ class DrawerWidget extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MyHomePage(),
+                    builder: (context) => MyHomePage(farmer: {},),
                   ));
             },
             leading: Icon(
@@ -54,7 +51,7 @@ class DrawerWidget extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MyHomePage(),
+                    builder: (context) => MyHomePage(farmer: {},),
                   ));
             },
             leading: Icon(
@@ -71,7 +68,7 @@ class DrawerWidget extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MyHomePage(),
+                    builder: (context) => MyHomePage(farmer: {},),
                   ));
             },
             leading: Icon(
@@ -88,7 +85,7 @@ class DrawerWidget extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MyHomePage(),
+                    builder: (context) => MyHomePage(farmer: {},),
                   ));
             },
             leading: Icon(

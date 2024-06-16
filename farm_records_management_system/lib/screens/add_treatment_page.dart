@@ -87,7 +87,8 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add New Treatment'),
+        backgroundColor: Colors.green,
+        title: const Text('New Treatment'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

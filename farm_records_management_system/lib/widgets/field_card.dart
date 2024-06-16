@@ -6,7 +6,7 @@ class FieldsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200, // Ensure the container has a finite height
+      height: 180, // Ensure the container has a finite height
       width: MediaQuery.of(context).size.width / 2 - 32, // minus 32 due to the margin
       margin: const EdgeInsets.all(14.0),
       padding: const EdgeInsets.all(14.0),
@@ -39,6 +39,7 @@ class FieldsCard extends StatelessWidget {
           ),
           const SizedBox(height: 8.0), // Add some spacing between the icon and text
           const Text("Fields",
+              textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 20.0,
                   color: Colors.black,

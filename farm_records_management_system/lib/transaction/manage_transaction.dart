@@ -1,6 +1,4 @@
-import 'package:farm_records_management_system/utils/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:farm_records_management_system/constants/colors.dart';
 import 'package:farm_records_management_system/transaction/add_transaction.dart';
 import 'package:intl/intl.dart';
 import 'expense_DAO.dart';
@@ -83,7 +81,7 @@ class _ManageTransactionsScreenState extends State<ManageTransactionsScreen>
               controller: _tabController,
               labelColor: Colors.white, // Active tab text color
               unselectedLabelColor: Colors.black, // Inactive tab text color
-              indicator: BoxDecoration(
+              indicator:const BoxDecoration(
                 color: Colors.orange, // Active tab color
                 // borderRadius: BorderRadius.none,
               ),
@@ -91,13 +89,13 @@ class _ManageTransactionsScreenState extends State<ManageTransactionsScreen>
               tabs: [
                 Tab(
                   icon: _selectedTabIndex == 0
-                      ? Icon(Icons.attach_money, color: Colors.white)
+                      ?const Icon(Icons.attach_money, color: Colors.white)
                       : null,
                   text: 'INCOME',
                 ),
                 Tab(
                   icon: _selectedTabIndex == 0
-                      ? Icon(Icons.attach_money, color: Colors.white)
+                      ?const Icon(Icons.attach_money, color: Colors.white)
                       : null,
                   text: 'EXPENSES',
                 ),
@@ -138,7 +136,7 @@ class _ManageTransactionsScreenState extends State<ManageTransactionsScreen>
       );
     }
     return Padding(
-      padding: EdgeInsets.all(16.0),
+      padding:const EdgeInsets.all(16.0),
       child: Column(
         children: [
           Expanded(

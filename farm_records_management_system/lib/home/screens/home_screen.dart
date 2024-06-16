@@ -5,7 +5,7 @@ import 'package:farm_records_management_system/home/widgets/appbar_widget.dart';
 import 'package:flutter/material.dart';
 
 class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({Key? key, required Map<String, dynamic> farmer}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

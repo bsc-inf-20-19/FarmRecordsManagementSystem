@@ -6,7 +6,7 @@ class TransCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
+      height: 180,
       width: MediaQuery.of(context).size.width / 2 - 32, // minus 32 due to the margin
       margin: const EdgeInsets.all(14.0),
       padding: const EdgeInsets.all(14.0),

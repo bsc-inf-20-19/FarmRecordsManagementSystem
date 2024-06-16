@@ -87,6 +87,7 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(widget.taskId == null ? 'New Task' : 'Edit Task')),
+      backgroundColor: Colors.green,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(

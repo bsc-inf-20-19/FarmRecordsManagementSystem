@@ -1,10 +1,10 @@
-import 'package:farm_records_management_system/plant/new_crop_page.dart';
-import 'package:farm_records_management_system/screens/detail_page.dart';
-import 'package:flutter/material.dart';
 import 'package:farm_records_management_system/database/databaseHelper.dart';
+import 'package:farm_records_management_system/plant/crop_details_tabbed.dart';
+import 'package:farm_records_management_system/plant/new_crop_page.dart';
+import 'package:flutter/material.dart';
 
 class CropListPage extends StatefulWidget {
-  const CropListPage({super.key});
+  const CropListPage({Key? key}) : super(key: key);
 
   @override
   _CropListPageState createState() => _CropListPageState();
@@ -41,9 +41,7 @@ class _CropListPageState extends State<CropListPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => Details(
-          cropName: crop['name'], cropCompany: '', cropType: '', cropPlotNumber: '', cropHarvest: '', seedType: '',
-        ),
+        builder: (context) => CropDetailsTabbedPage(crop: crop),
       ),
     ).then((_) => _fetchCrops());
   }

@@ -85,6 +85,7 @@ class _FieldListScreenState extends State<FieldListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.green,
         title: isSearching
             ? TextField(
                 controller: searchController,
@@ -97,6 +98,7 @@ class _FieldListScreenState extends State<FieldListScreen> {
             : const Text('Field List'),
         actions: [
           IconButton(
+            color: Colors.white,
             icon: Icon(isSearching ? Icons.close : Icons.search),
             onPressed: () {
               setState(() {

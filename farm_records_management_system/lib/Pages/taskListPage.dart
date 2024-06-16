@@ -122,6 +122,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.green,
         title: isSearching
             ? TextField(
                 controller: searchController,
@@ -131,7 +132,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                   border: InputBorder.none,
                 ),
               )
-            : const Text('Task List'),
+            : const Text('Task List', style: TextStyle(color: Colors.white),),
         actions: [
           IconButton(
             icon: Icon(isSearching ? Icons.close : Icons.search),
@@ -212,6 +213,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.green,
         onPressed: _navigateToAddTaskPage,
         child: const Icon(Icons.add),
       ),

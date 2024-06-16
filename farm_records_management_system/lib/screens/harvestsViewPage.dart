@@ -1,17 +1,14 @@
-import 'package:farm_records_management_system/database/databaseHelper.dart';
 import 'package:farm_records_management_system/screens/add_harvest_page.dart';
-import 'package:farm_records_management_system/screens/update_harvest_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:farm_records_management_system/database/databaseHelper.dart';
 
-class HarvestViewPage extends StatefulWidget {
-  const HarvestViewPage({Key? key}) : super(key: key);
-
+class HarvestListScreen extends StatefulWidget {
   @override
-  _HarvestViewPageState createState() => _HarvestViewPageState();
+  _HarvestListScreenState createState() => _HarvestListScreenState();
 }
 
-class _HarvestViewPageState extends State<HarvestViewPage> {
+class _HarvestListScreenState extends State<HarvestListScreen> {
   List<Map<String, dynamic>> harvests = [];
   late TextEditingController searchController;
   bool isSearching = false;
@@ -19,8 +16,8 @@ class _HarvestViewPageState extends State<HarvestViewPage> {
   @override
   void initState() {
     super.initState();
-    _loadData();
     searchController = TextEditingController();
+    _loadHarvests();
   }
 
   @override
@@ -29,7 +26,7 @@ class _HarvestViewPageState extends State<HarvestViewPage> {
     super.dispose();
   }
 
-  Future<void> _loadData() async {
+  Future<void> _loadHarvests() async {
     try {
       List<Map<String, dynamic>> result = await DatabaseHelper.instance.getHarvests();
       setState(() {
@@ -44,15 +41,12 @@ class _HarvestViewPageState extends State<HarvestViewPage> {
     setState(() {
       if (searchTerm.isEmpty) {
         isSearching = false;
-        _loadData();
+        _loadHarvests();
       } else {
         isSearching = true;
         harvests = harvests.where((harvest) {
-          return harvest['cropList'].toLowerCase().contains(searchTerm) ||
-              harvest['batchNo'].toLowerCase().contains(searchTerm) ||
-              harvest['harvestQuantity'].toLowerCase().contains(searchTerm) ||
-              harvest['harvestQuality'].toLowerCase().contains(searchTerm) ||
-              harvest['date'].toLowerCase().contains(searchTerm);
+          return harvest.values.any((value) =>
+              value.toString().toLowerCase().contains(searchTerm.toLowerCase()));
         }).toList();
       }
     });
@@ -62,7 +56,6 @@ class _HarvestViewPageState extends State<HarvestViewPage> {
     if (dateStr == null || dateStr.isEmpty) {
       return 'Invalid Date';
     }
-
     try {
       final date = DateTime.parse(dateStr);
       return DateFormat("yyyy-MM-dd").format(date);
@@ -90,8 +83,7 @@ class _HarvestViewPageState extends State<HarvestViewPage> {
             TextButton(
               child: const Text('Confirm'),
               onPressed: () async {
-                await DatabaseHelper.instance.deleteHarvest(harvestId);
-                _loadData();
+                await _deleteHarvest(harvestId);
                 Navigator.of(context).pop();
               },
             ),
@@ -101,22 +93,60 @@ class _HarvestViewPageState extends State<HarvestViewPage> {
     );
   }
 
+  Future<void> _deleteHarvest(int harvestId) async {
+    try {
+      await DatabaseHelper.instance.deleteHarvest(harvestId);
+      _loadHarvests();
+    } catch (e) {
+      debugPrint('Error deleting harvest: $e');
+    }
+  }
+
+  void _navigateToAddHarvestPage() async {
+    final addedHarvest = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddHarvestPage(),
+      ),
+    );
+    if (addedHarvest != null) {
+      _loadHarvests();
+    }
+  }
+
+  void _navigateToEditHarvestPage(int harvestId) async {
+    final updatedHarvest = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddHarvestPage(),
+      ),
+    );
+    if (updatedHarvest != null) {
+      _loadHarvests();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.green,
         title: isSearching
             ? TextField(
                 controller: searchController,
-                onChanged: (value) => _applySearchFilter(value.toLowerCase()),
-                decoration: InputDecoration(
+                onChanged: (value) => _applySearchFilter(value),
+                decoration: const InputDecoration(
                   hintText: 'Search by crop, batch, or date',
                   border: InputBorder.none,
                 ),
               )
-            : Text('Harvests'),
+            : const Text(
+                'Harvests',
+                style: TextStyle(color: Colors.white),
+              ),
         actions: [
           IconButton(
+            color: Colors.white,
             icon: Icon(isSearching ? Icons.close : Icons.search),
             onPressed: () {
               setState(() {
@@ -124,99 +154,92 @@ class _HarvestViewPageState extends State<HarvestViewPage> {
                   searchController.clear();
                 }
                 isSearching = !isSearching;
+                if (!isSearching) {
+                  _loadHarvests();
+                }
               });
             },
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: harvests.length,
-        itemBuilder: (context, index) {
-          var harvest = harvests[index];
-          String formattedDate = _formatDate(harvest["date"]);
-          String harvestQuality = harvest['harvestQuality'];
+      body: harvests.isEmpty
+          ? Center(child: Text("There are no harvests recorded for the current filters"))
+          : ListView.builder(
+              itemCount: harvests.length,
+              itemBuilder: (context, index) {
+                final harvest = harvests[index];
+                final crop = harvest['cropList'] ?? 'N/A';
+                final batchNo = harvest['batchNo'] ?? 'N/A';
+                final quantity = harvest['harvestQuantity'] ?? 'N/A';
+                final quality = harvest['harvestQuality'] ?? 'N/A';
+                final unitCost = harvest['unitCost'] ?? 'N/A';
+                final income = harvest['harvestIncome'] ?? 'N/A';
+                final notes = harvest['harvestNotes'] ?? 'N/A';
+                final date = harvest['date'] ?? 'N/A';
 
-          return Card(
-            margin: EdgeInsets.all(16.0),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        '${harvest["cropList"]}',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Spacer(),
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: PopupMenuButton<String>(
-                          onSelected: (value) async {
-                            if (value == 'edit') {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => UpdateHarvestPage(
-                                    harvestId: harvest['id'],
-                                  ),
-                                ),
-                              ).then((result) {
-                                if (result == true) {
-                                  _loadData();
-                                }
-                              });
-                            } else if (value == 'delete') {
-                              _showDeleteConfirmationDialog(context, harvest['id']);
-                            }
-                          },
-                          itemBuilder: (context) => [
-                            const PopupMenuItem(
-                              value: 'edit',
-                              child: Text('Edit'),
+                return Card(
+                  elevation: 2.0,
+                  margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              crop,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                            const PopupMenuItem(
-                              value: 'delete',
-                              child: Text('Delete'),
+                            const Spacer(),
+                            Align(
+                              alignment: Alignment.topRight,
+                              child: PopupMenuButton<String>(
+                                onSelected: (value) async {
+                                  if (value == 'edit') {
+                                    _navigateToEditHarvestPage(harvest['id']);
+                                  } else if (value == 'delete') {
+                                    _showDeleteConfirmationDialog(context, harvest['id']);
+                                  }
+                                },
+                                itemBuilder: (context) => [
+                                  const PopupMenuItem(
+                                    value: 'edit',
+                                    child: Text('Edit'),
+                                  ),
+                                  const PopupMenuItem(
+                                    value: 'delete',
+                                    child: Text('Delete'),
+                                  ),
+                                ],
+                                icon: const Icon(Icons.more_vert),
+                              ),
                             ),
                           ],
-                          icon: const Icon(Icons.more_vert),
                         ),
-                      ),
-                    ],
+                        const Divider(thickness: 0.5, color: Colors.black54),
+                        const SizedBox(height: 8),
+                        HarvestItem(label: 'Batch No', value: batchNo, color: Colors.green),
+                        HarvestItem(label: 'Quantity', value: quantity, color: Colors.green),
+                        HarvestItem(label: 'Quality', value: quality, color: Colors.green),
+                        HarvestItem(label: 'Unit Cost', value: unitCost, color: Colors.green),
+                        HarvestItem(label: 'Income', value: income, color: Colors.green),
+                        HarvestItem(label: 'Date', value: _formatDate(date), color: Colors.green),
+                        HarvestItem(label: 'Notes', value: notes, color: Colors.green),
+                      ],
+                    ),
                   ),
-                  Divider(thickness: .5, color: Colors.black54),
-                  SizedBox(height: 8),
-                  HarvestItem(label: 'Harvest date', value: '$formattedDate'),
-                  HarvestItem(label: 'Harvest Quality', value: '${harvest["harvestQuality"]} - $formattedDate'),
-                  HarvestItem(label: 'Batch No', value: '${harvest["batchNo"]}'),
-                  HarvestItem(label: 'Harvest Quantity', value: ' ${harvest["harvestQuantity"]}'),
-                  HarvestItem(label: 'Unit Cost', value: '${harvest["unitCost"]}'),
-                  HarvestItem(label: 'Harvest Income', value: '${harvest["harvestIncome"]}'),
-                  HarvestItem(label: 'Harvest Notes', value: '${harvest["harvestNotes"]}'),
-                ],
-              ),
+                );
+              },
             ),
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final addedHarvest = await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AddHarvestPage(),
-            ),
-          );
-          if (addedHarvest != null) {
-            _loadData();
-          }
-        },
-        child: const Icon(Icons.add),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Colors.orange,
+        onPressed: _navigateToAddHarvestPage,
+        icon: const Icon(Icons.add),
+        label: const Text('Add'),
       ),
     );
   }
@@ -225,8 +248,13 @@ class _HarvestViewPageState extends State<HarvestViewPage> {
 class HarvestItem extends StatelessWidget {
   final String label;
   final String value;
+  final Color? color;
 
-  HarvestItem({required this.label, required this.value});
+  const HarvestItem({
+    required this.label,
+    required this.value,
+    this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -235,11 +263,12 @@ class HarvestItem extends StatelessWidget {
       child: Row(
         children: [
           Text(label),
-          Spacer(),
+          const Spacer(),
           Text(
             value,
             style: TextStyle(
               fontWeight: FontWeight.bold,
+              color: color,
             ),
           ),
         ],

@@ -81,7 +81,7 @@ class TrialPage extends StatelessWidget {
           const HomeSection()
         ],
       ),
-      drawer: const DrawerWidget(),
+      drawer: const DrawerWidget(farmer: {},),
     );
   }
 }
