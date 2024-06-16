@@ -86,9 +86,9 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _login,
-                child: const Text('Login'),
+                child: Text('Login', selectionColor: Color.fromARGB(255,255,255,255),),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueGrey,
+                  backgroundColor: Color.fromARGB(255, 87, 125, 207),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
@@ -100,9 +100,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 onPressed: () {
                   Navigator.pushNamed(context, '/register');
                 },
-                child: const Text('Register'),
+                child: Text('Register', selectionColor: Color.fromARGB(255, 12, 0, 0),),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueGrey[300],
+                  backgroundColor: Color.fromARGB(255, 255, 255, 255),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),

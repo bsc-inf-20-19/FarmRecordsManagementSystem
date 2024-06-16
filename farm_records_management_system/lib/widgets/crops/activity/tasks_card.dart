@@ -36,6 +36,16 @@ class TasksCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Expanded(
+            child: Center(
+              child: Icon(
+                Icons.task, // Use a relevant icon
+                size: 80.0, // Adjust the size as needed
+                color: Colors.green, // Adjust the color as needed
+              ),
+            ),
+          ),
+          SizedBox(height: 10),
             Text(
               "Tasks",
               style: TextStyle(

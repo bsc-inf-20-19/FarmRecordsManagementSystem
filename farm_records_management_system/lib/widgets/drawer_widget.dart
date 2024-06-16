@@ -3,12 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DrawerWidget extends StatelessWidget {
+  const DrawerWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
         children: [
-          DrawerHeader(
+          const DrawerHeader(
             padding: EdgeInsets.zero,
             child: UserAccountsDrawerHeader(
               decoration: BoxDecoration(
@@ -37,14 +39,14 @@ class DrawerWidget extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MyHomePage(),
+                    builder: (context) => const MyHomePage(),
                   ));
             },
-            leading: Icon(
+            leading: const Icon(
               CupertinoIcons.home,
-              color: Color(0xFF3388E3C),
+              color: Color(0xff3388e3c),
             ),
-            title: Text(
+            title: const Text(
               "Home",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
@@ -54,14 +56,14 @@ class DrawerWidget extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MyHomePage(),
+                    builder: (context) => const MyHomePage(),
                   ));
             },
-            leading: Icon(
+            leading: const Icon(
               CupertinoIcons.person,
-              color: Color(0xFF3388E3C),
+              color: Color(0xff3388e3c),
             ),
-            title: Text(
+            title: const Text(
               "My Account",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
@@ -71,14 +73,14 @@ class DrawerWidget extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MyHomePage(),
+                    builder: (context) => const MyHomePage(),
                   ));
             },
-            leading: Icon(
+            leading: const Icon(
               CupertinoIcons.cart,
-              color: Color(0xFF3388E3C),
+              color: Color(0xff3388e3c),
             ),
-            title: Text(
+            title: const Text(
               "My Farm",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
@@ -88,25 +90,25 @@ class DrawerWidget extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => MyHomePage(),
+                    builder: (context) => const MyHomePage(),
                   ));
             },
-            leading: Icon(
+            leading: const Icon(
               CupertinoIcons.settings,
-              color: Color(0xFF3388E3C),
+              color: Color(0xff3388e3c),
             ),
-            title: Text(
+            title: const Text(
               "Settings",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ),
           ListTile(
             onTap: () {},
-            leading: Icon(
+            leading: const Icon(
               Icons.exit_to_app,
-              color: Color(0xFF3388E3C),
+              color: Color(0xff3388e3c),
             ),
-            title: Text(
+            title: const Text(
               "Log Out",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),

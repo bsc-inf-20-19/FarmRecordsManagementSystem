@@ -9,7 +9,7 @@ class FieldScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
-        children: [
+        children: const [
           FieldBarWidget(),
            const FieldSection(),
         ],

@@ -3,13 +3,13 @@ import 'package:farm_records_management_system/widgets/crops/activity/activity_b
 import 'package:flutter/material.dart';
 
 class ActivityPage extends StatelessWidget {
-  const ActivityPage({super.key});
+  const ActivityPage({super.key, required plantingId});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
-        children: [
+        children: const [
           ActivityBarWidget(),
           // Activities
           ActivitySection(),

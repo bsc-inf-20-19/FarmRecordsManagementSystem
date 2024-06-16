@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 class CropCard extends StatelessWidget {
   const CropCard({super.key});
 
@@ -25,11 +26,24 @@ class CropCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Crops",
-              style: TextStyle(
-                  fontSize: 20.0,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold)),
+          Expanded(
+            child: Center(
+              child: Icon(
+                Icons.eco, // Use a relevant icon
+                size: 80.0, // Adjust the size as needed
+                color: Colors.green, // Adjust the color as needed
+              ),
+            ),
+          ),
+          SizedBox(height: 10),
+          Text(
+            "Crops",
+            style: TextStyle(
+              fontSize: 20.0,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ],
       ),
     );

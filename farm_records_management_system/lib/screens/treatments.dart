@@ -6,7 +6,7 @@ import 'package:farm_records_management_system/screens/updateTreatmentPage.dart'
 import 'package:farm_records_management_system/database/pdfHepher.dart';
 
 class TreatmentsPage extends StatefulWidget {
-  const TreatmentsPage({Key? key}) : super(key: key);
+  const TreatmentsPage({super.key});
 
   @override
   _TreatmentsPageState createState() => _TreatmentsPageState();

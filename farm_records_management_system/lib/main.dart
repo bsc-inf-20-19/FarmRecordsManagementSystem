@@ -1,19 +1,15 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:farm_records_management_system/profileManagement/login.dart';
 import 'package:farm_records_management_system/profileManagement/registration.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // Conditionally initialize sqflite depending on the platform
+  
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
   }
-
   runApp(const MyApp());
 }
 
