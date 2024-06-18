@@ -423,7 +423,7 @@ class DatabaseHelper {
     return await db.insert('plantings', data);
   }
 
-  Future<List<Map<String, dynamic>>> getPlantings(DateTime selectedDate, {required DateTime endDate, required startDate}) async {
+  Future<List<Map<String, dynamic>>> getPlantings() async {
     Database db = await _initDb();
     return await db.query('plantings');
   }
