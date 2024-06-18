@@ -1,12 +1,13 @@
-import 'dart:convert';
+import 'package:farm_records_management_system/Pages/newField.dart';
+import 'package:flutter/material.dart';
 import 'package:farm_records_management_system/database/databaseHelper.dart';
 import 'package:farm_records_management_system/plant/detail_page.dart';
-import 'package:farm_records_management_system/plant/new_crop_page.dart';
-import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:io';
+import 'dart:convert';
 import 'package:csv/csv.dart';
 import 'package:excel/excel.dart';
+import 'new_crop_page.dart';
 
 class NewPlantPage extends StatefulWidget {
   const NewPlantPage({Key? key}) : super(key: key);
@@ -26,18 +27,26 @@ class _NewPlantPageState extends State<NewPlantPage> {
   final _seedTypeController = TextEditingController();
 
   List<String> _cropTypeList = [];
-  List<String> _fieldList = ["Field A", "Field B", "Field C", "Field D"];
+  List<String> _fieldList = []; // Initialize as empty initially
 
   @override
   void initState() {
     super.initState();
     _fetchCropTypes();
+    _fetchFields(); // Fetch fields from database on init
   }
 
   Future<void> _fetchCropTypes() async {
     final crops = await DatabaseHelper.instance.getCrops();
     setState(() {
       _cropTypeList = crops.map((crop) => crop['name'] as String).toList();
+    });
+  }
+
+  Future<void> _fetchFields() async {
+    final fields = await DatabaseHelper.instance.getFields();
+    setState(() {
+      _fieldList = fields.map((field) => field['fieldName'] as String).toList();
     });
   }
 
@@ -49,6 +58,23 @@ class _NewPlantPageState extends State<NewPlantPage> {
 
     if (result == true) {
       _fetchCropTypes(); // Refresh the crop types after adding a new crop
+    }
+  }
+
+  Future<void> _navigateToAddFieldPage() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => NewFieldPage(
+          onAdd: (fieldData) async {
+            await DatabaseHelper.instance.insertField(fieldData); // Insert field into database
+          },
+        ),
+      ),
+    );
+
+    if (result == true) {
+      _fetchFields(); // Refresh the fields after adding a new field
     }
   }
 
@@ -156,6 +182,11 @@ class _NewPlantPageState extends State<NewPlantPage> {
             icon: const Icon(Icons.file_upload, color: Colors.black),
             tooltip: 'Import Data',
             onPressed: _importFromFile,
+          ),
+          IconButton( // Add a button to navigate to add new field page
+            icon: const Icon(Icons.add, color: Colors.black),
+            tooltip: 'Add New Field',
+            onPressed: _navigateToAddFieldPage,
           ),
         ],
       ),
@@ -312,7 +343,8 @@ class _NewPlantPageState extends State<NewPlantPage> {
               cropType: _cropDropdownController.text,
               cropPlotNumber: _cropPlotController.text,
               cropHarvest: _cropHarvestController.text,
-              seedType: _seedTypeController.text, cropName: '', 
+              seedType: _seedTypeController.text,
+              cropName: '',
             );
           }),
         );

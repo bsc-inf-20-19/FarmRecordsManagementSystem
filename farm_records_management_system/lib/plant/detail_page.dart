@@ -1,26 +1,24 @@
 import 'dart:io';
-import 'package:farm_records_management_system/database/databaseHelper.dart';
-import 'package:farm_records_management_system/plant/new_planting.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:csv/csv.dart';
 import 'package:open_file/open_file.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:farm_records_management_system/screens/new_planting.dart';
-import 'package:pdf/pdf.dart';
+import 'package:farm_records_management_system/database/databaseHelper.dart';
+import 'package:farm_records_management_system/plant/new_planting.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:permission_handler/permission_handler.dart';
 
 class Details extends StatefulWidget {
   const Details({
-    Key? key,
+    super.key,
     required this.cropName,
     required this.cropCompany,
     required this.cropType,
     required this.cropPlotNumber,
     required this.cropHarvest,
     required this.seedType,
-  }) : super(key: key);
+  });
 
   final String cropName;
   final String cropCompany;
@@ -30,6 +28,7 @@ class Details extends StatefulWidget {
   final String seedType;
 
   @override
+  // ignore: library_private_types_in_public_api
   _DetailsState createState() => _DetailsState();
 }
 
@@ -43,10 +42,14 @@ class _DetailsState extends State<Details> {
   }
 
   Future<void> _fetchPlantings() async {
-    // DateTime selectedDate = DateTime.now();
-    // DateTime endDate = DateTime.now().add(const Duration(days: 30));
+    DateTime selectedDate = DateTime.now();
+    DateTime endDate = DateTime.now().add(const Duration(days: 30));
 
-    List<Map<String, dynamic>> plantings = await DatabaseHelper.instance.getPlantings();
+    List<Map<String, dynamic>> plantings = await DatabaseHelper.instance.getPlantings(
+      selectedDate,
+      endDate: endDate,
+      startDate: null,
+    );
 
     if (widget.cropName.isNotEmpty) {
       plantings = plantings
@@ -130,8 +133,9 @@ class _DetailsState extends State<Details> {
       // Permission granted, do nothing
     } else {
       // Permission denied, show error message
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Storage permission is required to save files')),
+        const SnackBar(content: Text('Storage permission is required to save files')),
       );
     }
   }
@@ -148,7 +152,7 @@ class _DetailsState extends State<Details> {
             itemBuilder: (context, index) {
               final planting = _plantings[index];
               return pw.Container(
-                padding: pw.EdgeInsets.all(10),
+                padding: const pw.EdgeInsets.all(10),
                 child: pw.Column(
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
                   children: [
@@ -171,8 +175,9 @@ class _DetailsState extends State<Details> {
 
     final directory = await getExternalStorageDirectory();
     if (directory == null) {
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error accessing external storage')),
+        const SnackBar(content: Text('Error accessing external storage')),
       );
       return;
     }
@@ -354,7 +359,7 @@ class _DetailsState extends State<Details> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const Details(cropName: '', cropCompany: '', cropType: '', cropPlotNumber: '', cropHarvest: '', seedType: '',),
+              builder: (context) => const NewPlantPage(),
             ),
           ).then((_) => _fetchPlantings());
         },
