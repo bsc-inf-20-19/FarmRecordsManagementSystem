@@ -183,6 +183,11 @@ class _NewPlantPageState extends State<NewPlantPage> {
             tooltip: 'Import Data',
             onPressed: _importFromFile,
           ),
+          IconButton( // Add a button to navigate to add new field page
+            icon: const Icon(Icons.add, color: Colors.black),
+            tooltip: 'Add New Field',
+            onPressed: _navigateToAddFieldPage,
+          ),
         ],
       ),
       body: Container(

@@ -44,6 +44,8 @@ class _DetailsState extends State<Details> {
   Future<void> _fetchPlantings() async {
     DateTime selectedDate = DateTime.now();
     DateTime endDate = DateTime.now().add(const Duration(days: 30));
+    DateTime selectedDate = DateTime.now();
+    DateTime endDate = DateTime.now().add(const Duration(days: 30));
 
     List<Map<String, dynamic>> plantings = await DatabaseHelper.instance.getPlantings(
     );
