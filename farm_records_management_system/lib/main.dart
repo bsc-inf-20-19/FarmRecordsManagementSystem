@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "My Farm",
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primaryColor: const Color(0xFF33691E)),
+      theme: ThemeData(primaryColor: const Color(0xFF33691E) ),
       home: const MyHomePage(farmer: {},),
         initialRoute: '/login',
       routes: {

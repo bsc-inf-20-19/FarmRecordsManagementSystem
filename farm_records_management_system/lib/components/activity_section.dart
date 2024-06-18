@@ -1,4 +1,4 @@
-import 'package:farm_records_management_system/plant/new_planting.dart';
+import 'package:farm_records_management_system/plant/main_page.dart';
 import 'package:farm_records_management_system/screens/harvest_add.dart';
 import 'package:farm_records_management_system/screens/home_screen.dart';
 import 'package:farm_records_management_system/screens/treatments.dart';
@@ -26,7 +26,7 @@ class ActivitySection extends StatelessWidget {
                   child: InkWell(
                     onTap: () {
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) =>const NewPlantPage()));
+                          MaterialPageRoute(builder: (context) =>const MainPage()));
                     },
                     child: const PlantingCard(),
                   ),

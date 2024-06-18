@@ -86,8 +86,9 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.taskId == null ? 'New Task' : 'Edit Task')),
-      backgroundColor: Colors.green,
+      appBar: AppBar(title: Text(widget.taskId == null ? 'New Task' : 'Edit Task', style: TextStyle(color: Colors.white),),
+              backgroundColor: Colors.green,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -178,10 +179,14 @@ class _TaskFormScreenState extends State<TaskFormScreen> {
                 },
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _saveTask,
-                child: const Text('Save Task'),
-              ),
+             ElevatedButton(
+  onPressed: _saveTask,
+  style: ElevatedButton.styleFrom(
+    backgroundColor: Colors.orange, // Set the background color to orange
+  ),
+  child: const Text('Add Task', style: TextStyle(color: Colors.white),),
+),
+
             ],
           ),
         ),

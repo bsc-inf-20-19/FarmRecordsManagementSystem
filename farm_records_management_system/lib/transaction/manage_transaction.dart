@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:farm_records_management_system/transaction/add_transaction.dart';
 import 'package:intl/intl.dart';
-import 'expense_DAO.dart';
-import 'income_DAO.dart';
+import 'package:farm_records_management_system/transaction/add_transaction.dart';
+import 'package:farm_records_management_system/transaction/expense_DAO.dart';
+import 'package:farm_records_management_system/transaction/income_DAO.dart';
 
 class ManageTransactionsScreen extends StatefulWidget {
   final int farmerID;
 
- const ManageTransactionsScreen({super.key, required this.farmerID});
+  const ManageTransactionsScreen({Key? key, required this.farmerID}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
-  _ManageTransactionsScreenState createState() =>
-      _ManageTransactionsScreenState();
+  _ManageTransactionsScreenState createState() => _ManageTransactionsScreenState();
 }
 
-class _ManageTransactionsScreenState extends State<ManageTransactionsScreen>
-    with SingleTickerProviderStateMixin {
+class _ManageTransactionsScreenState extends State<ManageTransactionsScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   List<Map<String, dynamic>> _incomeTransactions = [];
@@ -38,8 +35,7 @@ class _ManageTransactionsScreenState extends State<ManageTransactionsScreen>
 
   Future<void> _fetchTransactions() async {
     final incomes = await IncomeDAO.instance.queryAllIncomes(widget.farmerID);
-    final expenses =
-        await ExpenseDAO.instance.queryAllExpenses(widget.farmerID);
+    final expenses = await ExpenseDAO.instance.queryAllExpenses(widget.farmerID);
     setState(() {
       _incomeTransactions = incomes;
       _expenseTransactions = expenses;
@@ -60,43 +56,84 @@ class _ManageTransactionsScreenState extends State<ManageTransactionsScreen>
     _fetchTransactions(); // Refresh transactions after returning from AddTransactionScreen
   }
 
+  Widget _buildTransactionList(List<Map<String, dynamic>> transactions, String type) {
+    if (transactions.isEmpty) {
+      return Center(
+        child: Text(
+          'No $type to display',
+          style: const TextStyle(color: Colors.orange), // Set message text color to orange
+        ),
+      );
+    }
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: ListView.builder(
+        itemCount: transactions.length,
+        itemBuilder: (context, index) {
+          final transaction = transactions[index];
+          return Card(
+            color: const Color(0xFFC7C7C7),
+            margin: const EdgeInsets.symmetric(vertical: 8.0),
+            child: ListTile(
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildTransactionDetail('Description', transaction['description']),
+                  _buildTransactionDetail('Date', DateFormat('yyyy-MM-dd').format(DateTime.parse(transaction['date']))),
+                  _buildTransactionDetail('Amount', '\$${transaction['amount']}'),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildTransactionDetail(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          Text(value),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-      return Scaffold(
+    return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
         title: const Text(
           'Transactions',
-          style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold), // Set app bar text color to white
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         bottom: PreferredSize(
-          preferredSize:
-              const Size.fromHeight(50.0), // Adjust the height as needed
+          preferredSize: const Size.fromHeight(50.0), // Adjust the height as needed
           child: Container(
-            color: Colors
-                .white, // Set the background color for the tab bar section
+            color: Colors.white, // Set the background color for the tab bar section
             child: TabBar(
               controller: _tabController,
               labelColor: Colors.white, // Active tab text color
               unselectedLabelColor: Colors.black, // Inactive tab text color
-              indicator:const BoxDecoration(
+              indicator: BoxDecoration(
                 color: Colors.orange, // Active tab color
-                // borderRadius: BorderRadius.none,
               ),
               indicatorSize: TabBarIndicatorSize.tab,
               tabs: [
                 Tab(
-                  icon: _selectedTabIndex == 0
-                      ?const Icon(Icons.attach_money, color: Colors.white)
-                      : null,
+                  icon: _selectedTabIndex == 0 ? const Icon(Icons.attach_money, color: Colors.white) : null,
                   text: 'INCOME',
                 ),
                 Tab(
-                  icon: _selectedTabIndex == 0
-                      ?const Icon(Icons.attach_money, color: Colors.white)
-                      : null,
+                  icon: _selectedTabIndex == 0 ? const Icon(Icons.attach_money, color: Colors.white) : null,
                   text: 'EXPENSES',
                 ),
               ],
@@ -117,43 +154,8 @@ class _ManageTransactionsScreenState extends State<ManageTransactionsScreen>
           _navigateToAddTransactionScreen(isIncome);
         },
         icon: const Icon(Icons.add),
-        label: const Text('Add Transaction', 
-                          style: TextStyle(color: Colors.white)),
+        label: const Text('Add Transaction', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.orange, // Set button color to orange
-      ),
-    );
-  }
-
-  Widget _buildTransactionList(
-      List<Map<String, dynamic>> transactions, String type) {
-    if (transactions.isEmpty) {
-      return Center(
-        child: Text(
-          'No $type to display',
-          style: const TextStyle(
-              color: Colors.orange), // Set message text color to orange
-        ),
-      );
-    }
-    return Padding(
-      padding:const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: transactions.length,
-              itemBuilder: (context, index) {
-                final transaction = transactions[index];
-                return ListTile(
-                  title: Text(transaction['description']),
-                  subtitle: Text(DateFormat('yyyy-MM-dd')
-                      .format(DateTime.parse(transaction['date']))),
-                  trailing: Text('\$${transaction['amount']}'),
-                );
-              },
-            ),
-          ),
-        ],
       ),
     );
   }

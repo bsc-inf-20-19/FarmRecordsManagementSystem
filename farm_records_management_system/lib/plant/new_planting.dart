@@ -183,11 +183,6 @@ class _NewPlantPageState extends State<NewPlantPage> {
             tooltip: 'Import Data',
             onPressed: _importFromFile,
           ),
-          IconButton( // Add a button to navigate to add new field page
-            icon: const Icon(Icons.add, color: Colors.black),
-            tooltip: 'Add New Field',
-            onPressed: _navigateToAddFieldPage,
-          ),
         ],
       ),
       body: Container(
@@ -247,24 +242,35 @@ class _NewPlantPageState extends State<NewPlantPage> {
               ),
             ),
             const SizedBox(height: 10.0),
-            DropdownButtonFormField(
-              value: _fieldDropdownController.text.isNotEmpty ? _fieldDropdownController.text : null,
-              items: _fieldList
-                  .map((e) => DropdownMenuItem(
-                        value: e,
-                        child: Text(e),
-                      ))
-                  .toList(),
-              onChanged: (val) {
-                setState(() {
-                  _fieldDropdownController.text = val as String;
-                });
-              },
-              icon: const Icon(Icons.arrow_drop_down_outlined, color: Colors.green),
-              decoration: const InputDecoration(
-                labelText: "Select field",
-                border: OutlineInputBorder(),
-              ),
+            Row(
+              children: [
+                Expanded(
+                  child: DropdownButtonFormField(
+                    value: _fieldDropdownController.text.isNotEmpty ? _fieldDropdownController.text : null,
+                    items: _fieldList
+                        .map((e) => DropdownMenuItem(
+                              value: e,
+                              child: Text(e),
+                            ))
+                        .toList(),
+                    onChanged: (val) {
+                      setState(() {
+                        _fieldDropdownController.text = val as String;
+                      });
+                    },
+                    icon: const Icon(Icons.arrow_drop_down_outlined, color: Colors.green),
+                    decoration: const InputDecoration(
+                      labelText: "Select field",
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.add, color: Colors.green),
+                  tooltip: 'Add New Field',
+                  onPressed: _navigateToAddFieldPage,
+                ),
+              ],
             ),
             const SizedBox(height: 10.0),
             MyTextField(

@@ -88,7 +88,7 @@ class _AddTreatmentPageState extends State<AddTreatmentPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green,
-        title: const Text('New Treatment'),
+        title: const Text('New Treatment', style: TextStyle(color: Colors.white),),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
