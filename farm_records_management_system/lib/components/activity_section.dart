@@ -60,7 +60,7 @@ class ActivitySection extends StatelessWidget {
                   child: InkWell(
                     onTap: () {
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) =>const MyHomePage()));
+                          MaterialPageRoute(builder: (context) =>const MyHomePage(farmer: {},)));
                     },
                     child:const TasksCard(),
                   ),

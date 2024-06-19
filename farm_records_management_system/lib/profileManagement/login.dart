@@ -21,7 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (farmer != null) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const MyHomePage()),
+        MaterialPageRoute(builder: (context) => const MyHomePage(farmer: {},)),
       );
     } else {
       setState(() {

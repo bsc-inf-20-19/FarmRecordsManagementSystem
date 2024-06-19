@@ -46,7 +46,7 @@ class MyActivityPage extends StatelessWidget {
         ),
         body: const Padding(
           padding: EdgeInsets.only(top: 16),
-          child: HomeSection(),
+          child: HomeSection(farmer: {},),
         ));
   }
 }

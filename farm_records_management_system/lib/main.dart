@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:farm_records_management_system/profileManagement/login.dart';
 import 'package:farm_records_management_system/profileManagement/registration.dart';
-import 'package:farm_records_management_system/screens/home_screen.dart';
 
 
 void main() {
@@ -21,16 +20,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "Freshify App",
+      title: "Farm Records Management System",
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primaryColor: const Color(0xFF33691E)),
-      home: MyHomePage(),
-      // initialRoute: '/login',
-      // routes: {
-      //   '/': (context) => LoginScreen(),
-      //   '/login': (context) => LoginScreen(),
-      //   '/register': (context) => RegistrationScreen(),
-      // },
+      // home: MyHomePage(),
+      initialRoute: '/login',
+      routes: {
+        '/': (context) => LoginScreen(),
+        '/login': (context) => LoginScreen(),
+        '/register': (context) => RegistrationScreen(),
+      },
     );
   }
 }

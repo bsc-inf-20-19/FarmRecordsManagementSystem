@@ -14,7 +14,7 @@ class FieldBarWidget extends StatelessWidget {
           Navigator.pop(
             context,
             MaterialPageRoute(
-              builder: (context) => const MyHomePage(),
+              builder: (context) => const MyHomePage(farmer: {},),
             ),
           );
         },

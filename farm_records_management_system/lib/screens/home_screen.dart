@@ -4,7 +4,7 @@ import 'package:farm_records_management_system/widgets/appbar_widget.dart';
 import 'package:farm_records_management_system/widgets/drawer_widget.dart';
 
 class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
+  const MyHomePage({super.key, required Map<String, dynamic> farmer});
 
   @override
   Widget build(BuildContext context) {
@@ -24,16 +24,16 @@ class MyHomePage extends StatelessWidget {
                 ],
               ),
             ),
-            child: Column(
+            child: const Column(
               children: [
                 AppBarWidget(),
-                Expanded(child: HomeSection()),
+                Expanded(child: HomeSection(farmer: {},)),
               ],
             ),
           ),
         ],
       ),
-      drawer: DrawerWidget(),
+      drawer: DrawerWidget(farmer: {},),
     );
   }
 }

@@ -76,7 +76,6 @@ class DatabaseHelper {
         firstName TEXT,
         lastName TEXT,
         email TEXT,
-        phone TEXT,
         password TEXT
       )
     ''');

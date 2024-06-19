@@ -9,7 +9,7 @@ import 'package:farm_records_management_system/widgets/trans_card.dart';
 import 'package:flutter/material.dart';
 
 class HomeSection extends StatelessWidget {
-  const HomeSection({super.key});
+  const HomeSection({super.key, required Map<String, dynamic> farmer});
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +68,7 @@ class HomeSection extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const MyHomePage()), // Navigate to Setup Screen
+                        MaterialPageRoute(builder: (context) => const MyHomePage(farmer: {},)), // Navigate to Setup Screen
                       );
                     },
                     child:const SetupCard(),
