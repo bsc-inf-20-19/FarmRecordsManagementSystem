@@ -200,6 +200,7 @@ class _FieldListScreenState extends State<FieldListScreen> {
             }
           });
         },
+        backgroundColor: Colors.green,
         child: const Icon(Icons.add),
       ),
     );

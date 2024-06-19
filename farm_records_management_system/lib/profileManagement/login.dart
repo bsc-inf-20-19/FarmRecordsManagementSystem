@@ -1,4 +1,5 @@
 import 'package:farm_records_management_system/farmer/farmer_DAO.dart';
+import 'package:farm_records_management_system/profileManagement/registration.dart';
 import 'package:farm_records_management_system/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +22,6 @@ class _LoginScreenState extends State<LoginScreen> {
     if (farmer != null) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const MyHomePage(farmer: {},)),
         MaterialPageRoute(builder: (context) => MyHomePage(farmer: {},)),
       );
     } else {

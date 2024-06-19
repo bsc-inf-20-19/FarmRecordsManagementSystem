@@ -1,4 +1,4 @@
-import 'package:farm_records_management_system/home/screens/home_screen.dart';
+import 'package:farm_records_management_system/screens/home_screen.dart';
 import 'package:farm_records_management_system/profileManagement/login.dart';
 import 'package:farm_records_management_system/profileManagement/myAccountPage.dart';
 import 'package:farm_records_management_system/profileManagement/myFarmPage.dart';
@@ -11,9 +11,6 @@ class DrawerWidget extends StatelessWidget {
   final Map<String, dynamic> farmer;
 
   const DrawerWidget({super.key, required this.farmer});
-  final Map<String, dynamic> farmer;
-
-  const DrawerWidget({super.key, required this.farmer});
 
   @override
   Widget build(BuildContext context) {
@@ -21,16 +18,12 @@ class DrawerWidget extends StatelessWidget {
       child: ListView(
         children: [
           DrawerHeader(
-          DrawerHeader(
             padding: EdgeInsets.zero,
             child: UserAccountsDrawerHeader(
-              decoration: const BoxDecoration(
               decoration: const BoxDecoration(
                 color: Colors.green,
               ),
               accountName: Text(
-                "${farmer['firstName'] ?? 'FirstName'} ${farmer['lastName'] ?? 'LastName'}",
-                style: const TextStyle(
                 "${farmer['firstName'] ?? 'FirstName'} ${farmer['lastName'] ?? 'LastName'}",
                 style: const TextStyle(
                   fontSize: 20,
@@ -40,24 +33,14 @@ class DrawerWidget extends StatelessWidget {
               accountEmail: Text(
                 farmer['email'] ?? 'email@example.com',
                 style: const TextStyle(
-                farmer['email'] ?? 'email@example.com',
-                style: const TextStyle(
                   fontSize: 16,
                 ),
-              ),
-              currentAccountPicture: const CircleAvatar(
-                backgroundImage: AssetImage("assets/images/farmer_avatar.jpg"),
               ),
             ),
           ),
           ListTile(
             onTap: () {
               Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MyHomePage(farmer: farmer),
-                ),
-              );
                 context,
                 MaterialPageRoute(
                   builder: (context) => MyHomePage(farmer: farmer),
@@ -81,11 +64,6 @@ class DrawerWidget extends StatelessWidget {
                   builder: (context) => MyAccountPage(farmer: farmer),
                 ),
               );
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MyAccountPage(farmer: farmer),
-                ),
-              );
             },
             leading: const Icon(
               CupertinoIcons.person,
@@ -99,11 +77,6 @@ class DrawerWidget extends StatelessWidget {
           ListTile(
             onTap: () {
               Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MyFarmPage(farmer: farmer),
-                ),
-              );
                 context,
                 MaterialPageRoute(
                   builder: (context) => MyFarmPage(farmer: farmer),
@@ -127,11 +100,6 @@ class DrawerWidget extends StatelessWidget {
                   builder: (context) => SettingsPage(),
                 ),
               );
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SettingsPage(),
-                ),
-              );
             },
             leading: const Icon(
               CupertinoIcons.settings,
@@ -143,32 +111,6 @@ class DrawerWidget extends StatelessWidget {
             ),
           ),
           ListTile(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AboutPage(),
-                ),
-              );
-            },
-            leading: const Icon(
-              Icons.info,
-              color: Color(0xff3388e3c),
-            ),
-            title: const Text(
-              "About",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-          ),
-          ListTile(
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => LoginScreen(),
-                ),
-              );
-            },
             onTap: () {
               Navigator.push(
                 context,
