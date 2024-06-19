@@ -7,7 +7,7 @@ class FieldBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Color.fromARGB(255, 97, 204, 82), // Green background color
+      backgroundColor: Colors.green,
       elevation: 0, // No shadow
       leading: InkWell(
         onTap: () {

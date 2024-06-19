@@ -122,6 +122,7 @@ class _HarvestListScreenState extends State<HarvestListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.green,
         title: isSearching
             ? TextField(
                 controller: searchController,
@@ -131,9 +132,10 @@ class _HarvestListScreenState extends State<HarvestListScreen> {
                   border: InputBorder.none,
                 ),
               )
-            : const Text('Harvest List'),
+            : const Text('Harvests', style: TextStyle(color: Colors.white),),
         actions: [
           IconButton(
+            color: Colors.white,
             icon: Icon(isSearching ? Icons.close : Icons.search),
             onPressed: () {
               setState(() {
@@ -205,12 +207,12 @@ class _HarvestListScreenState extends State<HarvestListScreen> {
                   const Divider(thickness: 0.5, color: Colors.black54),
                   const SizedBox(height: 8),
                   HarvestItem(label: 'Batch No', value: batchNo, color: Colors.green),
-                  HarvestItem(label: 'Quantity', value: quantity, color: Colors.blue),
-                  HarvestItem(label: 'Quality', value: quality, color: Colors.orange),
-                  HarvestItem(label: 'Unit Cost', value: unitCost, color: Colors.red),
-                  HarvestItem(label: 'Income', value: income, color: Colors.purple),
-                  HarvestItem(label: 'Date', value: _formatDate(date), color: Colors.brown),
-                  HarvestItem(label: 'Notes', value: notes, color: Colors.cyan),
+                  HarvestItem(label: 'Quantity', value: quantity, color: Colors.green),
+                  HarvestItem(label: 'Quality', value: quality, color: Colors.green),
+                  HarvestItem(label: 'Unit Cost', value: unitCost, color: Colors.green),
+                  HarvestItem(label: 'Income', value: income, color: Colors.green),
+                  HarvestItem(label: 'Date', value: _formatDate(date), color: Colors.green),
+                  HarvestItem(label: 'Notes', value: notes, color: Colors.green),
                 ],
               ),
             ),
@@ -218,6 +220,7 @@ class _HarvestListScreenState extends State<HarvestListScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.green,
         onPressed: _navigateToAddHarvestPage,
         child: const Icon(Icons.add),
       ),

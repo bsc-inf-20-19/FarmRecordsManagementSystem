@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 
-class ReportCard extends StatelessWidget {
-  const ReportCard({super.key});
+class ExpenseCard extends StatelessWidget {
+  const ExpenseCard({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 180,
-      width: MediaQuery.of(context).size.width / 2 - 32, // minus 32 due to the margin
+      width: double.infinity,
       margin: const EdgeInsets.all(14.0),
       padding: const EdgeInsets.all(14.0),
       decoration: const BoxDecoration(
-        color: Colors.white, // background color of the cards
+        color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(20.0)),
         boxShadow: [
-          // this is the shadow of the card
           BoxShadow(
             color: Colors.black,
             spreadRadius: 0.5,
@@ -24,13 +23,13 @@ class ReportCard extends StatelessWidget {
         ],
       ),
       child: const Column(
-        mainAxisAlignment: MainAxisAlignment.end, // position everything to the bottom
+        mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: Center(
               child: Icon(
-                Icons.pie_chart, // Use a relevant icon
+                Icons.add_box, // Use a relevant icon
                 size: 80.0, // Adjust the size as needed
                 color: Colors.green, // Adjust the color as needed
               ),
@@ -38,10 +37,10 @@ class ReportCard extends StatelessWidget {
           ),
           SizedBox(height: 10),
           Text(
-            'Report',
+            "EXPENSE",
             style: TextStyle(
-              color: Colors.black,
               fontSize: 20.0,
+              color: Colors.black,
               fontWeight: FontWeight.bold,
             ),
           ),

@@ -52,6 +52,7 @@ class _AddHarvestPageState extends State<AddHarvestPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.green,
         title: Text('Add Harvest'),
       ),
       body: Padding(

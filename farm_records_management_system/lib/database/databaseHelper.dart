@@ -396,7 +396,7 @@ class DatabaseHelper {
     Database db = await _initDb();
     List<Map<String, dynamic>> result = await db.query(
       'harvests',
-      where: 'harvestID = ?',
+      where: 'id = ?',
       whereArgs: [id],
       limit: 1,
     );
@@ -408,14 +408,14 @@ class DatabaseHelper {
     return await db.update(
       'harvests',
       data,
-      where: 'harvestID = ?',
+      where: 'id = ?',
       whereArgs: [id],
     );
   }
 
   Future<int> deleteHarvest(int id) async {
     Database db = await _initDb();
-    return await db.delete('harvests', where: 'harvestID = ?', whereArgs: [id]);
+    return await db.delete('harvests', where: 'id = ?', whereArgs: [id]);
   }
 
   // // CRUD operations for plantings

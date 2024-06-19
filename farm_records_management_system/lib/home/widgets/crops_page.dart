@@ -1,5 +1,5 @@
 
-import 'package:farm_records_management_system/home/components/sections/home_section.dart';
+import 'package:farm_records_management_system/components/home_section.dart';
 import 'package:farm_records_management_system/home/utils/styles.dart';
 import 'package:flutter/material.dart';
 

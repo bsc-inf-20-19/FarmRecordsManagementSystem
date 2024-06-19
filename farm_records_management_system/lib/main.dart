@@ -1,34 +1,25 @@
-import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:farm_records_management_system/farmer/farmer_DAO.dart';
 import 'package:farm_records_management_system/profileManagement/login.dart';
 import 'package:farm_records_management_system/profileManagement/registration.dart';
-
+import 'package:farm_records_management_system/screens/home_screen.dart';
+import 'package:flutter/material.dart';
 
 void main() {
-  
-  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-    sqfliteFfiInit();
-    databaseFactory = databaseFactoryFfi;
-  }
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "Farm Records Management System",
+      title: "My Farm",
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primaryColor: const Color(0xFF33691E)),
-      // home: MyHomePage(),
-      initialRoute: '/login',
+      theme: ThemeData(primaryColor: const Color(0xFF33691E) ),
+      home: const MyHomePage(farmer: {},),
+        initialRoute: '/login',
       routes: {
-        '/': (context) => LoginScreen(),
-        '/login': (context) => LoginScreen(),
-        '/register': (context) => RegistrationScreen(),
+         '/login': (context) => LoginScreen(),
+         '/register': (context) => RegistrationScreen(),
       },
     );
   }

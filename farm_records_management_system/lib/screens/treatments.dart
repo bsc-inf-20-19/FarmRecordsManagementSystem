@@ -1,3 +1,4 @@
+import 'package:farm_records_management_system/home/utils/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:farm_records_management_system/database/databaseHelper.dart';
@@ -134,16 +135,18 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.green,
         title: isSearching
             ? TextField(
                 controller: searchController,
                 onChanged: (value) => _applySearchFilter(value),
                 decoration: const InputDecoration(
                   hintText: 'Search by name, type, or date',
+                  fillColor: Colors.white,
                   border: InputBorder.none,
                 ),
               )
-            : const Text('Treatments'),
+            : const Text('Treatments', style: TextStyle(color: Colors.white),),
         actions: [
           IconButton(
             icon: Icon(isSearching ? Icons.close : Icons.search),
@@ -157,7 +160,7 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
             },
           ),
           IconButton(
-            icon: const Icon(Icons.picture_as_pdf),
+            icon: const Icon(Icons.picture_as_pdf, color: Colors.white,),
             onPressed: () async {
               await PDFGenerator.generateAndShareTreatmentPdf(
                   context, treatments);
@@ -248,6 +251,7 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.green,
         onPressed: _navigateToAddTreatmentPage,
         child: const Icon(Icons.add),
       ),

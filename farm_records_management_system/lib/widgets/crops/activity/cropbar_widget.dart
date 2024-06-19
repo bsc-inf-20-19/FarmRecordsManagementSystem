@@ -7,7 +7,7 @@ class CropBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Color.fromARGB(255, 57, 185, 41),
+      color: Colors.green,
       padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

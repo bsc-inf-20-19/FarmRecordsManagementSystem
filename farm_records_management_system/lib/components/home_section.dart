@@ -1,3 +1,4 @@
+import 'package:farm_records_management_system/components/set-up_section.dart';
 import 'package:farm_records_management_system/screens/fields_screen.dart';
 import 'package:farm_records_management_system/screens/home_screen.dart';
 import 'package:farm_records_management_system/transaction/manage_transaction.dart';
@@ -68,7 +69,7 @@ class HomeSection extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const MyHomePage(farmer: {},)), // Navigate to Setup Screen
+                        MaterialPageRoute(builder: (context) => SetUpPage()) // Navigate to Setup Screen
                       );
                     },
                     child:const SetupCard(),
