@@ -24,10 +24,10 @@ class MyHomePage extends StatelessWidget {
                 ],
               ),
             ),
-            child: Column(
+            child: const Column(
               children: [
                 AppBarWidget(),
-                Expanded(child: HomeSection()),
+                Expanded(child: HomeSection(farmer: {},)),
               ],
             ),
           ),
