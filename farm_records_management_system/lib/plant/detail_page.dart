@@ -9,6 +9,7 @@ import 'package:farm_records_management_system/plant/edit_planting.dart';
 import 'package:farm_records_management_system/plant/new_planting.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:permission_handler/permission_handler.dart';
+import 'package:file_picker/file_picker.dart';
 
 class Details extends StatefulWidget {
   const Details({
@@ -275,6 +276,45 @@ class _DetailsState extends State<Details> {
     await OpenFile.open(csvFile.path);
   }
 
+  Future<void> _importCsv() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['csv'],
+    );
+
+    if (result == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No file selected')),
+      );
+      return;
+    }
+
+    File file = File(result.files.single.path!);
+
+    final csvData = await file.readAsString();
+    final List<List<dynamic>> csvTable = const CsvToListConverter().convert(csvData);
+
+    for (var i = 1; i < csvTable.length; i++) {
+      final row = csvTable[i];
+      await DatabaseHelper.instance.insertPlanting({
+        'crop': row[0],
+        'field': row[1],
+        'description': row[2],
+        'cropCompany': row[3],
+        'cropType': row[4],
+        'cropPlotNumber': row[5],
+        'cropHarvest': row[6],
+        'date': row[7],
+      });
+    }
+
+    _fetchPlantings();
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('CSV data imported successfully')),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -295,6 +335,11 @@ class _DetailsState extends State<Details> {
             icon: const Icon(Icons.file_download),
             onPressed: _exportToCsv,
             tooltip: 'Export to CSV',
+          ),
+          IconButton(
+            icon: const Icon(Icons.file_upload),
+            onPressed: _importCsv,
+            tooltip: 'Import CSV',
           ),
         ],
       ),

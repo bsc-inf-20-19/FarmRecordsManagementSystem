@@ -1,7 +1,11 @@
+import 'dart:io';
+
+import 'package:csv/csv.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:farm_records_management_system/database/databaseHelper.dart';
 import 'package:farm_records_management_system/plant/crop_details_tabbed.dart';
 import 'package:farm_records_management_system/plant/new_crop_page.dart';
-import 'package:flutter/material.dart';
 
 class CropListPage extends StatefulWidget {
   const CropListPage({Key? key}) : super(key: key);
@@ -21,8 +25,30 @@ class _CropListPageState extends State<CropListPage> {
 
   Future<void> _fetchCrops() async {
     final crops = await DatabaseHelper.instance.getCrops();
+    final plantings = await DatabaseHelper.instance.getPlantings();
+
+    Set existingCropNames = crops.map((crop) => crop['name'].toLowerCase()).toSet();
+    Set newCropNames = plantings.map((planting) => planting['crop'].toLowerCase()).toSet();
+
+    // Determine new crops that are not already in the crop list (case insensitive)
+    Set uniqueNewCropNames = newCropNames.difference(existingCropNames);
+
+    // Insert unique new crops into the database
+    for (String newCropName in uniqueNewCropNames) {
+      // Find the original case of the crop name
+      String originalCaseName = plantings.firstWhere((planting) => planting['crop'].toLowerCase() == newCropName)['crop'];
+
+      await DatabaseHelper.instance.insertCrop({
+        'name': originalCaseName,
+        'harvestUnits': '', // Set default values or leave blank as per your requirement
+        'notes': '',        // Set default values or leave blank as per your requirement
+      });
+    }
+
+    // Fetch updated crops list from the database
+    final updatedCrops = await DatabaseHelper.instance.getCrops();
     setState(() {
-      _crops = crops;
+      _crops = updatedCrops;
     });
   }
 
@@ -44,6 +70,45 @@ class _CropListPageState extends State<CropListPage> {
         builder: (context) => CropDetailsTabbedPage(crop: crop),
       ),
     ).then((_) => _fetchCrops());
+  }
+
+  Future<void> _importCsv() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['csv'],
+    );
+
+    if (result == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No file selected')),
+      );
+      return;
+    }
+
+    File file = File(result.files.single.path!);
+
+    final csvData = await file.readAsString();
+    final List<List<dynamic>> csvTable = const CsvToListConverter().convert(csvData);
+
+    for (var i = 1; i < csvTable.length; i++) {
+      final row = csvTable[i];
+      await DatabaseHelper.instance.insertPlanting({
+        'crop': row[0],
+        'field': row[1],
+        'description': row[2],
+        'cropCompany': row[3],
+        'cropType': row[4],
+        'cropPlotNumber': row[5],
+        'cropHarvest': row[6],
+        'date': row[7],
+      });
+    }
+
+    _fetchCrops(); // Fetch crops after importing to update the list
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('CSV data imported successfully')),
+    );
   }
 
   @override

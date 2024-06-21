@@ -2,11 +2,6 @@ import 'package:farm_records_management_system/Pages/newField.dart';
 import 'package:flutter/material.dart';
 import 'package:farm_records_management_system/database/databaseHelper.dart';
 import 'package:farm_records_management_system/plant/detail_page.dart';
-import 'package:file_picker/file_picker.dart';
-import 'dart:io';
-import 'dart:convert';
-import 'package:csv/csv.dart';
-import 'package:excel/excel.dart';
 import 'new_crop_page.dart';
 
 class NewPlantPage extends StatefulWidget {
@@ -27,13 +22,13 @@ class _NewPlantPageState extends State<NewPlantPage> {
   final _seedTypeController = TextEditingController();
 
   List<String> _cropTypeList = [];
-  List<String> _fieldList = []; // Initialize as empty initially
+  List<String> _fieldList = [];
 
   @override
   void initState() {
     super.initState();
     _fetchCropTypes();
-    _fetchFields(); // Fetch fields from database on init
+    _fetchFields();
   }
 
   Future<void> _fetchCropTypes() async {
@@ -57,7 +52,7 @@ class _NewPlantPageState extends State<NewPlantPage> {
     );
 
     if (result == true) {
-      _fetchCropTypes(); // Refresh the crop types after adding a new crop
+      _fetchCropTypes();
     }
   }
 
@@ -76,7 +71,7 @@ class _NewPlantPageState extends State<NewPlantPage> {
     );
 
     if (result == true) {
-      _fetchFields(); // Refresh the fields after adding a new field
+      _fetchFields();
     }
   }
 
@@ -107,64 +102,6 @@ class _NewPlantPageState extends State<NewPlantPage> {
     }
   }
 
-  Future<void> _importFromFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['csv', 'xlsx'],
-    );
-
-    if (result != null) {
-      File file = File(result.files.single.path!);
-
-      if (result.files.single.extension == 'csv') {
-        final input = file.openRead();
-        final fields = await input.transform(utf8.decoder).transform(CsvToListConverter()).toList();
-
-        for (var row in fields) {
-          Map<String, dynamic> plantingData = {
-            'date': row[0],
-            'crop': row[1],
-            'field': row[2],
-            'description': row[3],
-            'cropCompany': row[4],
-            'cropType': row[5],
-            'cropPlotNumber': row[6],
-            'cropHarvest': row[7],
-            'seedType': row[8],
-          };
-          await DatabaseHelper.instance.insertPlanting(plantingData);
-        }
-      } else if (result.files.single.extension == 'xlsx') {
-        var bytes = file.readAsBytesSync();
-        var excel = Excel.decodeBytes(bytes);
-
-        for (var table in excel.tables.keys) {
-          var sheet = excel.tables[table];
-          for (var row in sheet!.rows) {
-            Map<String, dynamic> plantingData = {
-              'date': row[0]?.value,
-              'crop': row[1]?.value,
-              'field': row[2]?.value,
-              'description': row[3]?.value,
-              'cropCompany': row[4]?.value,
-              'cropType': row[5]?.value,
-              'cropPlotNumber': row[6]?.value,
-              'cropHarvest': row[7]?.value,
-              'seedType': row[8]?.value,
-            };
-            await DatabaseHelper.instance.insertPlanting(plantingData);
-          }
-        }
-      }
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Data imported successfully')),
-      );
-    } else {
-      // User canceled the picker
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -179,13 +116,6 @@ class _NewPlantPageState extends State<NewPlantPage> {
         ),
         centerTitle: true,
         backgroundColor: Colors.green,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.file_upload, color: Colors.black),
-            tooltip: 'Import Data',
-            onPressed: _importFromFile,
-          ),
-        ],
       ),
       body: Container(
         padding: const EdgeInsets.all(20.0),
