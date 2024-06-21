@@ -1,4 +1,3 @@
-// custom_input_field.dart
 import 'package:flutter/material.dart';
 
 class CustomInputField extends StatelessWidget {
@@ -17,7 +16,7 @@ class CustomInputField extends StatelessWidget {
     this.readOnly = false,
     this.onTap,
     this.validator,
-    this.maxLines = 1, // default to single line input
+    this.maxLines = 1,
     Key? key,
   }) : super(key: key);
 

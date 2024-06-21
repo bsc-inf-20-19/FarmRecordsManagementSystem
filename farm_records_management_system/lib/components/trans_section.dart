@@ -78,7 +78,7 @@ class TrialPage extends StatelessWidget {
             ),
           ),
           //Latest Items
-          const HomeSection()
+          const HomeSection(farmer: {},)
         ],
       ),
       drawer: const DrawerWidget(farmer: {},),

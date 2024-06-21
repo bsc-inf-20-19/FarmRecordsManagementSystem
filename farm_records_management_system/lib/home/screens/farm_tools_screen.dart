@@ -1,6 +1,6 @@
 
 import 'package:farm_records_management_system/home/components/sections/tools_section.dart';
-import 'package:farm_records_management_system/home/widgets/drawer_widget.dart';
+import 'package:farm_records_management_system/widgets/drawer_widget.dart';
 import 'package:flutter/material.dart';
 
 class FarmToolsPage extends StatelessWidget {
@@ -33,7 +33,7 @@ class FarmToolsPage extends StatelessWidget {
           ToolsSection()
         ],
       ),
-      drawer: DrawerWidget(),
+      drawer: DrawerWidget(farmer: {},),
     );
   }
 }
