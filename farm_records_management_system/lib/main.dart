@@ -1,4 +1,3 @@
-import 'package:farm_records_management_system/farmer/farmer_DAO.dart';
 import 'package:farm_records_management_system/profileManagement/login.dart';
 import 'package:farm_records_management_system/profileManagement/registration.dart';
 import 'package:farm_records_management_system/screens/home_screen.dart';

@@ -1,6 +1,5 @@
 import 'package:farm_records_management_system/components/set-up_section.dart';
 import 'package:farm_records_management_system/screens/fields_screen.dart';
-import 'package:farm_records_management_system/screens/home_screen.dart';
 import 'package:farm_records_management_system/transaction/manage_transaction.dart';
 import 'package:farm_records_management_system/transaction/report_screen.dart';
 import 'package:farm_records_management_system/widgets/field_card.dart';
