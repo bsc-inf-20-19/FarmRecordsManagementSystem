@@ -444,13 +444,33 @@ class DatabaseHelper {
     return await db.delete('plantings', where: 'id = ?', whereArgs: [id]);
   }
 
-  Future<int> updatePlanting(int id, Map<String, dynamic> data) async {
+ Future<int> updatePlanting(Map<String, dynamic> planting) async {
+  final db = await _initDb();
+  return await db.update(
+    'plantings',
+    planting,
+    where: 'id = ?',
+    whereArgs: [planting['id']],
+  );
+}
+ // Method to update crop name in plantings
+  Future<void> updatePlantingsCropName(String oldCropName, String newCropName) async {
     Database db = await _initDb();
-    return await db.update(
+    await db.update(
       'plantings',
-      data,
-      where: 'id = ?',
-      whereArgs: [id],
+      {'crop': newCropName},
+      where: 'crop = ?',
+      whereArgs: [oldCropName],
+    );
+  }
+
+  // Method to get plantings by crop name
+  Future<List<Map<String, dynamic>>> getPlantingsByCropName(String cropName) async {
+    Database db = await _initDb();
+    return await db.query(
+      'plantings',
+      where: 'crop = ?',
+      whereArgs: [cropName],
     );
   }
 
@@ -502,4 +522,6 @@ class DatabaseHelper {
       whereArgs: [id],
     );
   }
+
+  getFieldsNames() {}
 }

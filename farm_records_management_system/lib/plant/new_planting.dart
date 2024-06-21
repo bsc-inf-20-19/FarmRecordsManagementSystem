@@ -66,8 +66,10 @@ class _NewPlantPageState extends State<NewPlantPage> {
       context,
       MaterialPageRoute(
         builder: (context) => NewFieldPage(
-          onAdd: (fieldData) async {
-            await DatabaseHelper.instance.insertField(fieldData); // Insert field into database
+          onAdd: (fieldData) {
+            setState(() {
+              _fieldList.add(fieldData['fieldName']);
+            });
           },
         ),
       ),
@@ -182,11 +184,6 @@ class _NewPlantPageState extends State<NewPlantPage> {
             icon: const Icon(Icons.file_upload, color: Colors.black),
             tooltip: 'Import Data',
             onPressed: _importFromFile,
-          ),
-          IconButton( // Add a button to navigate to add new field page
-            icon: const Icon(Icons.add, color: Colors.black),
-            tooltip: 'Add New Field',
-            onPressed: _navigateToAddFieldPage,
           ),
         ],
       ),

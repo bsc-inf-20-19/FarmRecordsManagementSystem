@@ -48,10 +48,92 @@ class _NewFieldPageState extends State<NewFieldPage> {
         'notes': _notesController.text,
       };
 
-      await DatabaseHelper.instance.insertField(newField);
-      widget.onAdd(newField);
-      Navigator.pop(context, true);
+      try {
+        await DatabaseHelper.instance.insertField(newField);
+        widget.onAdd(newField);
+        Navigator.pop(context, true);
+      } catch (error) {
+        setState(() {
+          _isSaving = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error saving field: $error'),
+          ),
+        );
+      }
     }
+  }
+
+  Widget _buildHeader(String text) {
+    return Text(
+      text,
+      style: const TextStyle(
+        fontSize: 16.0,
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+      ),
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, String labelText, IconData icon, {TextInputType inputType = TextInputType.text}) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: inputType,
+      decoration: InputDecoration(
+        labelText: labelText,
+        labelStyle: const TextStyle(color: Colors.black, fontSize: 14.0),
+        prefixIcon: Icon(icon, color: Colors.green.shade700),
+        contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: BorderSide(color: Colors.green.shade700),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: BorderSide(color: Colors.green.shade700),
+        ),
+      ),
+      style: const TextStyle(fontSize: 14.0),
+    );
+  }
+
+  Widget _buildDropdownField(String? value, String labelText, IconData icon, List<String> items, Function(String?) onChanged) {
+    return DropdownButtonFormField<String>(
+      value: value,
+      decoration: InputDecoration(
+        labelText: labelText,
+        labelStyle: const TextStyle(color: Colors.black, fontSize: 14.0),
+        prefixIcon: Icon(icon, color: Colors.green.shade700),
+        contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: BorderSide(color: Colors.green.shade700),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: BorderSide(color: Colors.green.shade700),
+        ),
+      ),
+      items: items.map((item) => DropdownMenuItem(value: item, child: Text(item, style: const TextStyle(fontSize: 14.0)))).toList(),
+      onChanged: onChanged,
+      validator: (value) => value == null ? 'Please select a value' : null,
+    );
+  }
+
+  Widget _buildAddFieldButton(BuildContext context) {
+    return ElevatedButton.icon(
+      onPressed: _isSaving ? null : _addField,
+      icon: const Icon(Icons.add, size: 20.0, color: Colors.white),
+      label: _isSaving ? const CircularProgressIndicator() : const Text("Add Field", style: TextStyle(fontSize: 16.0, color: Colors.white)),
+      style: ElevatedButton.styleFrom(
+        foregroundColor: Colors.white, backgroundColor: Colors.green.shade700,
+        minimumSize: const Size(180, 45),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+      ),
+    );
   }
 
   @override
@@ -59,107 +141,55 @@ class _NewFieldPageState extends State<NewFieldPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add New Field'),
+        centerTitle: true,
+        backgroundColor: Colors.green.shade700,
+        titleTextStyle: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(15.0),
         child: Form(
           key: _formKey,
-          child: ListView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomInputField(
-                label: 'Field Name',
-                controller: _fieldNameController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a field name';
-                  }
-                  return null;
-                },
-              ),
-              DropdownButtonFormField<String>(
-                value: _selectedFieldType,
-                decoration: const InputDecoration(labelText: 'Select Field Type'),
-                items: ['Field/outdoor', 'Greenhouse', 'Speeding', 'Grow tent']
-                    .map((type) => DropdownMenuItem(
-                          value: type,
-                          child: Text(type),
-                        ))
-                    .toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedFieldType = value;
-                  });
-                },
-                validator: (value) {
-                  if (value == null) {
-                    return 'Please select a field type';
-                  }
-                  return null;
-                },
-              ),
-              DropdownButtonFormField<String>(
-                value: _selectedLightProfile,
-                decoration: const InputDecoration(labelText: 'Select Light Profile'),
-                items: [
-                  'Full sun',
-                  'Full To Partial Sun',
-                  'Partial Sun',
-                  'Partial Shade',
-                  'Full Shade'
-                ].map((profile) => DropdownMenuItem(
-                      value: profile,
-                      child: Text(profile),
-                    )).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedLightProfile = value;
-                  });
-                },
-                validator: (value) {
-                  if (value == null) {
-                    return 'Please select a light profile';
-                  }
-                  return null;
-                },
-              ),
-              DropdownButtonFormField<String>(
-                value: _selectedFieldStatus,
-                decoration: const InputDecoration(labelText: 'Select Field Status'),
-                items: [
-                  'Available',
-                  'Partially Cultivated',
-                  'Fully cultivated'
-                ].map((status) => DropdownMenuItem(
-                      value: status,
-                      child: Text(status),
-                    )).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedFieldStatus = value;
-                  });
-                },
-                validator: (value) {
-                  if (value == null) {
-                    return 'Please select a field status';
-                  }
-                  return null;
-                },
-              ),
-              CustomInputField(
-                label: 'Field Size (Optional)',
-                controller: _fieldSizeController,
-                keyboardType: TextInputType.number,
-              ),
-              CustomInputField(
-                label: 'Write Notes',
-                controller: _notesController,
-                maxLines: 3,
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _addField,
-                child: _isSaving ? const CircularProgressIndicator() : const Text('Add Field'),
-              ),
+              const SizedBox(height: 20.0),
+              _buildHeader("Field Name"),
+              const SizedBox(height: 5.0),
+              _buildTextField(_fieldNameController, "Field Name", Icons.location_on),
+              const SizedBox(height: 20.0),
+              _buildHeader("Field Type"),
+              const SizedBox(height: 5.0),
+              _buildDropdownField(_selectedFieldType, "Select Field Type", Icons.category, ['Field/outdoor', 'Greenhouse', 'Speeding', 'Grow tent'], (value) {
+                setState(() {
+                  _selectedFieldType = value;
+                });
+              }),
+              const SizedBox(height: 20.0),
+              _buildHeader("Light Profile"),
+              const SizedBox(height: 5.0),
+              _buildDropdownField(_selectedLightProfile, "Select Light Profile", Icons.wb_sunny, ['Full sun', 'Full To Partial Sun', 'Partial Sun', 'Partial Shade', 'Full Shade'], (value) {
+                setState(() {
+                  _selectedLightProfile = value;
+                });
+              }),
+              const SizedBox(height: 20.0),
+              _buildHeader("Field Status"),
+              const SizedBox(height: 5.0),
+              _buildDropdownField(_selectedFieldStatus, "Select Field Status", Icons.info, ['Available', 'Partially Cultivated', 'Fully cultivated'], (value) {
+                setState(() {
+                  _selectedFieldStatus = value;
+                });
+              }),
+              const SizedBox(height: 20.0),
+              _buildHeader("Field Size (Optional)"),
+              const SizedBox(height: 5.0),
+              _buildTextField(_fieldSizeController, "Field Size", Icons.square_foot, inputType: TextInputType.number),
+              const SizedBox(height: 20.0),
+              _buildHeader("Notes"),
+              const SizedBox(height: 5.0),
+              _buildTextField(_notesController, "Write Notes", Icons.notes, inputType: TextInputType.multiline),
+              const SizedBox(height: 30.0),
+              Center(child: _buildAddFieldButton(context)),
             ],
           ),
         ),

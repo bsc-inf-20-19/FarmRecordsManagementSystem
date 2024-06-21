@@ -32,6 +32,10 @@ class _CropDetailsTabbedPageState extends State<CropDetailsTabbedPage> {
       'notes': _notesController.text,
     };
     await DatabaseHelper.instance.updateCrop(widget.crop['id'], updatedCrop);
+
+    // Update plantings with the new crop name
+    await DatabaseHelper.instance.updatePlantingsCropName(widget.crop['name'], _nameController.text);
+
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Crop details updated successfully')),
     );
@@ -96,8 +100,14 @@ class _CropDetailsTabbedPageState extends State<CropDetailsTabbedPage> {
               onPressed: _confirmDelete,
             ),
           ],
-          bottom: const TabBar(
-            tabs: [
+          bottom: TabBar(
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.grey,
+            indicator: UnderlineTabIndicator(
+              borderSide: BorderSide(color: Colors.white, width: 4.0),
+              insets: EdgeInsets.symmetric(horizontal: 16.0),
+            ),
+            tabs: const [
               Tab(text: 'Details'),
               Tab(text: 'Planting'),
             ],

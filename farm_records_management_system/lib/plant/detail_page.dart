@@ -5,20 +5,21 @@ import 'package:csv/csv.dart';
 import 'package:open_file/open_file.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:farm_records_management_system/database/databaseHelper.dart';
+import 'package:farm_records_management_system/plant/edit_planting.dart';
 import 'package:farm_records_management_system/plant/new_planting.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:permission_handler/permission_handler.dart';
 
 class Details extends StatefulWidget {
   const Details({
-    super.key,
+    Key? key,
     required this.cropName,
     required this.cropCompany,
     required this.cropType,
     required this.cropPlotNumber,
     required this.cropHarvest,
     required this.seedType,
-  });
+  }) : super(key: key);
 
   final String cropName;
   final String cropCompany;
@@ -28,7 +29,6 @@ class Details extends StatefulWidget {
   final String seedType;
 
   @override
-  // ignore: library_private_types_in_public_api
   _DetailsState createState() => _DetailsState();
 }
 
@@ -42,10 +42,8 @@ class _DetailsState extends State<Details> {
   }
 
   Future<void> _fetchPlantings() async {
-
-    List<Map<String, dynamic>> plantings = await DatabaseHelper.instance.getPlantings(
-    );
-
+    List<Map<String, dynamic>> plantings =
+        await DatabaseHelper.instance.getPlantings();
     if (widget.cropName.isNotEmpty) {
       plantings = plantings
           .where((planting) =>
@@ -54,11 +52,8 @@ class _DetailsState extends State<Details> {
           .toList();
     }
 
-    // Create a copy of the list before sorting
     List<Map<String, dynamic>> sortedPlantings =
         List<Map<String, dynamic>>.from(plantings);
-
-    // Sort plantings by date in descending order
     sortedPlantings.sort((a, b) {
       DateTime dateA;
       DateTime dateB;
@@ -66,13 +61,13 @@ class _DetailsState extends State<Details> {
       try {
         dateA = DateTime.parse(a['date']);
       } catch (e) {
-        dateA = DateTime(1970); // Default to Unix epoch if parsing fails
+        dateA = DateTime(1970);
       }
 
       try {
         dateB = DateTime.parse(b['date']);
       } catch (e) {
-        dateB = DateTime(1970); // Default to Unix epoch if parsing fails
+        dateB = DateTime(1970);
       }
 
       return dateB.compareTo(dateA);
@@ -123,12 +118,18 @@ class _DetailsState extends State<Details> {
     ).then((_) => _fetchPlantings());
   }
 
+  Future<void> _navigateToNewPlantingPage() async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => NewPlantPage(),
+      ),
+    ).then((_) => _fetchPlantings());
+  }
+
   Future<void> _requestPermissions() async {
     if (await Permission.storage.request().isGranted) {
-      // Permission granted, do nothing
     } else {
-      // Permission denied, show error message
-      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Storage permission is required to save files')),
       );
@@ -139,38 +140,72 @@ class _DetailsState extends State<Details> {
     await _requestPermissions();
 
     final pdf = pw.Document();
+
     pdf.addPage(
-      pw.Page(
-        build: (pw.Context context) {
-          return pw.ListView.builder(
-            itemCount: _plantings.length,
-            itemBuilder: (context, index) {
-              final planting = _plantings[index];
-              return pw.Container(
-                padding: const pw.EdgeInsets.all(10),
-                child: pw.Column(
-                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+      pw.MultiPage(
+        build: (pw.Context context) => _plantings.map((planting) {
+          return pw.Container(
+            padding: const pw.EdgeInsets.all(10),
+            child: pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: [
+                pw.Row(
                   children: [
-                    pw.Text('Crop: ${planting['crop'] ?? 'N/A'}'),
-                    pw.Text('Field: ${planting['field'] ?? 'N/A'}'),
-                    pw.Text('Seed Quantity: ${planting['description'] ?? 'N/A'}'),
-                    pw.Text('Seed Company: ${planting['cropCompany'] ?? 'N/A'}'),
-                    pw.Text('Seed Type: ${planting['cropType'] ?? 'N/A'}'),
-                    pw.Text('Seed Plot Number: ${planting['cropPlotNumber'] ?? 'N/A'}'),
-                    pw.Text('Estimated Harvest: ${planting['cropHarvest'] ?? 'N/A'}'),
-                    pw.Text('Date: ${planting['date'] ?? 'N/A'}'),
+                    pw.Text('Crop: ', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                    pw.Text(planting['crop'] ?? 'N/A'),
                   ],
                 ),
-              );
-            },
+                pw.Row(
+                  children: [
+                    pw.Text('Field: ', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                    pw.Text(planting['field'] ?? 'N/A'),
+                  ],
+                ),
+                pw.Row(
+                  children: [
+                    pw.Text('Seed Quantity: ', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                    pw.Text(planting['description'] ?? 'N/A'),
+                  ],
+                ),
+                pw.Row(
+                  children: [
+                    pw.Text('Seed Company: ', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                    pw.Text(planting['cropCompany'] ?? 'N/A'),
+                  ],
+                ),
+                pw.Row(
+                  children: [
+                    pw.Text('Seed Type: ', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                    pw.Text(planting['cropType'] ?? 'N/A'),
+                  ],
+                ),
+                pw.Row(
+                  children: [
+                    pw.Text('Seed Plot Number: ', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                    pw.Text(planting['cropPlotNumber'] ?? 'N/A'),
+                  ],
+                ),
+                pw.Row(
+                  children: [
+                    pw.Text('Estimated Harvest: ', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                    pw.Text(planting['cropHarvest'] ?? 'N/A'),
+                  ],
+                ),
+                pw.Row(
+                  children: [
+                    pw.Text('Date: ', style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                    pw.Text(planting['date'] ?? 'N/A'),
+                  ],
+                ),
+              ],
+            ),
           );
-        },
+        }).toList(),
       ),
     );
 
     final directory = await getExternalStorageDirectory();
     if (directory == null) {
-      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Error accessing external storage')),
       );
@@ -191,21 +226,19 @@ class _DetailsState extends State<Details> {
   Future<void> _exportToCsv() async {
     await _requestPermissions();
 
-    List<List<dynamic>> csvData = [];
+    List<List<dynamic>> csvData = [
+      [
+        'Crop',
+        'Field',
+        'Seed Quantity',
+        'Seed Company',
+        'Seed Type',
+        'Seed Plot Number',
+        'Estimated Harvest',
+        'Date',
+      ]
+    ];
 
-    // Header row
-    csvData.add([
-      'Crop',
-      'Field',
-      'Seed Quantity',
-      'Seed Company',
-      'Seed Type',
-      'Seed Plot Number',
-      'Estimated Harvest',
-      'Date',
-    ]);
-
-    // Data rows
     _plantings.forEach((planting) {
       csvData.add([
         planting['crop'] ?? 'N/A',
@@ -219,34 +252,26 @@ class _DetailsState extends State<Details> {
       ]);
     });
 
-    // Convert data to List<List<String>> as csv package expects List<dynamic>
     List<List<String>> csvDataAsString =
         csvData.map((row) => row.map((e) => e.toString()).toList()).toList();
 
-    // Get external storage directory
     final directory = await getExternalStorageDirectory();
     if (directory == null) {
-      // Handle error: Unable to access external storage
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error accessing external storage')),
       );
       return;
     }
 
-    // Create a File instance for the CSV file
     final path = directory.path;
     final csvFile = File('$path/plantings.csv');
-
-    // Convert data to CSV format and write to file
     String csvContent = const ListToCsvConverter().convert(csvDataAsString);
     await csvFile.writeAsString(csvContent);
 
-    // Show SnackBar after export
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('CSV exported to ${csvFile.path}')),
     );
 
-    // Open the exported CSV file using a file viewer
     await OpenFile.open(csvFile.path);
   }
 
@@ -279,10 +304,9 @@ class _DetailsState extends State<Details> {
         itemBuilder: (context, index) {
           final planting = _plantings[index];
           return Card(
-            margin: const EdgeInsets.symmetric(vertical: 10.0),
+            margin: const EdgeInsets.symmetric(vertical: 8.0),
             child: ListTile(
-              leading: Icon(FontAwesomeIcons.seedling,
-                  color: Colors.green.shade700, size: 30),
+              contentPadding: const EdgeInsets.all(10.0),
               title: Text(
                 planting['crop'] ?? 'N/A',
                 style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -290,248 +314,118 @@ class _DetailsState extends State<Details> {
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 5),
-                  Text(
-                    'Field: ${planting['field'] ?? 'N/A'}',
-                    style: const TextStyle(fontSize: 16),
+                  Row(
+                    children: [
+                      const Icon(Icons.location_on, size: 18, color: Colors.green),
+                      const SizedBox(width: 5),
+                      Text(
+                        'Field: ${planting['field'] ?? 'N/A'}',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 5),
-                  Text(
-                    'Seed Quantity: ${planting['description'] ?? 'N/A'}',
-                    style: const TextStyle(fontSize: 16),
+                  Row(
+                    children: [
+                      const Icon(Icons.inventory, size: 18, color: Colors.green),
+                      const SizedBox(width: 5),
+                      Text(
+                        'Seed Quantity: ${planting['description'] ?? 'N/A'}',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 5),
-                  Text(
-                    'Seed Company: ${planting['cropCompany'] ?? 'N/A'}',
-                    style: const TextStyle(fontSize: 16),
+                  Row(
+                    children: [
+                      const Icon(FontAwesomeIcons.building, size: 18, color: Colors.green),
+                      const SizedBox(width: 5),
+                      Text(
+                        'Seed Company: ${planting['cropCompany'] ?? 'N/A'}',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 5),
-                  Text(
-                    'Seed Type: ${planting['cropType'] ?? 'N/A'}',
-                    style: const TextStyle(fontSize: 16),
+                  Row(
+                    children: [
+                      const Icon(Icons.eco, size: 18, color: Colors.green),
+                      const SizedBox(width: 5),
+                      Text(
+                        'Seed Type: ${planting['cropType'] ?? 'N/A'}',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 5),
-                  Text(
-                    'Seed Plot Number: ${planting['cropPlotNumber'] ?? 'N/A'}',
-                    style: const TextStyle(fontSize: 16),
+                  Row(
+                    children: [
+                      const Icon(Icons.numbers, size: 18, color: Colors.green),
+                      const SizedBox(width: 5),
+                      Text(
+                        'Seed Plot Number: ${planting['cropPlotNumber'] ?? 'N/A'}',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 5),
-                  Text(
-                    'Estimated Harvest: ${planting['cropHarvest'] ?? 'N/A'}',
-                    style: const TextStyle(fontSize: 16),
+                  Row(
+                    children: [
+                      const Icon(Icons.calendar_today, size: 18, color: Colors.green),
+                      const SizedBox(width: 5),
+                      Text(
+                        'Estimated Harvest: ${planting['cropHarvest'] ?? 'N/A'}',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 5),
-                  Text(
-                    'Date: ${planting['date'] ?? 'N/A'}',
-                    style: const TextStyle(fontSize: 16),
+                  Row(
+                    children: [
+                      const Icon(Icons.date_range, size: 18, color: Colors.green),
+                      const SizedBox(width: 5),
+                      Text(
+                        'Date: ${planting['date'] ?? 'N/A'}',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ],
                   ),
                 ],
               ),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.edit, color: Colors.black87),
-                    onPressed: () => _editPlanting(planting),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.delete, color: Colors.black87),
-                    onPressed: () => _deletePlanting(planting['id']),
-                  ),
-                ],
+              trailing: PopupMenuButton<String>(
+                onSelected: (value) {
+                  if (value == 'edit') {
+                    _editPlanting(planting);
+                  } else if (value == 'delete') {
+                    _deletePlanting(planting['id']);
+                  }
+                },
+                itemBuilder: (BuildContext context) {
+                  return [
+                    const PopupMenuItem<String>(
+                      value: 'edit',
+                      child: Text('Edit'),
+                    ),
+                    const PopupMenuItem<String>(
+                      value: 'delete',
+                      child: Text('Delete'),
+                    ),
+                  ];
+                },
               ),
+              isThreeLine: true,
               onTap: () {
-                _updateCropList(planting['crop'] ?? 'N/A');
-                _editPlanting(planting);
+                // Display full details if required
               },
-              onLongPress: () => _deletePlanting(planting['id']),
             ),
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const NewPlantPage(),
-            ),
-          ).then((_) => _fetchPlantings());
-        },
+        onPressed: _navigateToNewPlantingPage,
+        child: const Icon(Icons.add),
         backgroundColor: Colors.green.shade700,
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
-    );
-  }
-}
-
-class _updateCropList {
-  _updateCropList(param0);
-}
-
-class EditPlantingPage extends StatefulWidget {
-  final Map<String, dynamic> planting;
-
-  const EditPlantingPage({Key? key, required this.planting}) : super(key: key);
-
-  @override
-  _EditPlantingPageState createState() => _EditPlantingPageState();
-}
-
-class _EditPlantingPageState extends State<EditPlantingPage> {
-  late TextEditingController _dateController;
-  late TextEditingController _cropController;
-  late TextEditingController _fieldController;
-  late TextEditingController _descriptionController;
-  late TextEditingController _cropCompanyController;
-  late TextEditingController _cropTypeController;
-  late TextEditingController _cropPlotNumberController;
-  late TextEditingController _cropHarvestController;
-
-  @override
-  void initState() {
-    super.initState();
-    _dateController = TextEditingController(text: widget.planting['date']);
-    _cropController = TextEditingController(text: widget.planting['crop']);
-    _fieldController = TextEditingController(text: widget.planting['field']);
-    _descriptionController = TextEditingController(text: widget.planting['description']);
-    _cropCompanyController = TextEditingController(text: widget.planting['cropCompany']);
-    _cropTypeController = TextEditingController(text: widget.planting['cropType']);
-    _cropPlotNumberController = TextEditingController(text: widget.planting['cropPlotNumber']);
-    _cropHarvestController = TextEditingController(text: widget.planting['cropHarvest']);
-  }
-
-  @override
-  void dispose() {
-    _dateController.dispose();
-    _cropController.dispose();
-    _fieldController.dispose();
-    _descriptionController.dispose();
-    _cropCompanyController.dispose();
-    _cropTypeController.dispose();
-    _cropPlotNumberController.dispose();
-    _cropHarvestController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _updatePlanting() async {
-    Map<String, dynamic> updatedPlanting = {
-      'date': _dateController.text,
-      'crop': _cropController.text,
-      'field': _fieldController.text,
-      'description': _descriptionController.text,
-      'cropCompany': _cropCompanyController.text,
-      'cropType': _cropTypeController.text,
-      'cropPlotNumber': _cropPlotNumberController.text,
-      'cropHarvest': _cropHarvestController.text,
-    };
-
-    await DatabaseHelper.instance.updatePlanting(widget.planting['id'], updatedPlanting);
-    await _updateCropList(_cropController.text);
-    Navigator.pop(context);
-  }
-
-  Future<void> _updateCropList(String cropName) async {
-    List<Map<String, dynamic>> crops = await DatabaseHelper.instance.getCrops();
-    bool cropExists = crops.any((crop) => crop['name'].toString().toLowerCase() == cropName.toLowerCase());
-
-    if (!cropExists) {
-      await DatabaseHelper.instance.insertCrop({'name': cropName, 'harvestUnits': '', 'notes': ''});
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Edit Planting'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: [
-            TextField(
-              controller: _dateController,
-              decoration: const InputDecoration(
-                labelText: 'Date',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.date_range),
-              ),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _cropController,
-              decoration: const InputDecoration(
-                labelText: 'Crop',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(FontAwesomeIcons.seedling),
-              ),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _fieldController,
-              decoration: const InputDecoration(
-                labelText: 'Field',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(FontAwesomeIcons.tractor),
-              ),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _descriptionController,
-              decoration: const InputDecoration(
-                labelText: 'Seed Quantity',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.production_quantity_limits),
-              ),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _cropCompanyController,
-              decoration: const InputDecoration(
-                labelText: 'Seed Company',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(FontAwesomeIcons.building),
-              ),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _cropTypeController,
-              decoration: const InputDecoration(
-                labelText: 'Seed Type',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.category),
-              ),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _cropPlotNumberController,
-              decoration: const InputDecoration(
-                labelText: 'Seed Plot Number',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(FontAwesomeIcons.listOl),
-              ),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              controller: _cropHarvestController,
-              decoration: const InputDecoration(
-                labelText: 'Estimated Harvest',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(FontAwesomeIcons.calendarAlt),
-              ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _updatePlanting,
-              child: const Text('Save'),
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                textStyle: const TextStyle(fontSize: 18),
-              ),
-            ),
-          ],
-        ),
+        tooltip: 'Add New Planting',
       ),
     );
   }
