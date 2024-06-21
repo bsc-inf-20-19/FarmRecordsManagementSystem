@@ -82,6 +82,7 @@ flutter:
     - assets/field.jpg
     - assets/background.png
     - assets/logo.png
+    - assets/background_green.jpg
  
   uses-material-design: true
 

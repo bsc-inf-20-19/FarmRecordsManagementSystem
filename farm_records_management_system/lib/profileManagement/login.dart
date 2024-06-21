@@ -34,149 +34,173 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(16.0),
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.white, Colors.green[50]!],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(20.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 15.0,
-                ),
-              ],
+      body: Stack(
+        children: [
+          // Background Image
+          Positioned.fill(
+            child: Image.asset(
+              'assets/background_green.jpg', // Background image path
+              fit: BoxFit.cover,
             ),
-            width: 450,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Column(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(bottom: 20.0),
-                      child: Image.asset(
-                        'assets/logo.png', // Add your logo image path here
-                        height: 100,
-                      ),
+          ),
+          // Dark overlay
+          Positioned.fill(
+            child: Container(
+              color: Colors.black.withOpacity(0.5),
+            ),
+          ),
+          // Login Form
+          Center(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.all(16.0),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.45), // Increased transparency
+                  borderRadius: BorderRadius.circular(20.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 15.0,
                     ),
+                  ],
+                ),
+                width: 300, // Reduced width
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Logo and Title
+                    Column(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(bottom: 20.0),
+                          child: Image.asset(
+                            'assets/logo.png', // Add your logo image path here
+                            height: 60, // Reduced height
+                          ),
+                        ),
+                        Text(
+                          'FARM RECORDS MANAGEMENT SYSTEM',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 18.0, // Reduced font size
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 3, 70, 22),
+                            letterSpacing: 1.2,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 15), // Reduced spacing
                     Text(
-                      'FARM RECORDS MANAGEMENT SYSTEM',
+                      'Welcome! Please log in to continue',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 26.0,
+                        fontSize: 14.0, // Reduced font size
                         fontWeight: FontWeight.bold,
-                        color: const Color.fromARGB(255, 17, 63, 20),
-                        letterSpacing: 1.2,
+                        color: Color.fromARGB(255, 12, 51, 31),
+                      ),
+                    ),
+                    SizedBox(height: 15), // Reduced spacing
+                    // User Icon
+                    CircleAvatar(
+                      radius: 30, // Reduced radius
+                      backgroundColor: Colors.green[100],
+                      child: Icon(
+                        Icons.person,
+                        size: 30, // Reduced icon size
+                        color: Color.fromARGB(255, 19, 64, 22),
+                      ),
+                    ),
+                    SizedBox(height: 15), // Reduced spacing
+                    // Email TextField
+                    TextField(
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                        labelText: 'Email ID',
+                        labelStyle: TextStyle(color: const Color.fromARGB(255, 24, 72, 27)),
+                        hintText: 'Enter your email',
+                        hintStyle: TextStyle(color: Colors.grey),
+                        prefixIcon: Icon(Icons.email, color: Color.fromARGB(255, 45, 109, 47)),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.8),
+                      ),
+                      style: TextStyle(fontSize: 14.0), // Reduced font size
+                    ),
+                    SizedBox(height: 10), // Reduced spacing
+                    // Password TextField
+                    TextField(
+                      controller: _passwordController,
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        labelStyle: TextStyle(color: Color.fromARGB(255, 19, 59, 20)),
+                        hintText: 'Enter your password',
+                        hintStyle: TextStyle(color: Colors.grey),
+                        prefixIcon: Icon(Icons.lock, color: Color.fromARGB(255, 40, 103, 42)),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.8),
+                      ),
+                      obscureText: true,
+                      style: TextStyle(fontSize: 14.0), // Reduced font size
+                    ),
+                    SizedBox(height: 15), // Reduced spacing
+                    // Login Button
+                    ElevatedButton(
+                      onPressed: _login,
+                      child: Text(
+                        'Login',
+                        style: TextStyle(color: Colors.white, fontSize: 16.0), // Reduced font size
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color.fromARGB(255, 22, 74, 25),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                        padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12), // Reduced padding
+                      ),
+                    ),
+                    SizedBox(height: 10), // Reduced spacing
+                    if (_errorMessage.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: Text(
+                          _errorMessage,
+                          style: TextStyle(color: Colors.red, fontSize: 12.0), // Reduced font size
+                        ),
+                      ),
+                    Text(
+                      "Don't have an account?",
+                      style: TextStyle(color: Color.fromARGB(221, 0, 0, 0), fontSize: 14.0,fontWeight: FontWeight.bold), // Reduced font size
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => RegistrationScreen()),
+                        );
+                      },
+                      child: Text(
+                        'Register here',
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 28, 82, 30),
+                          fontSize: 16.0, // Reduced font size
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.underline,
+                        ),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
-                Text(
-                  'Welcome! Please log in to continue',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.black87,
-                  ),
-                ),
-                SizedBox(height: 30),
-                CircleAvatar(
-                  radius: 50,
-                  backgroundColor: Colors.green[100],
-                  child: Icon(
-                    Icons.person,
-                    size: 60,
-                    color: Color.fromARGB(255, 19, 64, 22),
-                  ),
-                ),
-                SizedBox(height: 30),
-                TextField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    labelText: 'Email ID',
-                    labelStyle: TextStyle(color: const Color.fromARGB(255, 24, 72, 27)),
-                    prefixIcon: Icon(Icons.email, color: Color.fromARGB(255, 45, 109, 47)),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                  style: TextStyle(fontSize: 18.0),
-                ),
-                SizedBox(height: 20),
-                TextField(
-                  controller: _passwordController,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    labelStyle: TextStyle(color: Color.fromARGB(255, 19, 59, 20)),
-                    prefixIcon: Icon(Icons.lock, color: Color.fromARGB(255, 40, 103, 42)),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-                  obscureText: true,
-                  style: TextStyle(fontSize: 18.0),
-                ),
-                SizedBox(height: 30),
-                ElevatedButton(
-                  onPressed: _login,
-                  child: Text(
-                    'Login',
-                    style: TextStyle(color: Colors.white, fontSize: 20.0),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 22, 74, 25),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 60, vertical: 20),
-                  ),
-                ),
-                SizedBox(height: 20),
-                if (_errorMessage.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 20.0),
-                    child: Text(
-                      _errorMessage,
-                      style: TextStyle(color: Colors.red, fontSize: 16.0),
-                    ),
-                  ),
-                Text(
-                  "Don't have an account?",
-                  style: TextStyle(color: Colors.black87, fontSize: 18.0),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => RegistrationScreen()),
-                    );
-                  },
-                  child: Text(
-                    'Register here',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 28, 82, 30),
-                      fontSize: 18.0,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

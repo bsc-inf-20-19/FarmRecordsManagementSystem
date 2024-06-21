@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._instance();
@@ -16,10 +15,11 @@ class DatabaseHelper {
   String farmersTable = 'farmersTable';
   String farmTable = 'farmTable';
   String cropsTable = 'cropsTable';
-  String incomeTable = 'incomeTable';
-  String expenseTable = 'expenseTable';
+  String incomeTable = 'incomeTable'; // Newly added
+  String expenseTable = 'expenseTable'; // Newly added
   String inventoryTable = 'inventoryTable';
   String treatmentsTable = 'treatmentsTable';
+  // other table names...
 
   // Farmer columns
   String farmersID = 'farmersID';
@@ -41,23 +41,15 @@ class DatabaseHelper {
   Future<Database> _initDb() async {
     final dbDir = await getDatabasesPath();
     final dbPath = join(dbDir, 'farm_management.db');
-
-    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-      sqfliteFfiInit();
-      var databaseFactory = databaseFactoryFfi;
-      final db = await databaseFactory.openDatabase(dbPath, options: OpenDatabaseOptions(
-        version: 1,
-        onCreate: _createDb,
-      ));
-      return db;
-    } else {
-      final db = await openDatabase(dbPath, version: 1, onCreate: _createDb);
-      return db;
-    }
+    final db = await openDatabase(dbPath, version: 1, onCreate: _createDb);
+    return db;
   }
 
+  // Method to create the database tables
   void _createDb(Database db, int version) async {
-    await db.execute('''
+    // Create a table for Treatments
+    await db.execute(
+      '''
       CREATE TABLE IF NOT EXISTS $treatmentsTable (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         date TEXT,
@@ -68,28 +60,30 @@ class DatabaseHelper {
         quantity REAL,
         specific_to_planting TEXT
       )
-    ''');
+      ''',
+    );
 
     await db.execute('''
-      CREATE TABLE $farmersTable (
-        $farmersID INTEGER PRIMARY KEY AUTOINCREMENT,
-        firstName TEXT,
-        lastName TEXT,
-        email TEXT,
-        password TEXT
-      )
-    ''');
+    CREATE TABLE $farmersTable (
+      $farmersID INTEGER PRIMARY KEY AUTOINCREMENT,
+      firstName TEXT,
+      lastName TEXT,
+      email TEXT,
+      phone TEXT,
+      password TEXT
+    )
+  ''');
 
     await db.execute('''
-      CREATE TABLE $farmTable (
-        farmID INTEGER PRIMARY KEY AUTOINCREMENT,
-        $farmersID INTEGER,
-        farmName TEXT,
-        size TEXT,
-        type TEXT,
-        FOREIGN KEY ($farmersID) REFERENCES $farmersTable($farmersID)
-      )
-    ''');
+    CREATE TABLE $farmTable (
+      farmID INTEGER PRIMARY KEY AUTOINCREMENT,
+      $farmersID INTEGER,
+      farmName TEXT,
+      size TEXT,
+      type TEXT,
+      FOREIGN KEY ($farmersID) REFERENCES $farmersTable($farmersID)
+    )
+  ''');
 
     await db.execute('''
       CREATE TABLE $cropsTable (
@@ -105,26 +99,26 @@ class DatabaseHelper {
     ''');
 
     await db.execute('''
-      CREATE TABLE $incomeTable (
-        $incomeID INTEGER PRIMARY KEY AUTOINCREMENT,
-        $amount REAL NOT NULL,
-        $date TEXT NOT NULL,
-        $description TEXT,
-        $farmersID INTEGER,
-        FOREIGN KEY (farmersID) REFERENCES $farmersTable(farmersID)
-      )
-    ''');
+    CREATE TABLE $incomeTable (
+      $incomeID INTEGER PRIMARY KEY AUTOINCREMENT,
+      $amount REAL NOT NULL,
+      $date TEXT NOT NULL,
+      $description TEXT,
+      $farmersID INTEGER,
+      FOREIGN KEY (farmersID) REFERENCES $farmersTable(farmersID)
+    )
+  ''');
 
     await db.execute('''
-      CREATE TABLE $expenseTable (
-        $expenseID INTEGER PRIMARY KEY AUTOINCREMENT,
-        $amount REAL NOT NULL,
-        $date TEXT NOT NULL,
-        $description TEXT,
-        $farmersID INTEGER,
-        FOREIGN KEY (farmersID) REFERENCES $farmersTable(farmersID)
-      )
-    ''');
+    CREATE TABLE $expenseTable (
+      $expenseID INTEGER PRIMARY KEY AUTOINCREMENT,
+      $amount REAL NOT NULL,
+      $date TEXT NOT NULL,
+      $description TEXT,
+      $farmersID INTEGER,
+      FOREIGN KEY (farmersID) REFERENCES $farmersTable(farmersID)
+    )
+  ''');
 
     await db.execute('''
   CREATE TABLE $inventoryTable (
@@ -169,7 +163,9 @@ class DatabaseHelper {
     ''');
 
 
-    await db.execute('''
+    // Create a table for Fields
+    await db.execute(
+      '''
       CREATE TABLE IF NOT EXISTS fields (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         fieldName TEXT,
@@ -179,9 +175,12 @@ class DatabaseHelper {
         fieldSize REAL,
         notes TEXT
       )
-    ''');
+      ''',
+    );
 
-    await db.execute('''
+    // Create a table for Tasks
+    await db.execute(
+      '''
       CREATE TABLE IF NOT EXISTS tasks (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         taskName TEXT,
@@ -328,14 +327,14 @@ class DatabaseHelper {
   }
 
   Future<List<Map<String, dynamic>>> getTreatments() async {
-    Database db = await _initDb();
-    return await db.query(treatmentsTable);
+    Database db = await _initDb(); // Ensure proper initialization
+    return await db.query('treatmentsTable');
   }
 
   Future<Map<String, dynamic>?> getTreatment(int id) async {
-    Database db = await _initDb();
+    Database db = await _initDb(); // Ensure proper initialization
     List<Map<String, dynamic>> result = await db.query(
-      treatmentsTable,
+      'treatmentsTable',
       where: 'id = ?',
       whereArgs: [id],
       limit: 1,
@@ -344,14 +343,14 @@ class DatabaseHelper {
   }
 
   Future<int> deleteTreatment(int id) async {
-    Database db = await _initDb();
-    return await db.delete(treatmentsTable, where: 'id = ?', whereArgs: [id]);
+    Database db = await _initDb(); // Ensure proper initialization
+    return await db.delete('treatmentsTable', where: 'id = ?', whereArgs: [id]);
   }
 
   Future<int> updateTreatment(int id, Map<String, dynamic> data) async {
-    Database db = await _initDb();
+    Database db = await _initDb(); // Ensure proper initialization
     return await db.update(
-      treatmentsTable,
+      'treatmentsTable',
       data,
       where: 'id = ?',
       whereArgs: [id],
@@ -524,5 +523,14 @@ class DatabaseHelper {
     );
   }
 
-  getFieldsNames() {}
+Future<List<String>> getFieldsNames() async {
+  try {
+    Database db = await _initDb();
+    final List<Map<String, dynamic>> fields = await db.query('fields');
+    return fields.map((e) => e['fieldName'] as String).toList();
+  } catch (e) {
+    print('Error fetching fields names: $e');
+    return []; // Return empty list or handle error as needed
+  }
+}
 }
